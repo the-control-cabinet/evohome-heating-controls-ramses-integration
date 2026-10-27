@@ -192,7 +192,7 @@ Discovery alone gave a flat, partial device list, because ramses_cc can't always
 | Names must match exactly | Including the controller's own spelling: one zone name had a typo that the schema had to copy |
 | Assumptions accepted | Kitchen's sensor is the controller itself; HCC80R circuits map one-to-one to zones |
 | Phantom device | A spurious gateway ID had been learned; it was deleted and doesn't return |
-| After loading | Restart, check each zone once, no errors, HCC80R discovered, optionally "accept known devices only" |
+| After loading | Restart, check each zone once, no errors, HCC80R discovered, then enable "accept known devices only" |
 
 Full schema: [config/ramses-schema.yaml](config/ramses-schema.yaml) (zone names anonymised).
 
@@ -361,7 +361,7 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 
 ### Gateway
 - [ ] Separate supply from Wi-Fi location (above), then move the gateway to a central position; update the issue on the firmware repository.
-- [ ] Keep the September packet logs permanently; confirm the upstairs boiler-demand BDR91 appears in captures; optional "accept known devices only" and a ≤5.5 °C zone alert.
+- [ ] Keep the September packet logs permanently; confirm the upstairs boiler-demand BDR91 appears in captures.
 
 ### Plant room: physical works (soon)
 | Item | Purpose |

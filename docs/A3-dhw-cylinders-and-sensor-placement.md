@@ -34,7 +34,9 @@ The upper box also has pockets. They were left unused.
 - **Immersion backup:** the probes removed from the lower pocket were assumed to belong to the immersion heater circuit. If so, the immersion shouldn't be used as a backup until its own thermostat is correctly refitted.
 - **Before Evohome,** cylinder temperature appears to have been controlled by the cylinder's own installer-set thermostat; the occupant only had a timer.
 
-## ⚠️ Open safety check: unvented cylinder high-limit cut-out
+## Open safety check: unvented cylinder high-limit cut-out
+
+> ⚠️ **Safety item:** verify before relying on the system.
 
 An unvented cylinder heated indirectly must have an **overheat (high-limit) cut-out** that shuts the primary zone valve if the water overheats, **whatever** thermostat or controller is in charge. It's usually a manual-reset thermostat that interrupts the zone valve's supply, separate from the temperature-and-pressure relief valve.
 

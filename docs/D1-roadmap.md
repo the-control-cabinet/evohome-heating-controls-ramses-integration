@@ -3,14 +3,13 @@
 [← Back to README](../README.md)
 
 ## Priority: safety
-- [ ] **Verify the unvented cylinders' high-limit cut-outs** are fitted, sensing, and wired in series with each zone valve ([A3](A3-dhw-cylinders-and-sensor-placement.md#️-open-safety-check-unvented-cylinder-high-limit-cut-out)).
+- [ ] **Verify the unvented cylinders' high-limit cut-outs** are fitted, sensing, and wired in series with each zone valve ([A3](A3-dhw-cylinders-and-sensor-placement.md#open-safety-check-unvented-cylinder-high-limit-cut-out)).
 
 ## RAMSES-II gateway
 - [ ] **Connectivity on a wall adapter: open issue.** Stable on a PC's USB port, unreliable on a wall adapter. Separate supply from Wi-Fi location ([B6](B6-gateway-reliability.md)), then move the stick to a central position.
 - [ ] Update the issue raised with the firmware maintainer with the results (no response yet).
 - [ ] Copy the September packet logs to permanent storage; review retention.
 - [ ] Confirm the upstairs boiler-demand BDR91 (13:000002) is seen in captures.
-- [ ] Optional: "accept packets from known devices only".
 - [ ] Optional: alert for any zone at or below 5.5 °C, or the sun-and-thermometer override state.
 
 ## OpenTherm and advanced boiler control (planned)
