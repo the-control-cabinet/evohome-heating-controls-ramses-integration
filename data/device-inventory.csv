@@ -1,0 +1,41 @@
+ramses_id,class,device,controller,zone_or_role
+01:000001,CTL,Evohome controller,upstairs,radiators (12 zones) - main TCS
+01:000002,CTL,Evohome controller,downstairs,underfloor (6 zones); also zone 02 sensor
+02:000001,UFC,HCC80R UFH controller + HCS80,downstairs,circuits 00-05 -> zones 00-05
+04:000001,TRV,HR92,upstairs,zone 00
+04:000002,TRV,HR92,upstairs,zone 01
+04:000003,TRV,HR92,upstairs,zone 02
+04:000004,TRV,HR92,upstairs,zone 02
+04:000005,TRV,HR92,upstairs,zone 03
+04:000006,TRV,HR92,upstairs,zone 04 (also its sensor)
+04:000007,TRV,HR92,upstairs,zone 05
+04:000008,TRV,HR92,upstairs,zone 06
+04:000009,TRV,HR92,upstairs,zone 07
+04:000010,TRV,HR92,upstairs,zone 07
+04:000011,TRV,HR92,upstairs,zone 08
+04:000012,TRV,HR92,upstairs,zone 09
+04:000013,TRV,HR92,upstairs,zone 0A
+04:000014,TRV,HR92,upstairs,zone 0B
+34:000001,RND,T87RF wall stat,upstairs,zone 00 sensor
+34:000002,RND,T87RF wall stat,upstairs,zone 01 sensor
+34:000003,RND,T87RF wall stat,upstairs,zone 02 sensor
+34:000004,RND,T87RF wall stat,upstairs,zone 03 sensor
+34:000005,RND,T87RF wall stat,upstairs,zone 05 sensor
+34:000006,RND,T87RF wall stat,upstairs,zone 06 sensor
+34:000007,RND,T87RF wall stat,upstairs,zone 07 sensor
+34:000008,RND,T87RF wall stat,upstairs,zone 08 sensor
+34:000009,RND,T87RF wall stat,upstairs,zone 09 sensor
+34:000010,RND,T87RF wall stat,upstairs,zone 0A sensor
+34:000011,RND,T87RF wall stat,upstairs,zone 0B sensor
+34:000012,RND,T87RF wall stat,downstairs,zone 00 sensor
+34:000013,RND,T87RF wall stat,downstairs,zone 01 sensor
+34:000014,RND,T87RF wall stat,downstairs,zone 03 sensor
+34:000015,RND,T87RF wall stat,downstairs,zone 04 sensor
+34:000016,RND,T87RF wall stat,downstairs,zone 05 sensor
+07:000001,DHW,CS92 cylinder sensor,upstairs,cylinder 1
+07:000002,DHW,CS92 cylinder sensor,downstairs,cylinder 2
+13:000001,BDR,BDR91,upstairs,DHW (hot water valve) cylinder 1
+13:000002,BDR,BDR91,upstairs,boiler demand (appliance control)
+13:000003,BDR,BDR91,downstairs,DHW (hot water valve) cylinder 2
+13:000004,BDR,BDR91,downstairs,boiler demand (appliance control)
+18:000001,HGI,Indalo ramses_esp gateway,both,RF gateway via MQTT

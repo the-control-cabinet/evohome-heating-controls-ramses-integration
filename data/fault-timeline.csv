@@ -1,0 +1,17 @@
+date,event,source
+2026-09-18,"RAMSES-II stick (Indalo ramses_esp, HGI 18:000001) set up; ramses_cc configured using the in-development Home Assistant MQTT bridge option",chat log
+2026-09-18 23:48,"Stick sends W 2349 to upstairs controller: zone 00 21.50 C, mode 01 (temporary, until next switchpoint)",packet log
+2026-09-19 11:12,"Downstairs controller 01:000002 broadcasts 2309 zone setpoints: zone 00 = 5.00 C (01F4), zones 01-05 = 12.00 C",packet log
+2026-09-19 17:28,"All zones on both controllers found at 5 C target; system not in Away/frost mode",chat log
+2026-09-19 17:32,"Stick unplugged",chat log
+2026-09-19 18:10,"Zones set manually; at next schedule switchpoint all revert to 5 C. House cold; zones overridden by hand each evening until fixed",chat log
+2026-09-21,"24 h after unplugging stick and disabling ramses_cc: both controllers still show OVERRIDE 5 C on every zone; power-cycling a controller helps only until next switchpoint",chat log
+2026-09-22,"Hypotheses widened: controller state, TRV or wall-stat corruption",chat log
+2026-09-25,"TotalComfort integration examined - same as cloud Evohome integration, no rogue configuration",chat log
+2026-10-02 09:30,"Cloud integration commented out of configuration.yaml and ramses_cc deleted - no change",chat log
+2026-10-02 20:30,"'Local override' found enabled on all zones (long-standing). Manual wall-stat override shows CLOCK icon with Cancel; faulted zones show SUN+THERMOMETER icon, no Cancel",chat log
+2026-10-03,"Test: one zone deleted, re-added, TRV and T87RF wall stat re-bound",chat log
+2026-10 (early),"Both controllers cleared: every zone deleted, re-added, re-bound, schedule re-entered; downstairs actuators re-bound on the HCC80R (zone LED must go solid amber)",chat log
+2026-10-09,"Stick back in service via ramses_cc standalone MQTT broker mode, Tx off; ~48 h, several switchpoints, no recurrence",chat log
+2026-10-09,"Packet-log audit: stick only ever sent RQ reads + W 2349 temporary setpoints; none 5 C, none permanent (mode 02), none to downstairs controller",packet log
+2026-10-09,"Tx enabled deliberately with an audit command for any non-read packet",chat log

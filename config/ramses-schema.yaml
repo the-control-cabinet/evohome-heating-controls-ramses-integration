@@ -1,0 +1,107 @@
+# DEVICE IDs ARE MASKED placeholders (type prefix kept: 01 controller, 04 TRV, 34 wall stat ...). Replace with your own.
+# ramses_cc System schema - two Evohome controllers (paste into Ramses RF -> Configure -> System schema)
+# Zone names here are ANONYMISED for publication. In a live schema each _name must match the
+# controller's zone name EXACTLY - a one-letter typo in the controller's own zone name had to be matched.
+# Device IDs are RAMSES-II addresses: 01 controller, 02 UFH controller, 04 TRV, 07 DHW sensor,
+# 13 BDR relay, 18 gateway, 34 round wall stat.
+# Assumptions accepted by ramses_cc: Kitchen (downstairs zone 02) uses the controller itself as sensor;
+# HCC80R circuits 00-05 map one-to-one to zones 00-05. (Newer ramses_cc versions use zone_idx; earlier zone_index.)
+
+_owner: me
+main_tcs: '01:000001'
+orphans_heat: []
+orphans_hvac: []
+
+'01:000001':
+  _class: CTL
+  _owner: me
+  stored_hotwater:
+    heating_valve: null
+    hotwater_valve: '13:000001'
+    sensor: '07:000001'
+  system:
+    appliance_control: '13:000002'
+  underfloor_heating: {}
+  zones:
+    '00': {_name: Main Bedroom, class: radiator_valve, actuators: ['04:000001'], sensor: '34:000001'}
+    '01': {_name: Main En-suite, class: radiator_valve, actuators: ['04:000002'], sensor: '34:000002'}
+    '02': {_name: Landing, class: radiator_valve, actuators: ['04:000003', '04:000004'], sensor: '34:000003'}
+    '03': {_name: Bedroom 2, class: radiator_valve, actuators: ['04:000005'], sensor: '34:000004'}
+    '04': {_name: Bedroom 2 En-suite, class: radiator_valve, actuators: ['04:000006'], sensor: '04:000006'}
+    '05': {_name: Bedroom 3, class: radiator_valve, actuators: ['04:000007'], sensor: '34:000005'}
+    '06': {_name: Bedroom 3 En-suite, class: radiator_valve, actuators: ['04:000008'], sensor: '34:000006'}
+    '07': {_name: Office, class: radiator_valve, actuators: ['04:000009', '04:000010'], sensor: '34:000007'}
+    '08': {_name: Guest Room, class: radiator_valve, actuators: ['04:000011'], sensor: '34:000008'}
+    '09': {_name: Guest Bath, class: radiator_valve, actuators: ['04:000012'], sensor: '34:000009'}
+    '0A': {_name: Studio, class: radiator_valve, actuators: ['04:000013'], sensor: '34:000010'}
+    '0B': {_name: Play Room, class: radiator_valve, actuators: ['04:000014'], sensor: '34:000011'}
+
+'01:000002':
+  _class: CTL
+  _owner: me
+  stored_hotwater:
+    heating_valve: null
+    hotwater_valve: '13:000003'
+    sensor: '07:000002'
+  system:
+    appliance_control: '13:000004'
+  underfloor_heating:
+    '02:000001':
+      circuits:
+        '00': {zone_idx: '00'}
+        '01': {zone_idx: '01'}
+        '02': {zone_idx: '02'}
+        '03': {zone_idx: '03'}
+        '04': {zone_idx: '04'}
+        '05': {zone_idx: '05'}
+  zones:
+    '00': {_name: Lounge, class: underfloor_heating, sensor: '34:000012'}
+    '01': {_name: Family Room, class: underfloor_heating, sensor: '34:000013'}
+    '02': {_name: Kitchen, class: underfloor_heating, sensor: '01:000002'}
+    '03': {_name: Dining Room, class: underfloor_heating, sensor: '34:000014'}
+    '04': {_name: Hall, class: underfloor_heating, sensor: '34:000015'}
+    '05': {_name: Utility Room, class: underfloor_heating, sensor: '34:000016'}
+
+'02:000001': {_class: UFC, _owner: me}
+
+'04:000005': {_class: TRV, _owner: me}
+'04:000014': {_class: TRV, _owner: me}
+'04:000006': {_class: TRV, _owner: me}
+'04:000003': {_class: TRV, _owner: me}
+'04:000008': {_owner: me}
+'04:000007': {_class: TRV, _owner: me}
+'04:000002': {_owner: me}
+'04:000012': {_class: TRV, _owner: me}
+'04:000009': {_class: TRV, _owner: me}
+'04:000004': {_owner: me}
+'04:000013': {_class: TRV, _owner: me}
+'04:000010': {_class: TRV, _owner: me}
+'04:000011': {_class: TRV, _owner: me}
+'04:000001': {_class: TRV, _owner: me}
+
+'07:000002': {_class: DHW, _owner: me}
+'07:000001': {_class: DHW, _owner: me}
+
+'13:000003': {_class: BDR, _owner: me}
+'13:000004': {_class: BDR, _owner: me}
+'13:000001': {_class: BDR, _owner: me}
+'13:000002': {_class: BDR, _owner: me}
+
+'18:000001': {_class: HGI, _owner: me}
+
+'34:000003': {_class: RND, _owner: me}
+'34:000010': {_class: RND, _owner: me}
+'34:000011': {_class: RND, _owner: me}
+'34:000005': {_class: RND, _owner: me}
+'34:000008': {_class: RND, _owner: me}
+'34:000007': {_class: RND, _owner: me}
+'34:000001': {_class: RND, _owner: me}
+'34:000009': {_class: RND, _owner: me}
+'34:000004': {_class: RND, _owner: me}
+'34:000016': {_class: RND, _owner: me}
+'34:000006': {_class: RND, _owner: me}
+'34:000002': {_class: RND, _owner: me}
+'34:000015': {_class: RND, _owner: me}
+'34:000012': {_class: RND, _owner: me}
+'34:000014': {_class: RND, _owner: me}
+'34:000013': {_class: RND, _owner: me}
