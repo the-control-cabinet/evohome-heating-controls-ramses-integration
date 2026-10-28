@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.1.0] - 2026-10-28
+- Roadmap: OpenTherm section replaced by links to the supervisory layer, optimum start/stop, PID rig and OpenTherm control repos.
+
 ## [1.0.1] - 2026-10-27
 - Gateway firmware version removed from the public docs (fingerprinting hygiene).
 

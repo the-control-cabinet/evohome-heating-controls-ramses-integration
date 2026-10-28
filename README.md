@@ -382,15 +382,15 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 
 The monitoring build will be documented in its **own repository** once installed.
 
-### OpenTherm and advanced boiler control (planned)
-| Element | Plan |
-|---|---|
-| Hardware | **DIYLESS OpenTherm shield** on an ESP32 (ESPHome) as the boiler's **OpenTherm master** |
-| Logic | **Home Assistant** computes the flow-temperature setpoint from the RAMSES zone demands, setpoints and temperatures: weather and load compensation, then **advanced PID** (anti-windup, rate limits, minimum on/off) |
-| Evohome's role | Keeps running zones, TRVs, UFH and DHW scheduling; its demands become inputs |
-| Switched lives | Removed from the boiler path so only one control path is active |
-| Safety | Boiler-side work by a competent person and Gas Safe where required; a documented way back to BDR91 control |
-| Portfolio links | #8 PID control, #4 optimum start/stop, #6 alarm and trend strategy |
+### Supervisory and boiler control (planned, in their own repos)
+Evohome stays the **zone controller** throughout; its RAMSES-II data and BDR91 states become inputs to:
+
+| Step | Project | Evohome's part |
+|---|---|---|
+| B | [HA + Node-RED supervisory layer](https://github.com/the-control-cabinet/ha-node-red-supervisory-layer) | Its RAMSES-II entities are read; temporary setpoints are the only writes, under tiered command authority |
+| C | [Optimum start/stop](https://github.com/the-control-cabinet/optimum-start-stop-supervisory) | Executes **temporary setpoints** sent over RAMSES-II; built-in optimisation switched off |
+| D | [PID rig exercise](https://github.com/the-control-cabinet/pid-anti-hunt-control-rig) | None: tuning practice on the training rig |
+| E | [OpenTherm boiler control](https://github.com/the-control-cabinet/opentherm-boiler-control-esphome) | Zone heat demand (RAMSES) and BDR91 states (opto) become inputs; BDR91 switched lives leave the boiler path via an interlocked changeover |
 
 ---
 
