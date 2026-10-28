@@ -380,7 +380,7 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 | **Strap-on NTCs on both DHW cylinder hot outlets** | Real top-of-cylinder temperature vs the CS92; quantify the top overshoot; weekly 60 °C check |
 | Flow/return temperatures, pressures, leak plates | Full boiler and primary picture |
 
-The monitoring build will be documented in its **own repository** once installed.
+The monitoring build is documented in its own repository: [heating-plant-monitoring-esphome](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome).
 
 ### Supervisory and boiler control (planned, in their own repos)
 Evohome stays the **zone controller** throughout; its RAMSES-II data and BDR91 states become inputs to:

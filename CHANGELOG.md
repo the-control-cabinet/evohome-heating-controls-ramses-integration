@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.1.1] - 2026-10-28
+- Links to the now-published heating plant monitoring repo.
+
 ## [1.1.0] - 2026-10-28
 - Roadmap: OpenTherm section replaced by links to the supervisory layer, optimum start/stop, PID rig and OpenTherm control repos.
 
