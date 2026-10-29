@@ -10,7 +10,7 @@
 | Boiler | **Ideal Logic+ S30** (system boiler) |
 | Hydronic layout | **S-plan**: 230 V switched-live control, separate circuits for radiators, underfloor and two hot-water cylinders |
 | Heat emitters | Radiators (first/second floor), wet underfloor heating (ground floor) |
-| Hot water | **Two unvented indirect cylinders** (Center Store 250 L), "left" and "right" |
+| Hot water | **Two unvented indirect cylinders** (Centre Store 250 L), "left" and "right" |
 | Original controls | Basic room stat wiring plus a hot water timer box in another room |
 | Smart controls | Honeywell **Evohome**, self-installed in **2018** |
 
@@ -47,19 +47,19 @@ flowchart TB
 
 ## Key design decisions
 
-### 1. TRVs and HCC80R do the zoning; the CH relays only call the boiler
-On the **radiator** circuit, the original CH zone-valve actuator is **disconnected** (valve left open). Each radiator's **HR92 TRV** controls its own output, and the radiator BDR91 simply **calls the boiler** when any zone needs heat.
+### 1. TRVs and HCC80R do the zoning; the relays keep the S-plan valves
+On the **radiator** circuits, the TF and MF zone-valve heads are **still fitted but electrically disconnected, with their manual override latched** (held open, possibly not fully). Each radiator's **HR92 TRV** controls its own output, and the radiator BDR91 **calls the boiler directly**.
 
-The **underfloor** circuit works the same way. Its BDR91 is a boiler call only, and the **HCC80R** runs the UFH pump and the individual manifold actuators.
+The **underfloor** circuit is different (corrected by the Oct 2026 survey, [A4](A4-junction-box-survey-and-wiring.md)): its BDR91 **drives the UF zone valve**, and the boiler fires from that valve's **end switch**. The **HCC80R** runs the UFH pump and the individual manifold actuators.
 
 ### 2. Wall stats as the room sensor
 Every zone with a T87RF uses it as a **remote sensor**. Room temperature is measured at a sensible height away from the radiator, while the controller still drives the TRV or actuator. One radiator zone uses its TRV's own sensor; one UFH zone (Kitchen) uses the controller's built-in sensor.
 
 ### 3. Hot water via the Evohome DHW kits
-Each controller has a DHW kit: a **CS92** cylinder sensor and a **BDR91** switching that cylinder's **2-port zone valve**. In a standard S-plan the zone valve's end switch provides the boiler call. Here all four relays are understood to reach the boiler's switched live through the junction box, which is still to be traced. Sensor placement is covered in [A3](A3-dhw-cylinders-and-sensor-placement.md).
+Each controller has a DHW kit: a **CS92** cylinder sensor and a **BDR91** switching that cylinder's **2-port zone valve**. Each relay switches the **Danfoss TS715Si's output** (terminal A), not a permanent live, so the timer (on permanent ON) still gates hot water. The relay output passes through the cylinder's **stat and manual-reset cut-out** to the zone valve, and the boiler fires from the valve's **end switch**, the standard S-plan arrangement (traced in [A4](A4-junction-box-survey-and-wiring.md)). Sensor placement is covered in [A3](A3-dhw-cylinders-and-sensor-placement.md).
 
 ### 4. Boiler untouched
-All four BDR91s were wired into the **existing external junction box** fitted by the original installer, replacing the old timer and room-stat switching. The boiler wiring was never touched. As currently understood, all four switched lives end up on the boiler's single switched-live input. Tracing and monitoring each one is part of the separate plant-room monitoring project.
+All four BDR91s were wired into the **existing external junction box** fitted by the original installer, replacing the old timer and room-stat switching. The boiler wiring was never touched. All four demands reach the boiler's single switched-live input: the radiator relay directly, the other three through their valves' end switches ([A4](A4-junction-box-survey-and-wiring.md#2-what-calls-the-boiler)).
 
 ### 5. Two systems, not one
 Splitting radiators and underfloor across two controllers gave room for 18 zones and two DHW circuits. It has consequences:
@@ -74,7 +74,7 @@ Splitting radiators and underfloor across two controllers gave room for 18 zones
 | Hydraulics | Mixing (blending) valve → pump → flow manifold with flow meters → loops → return manifold |
 | Controller | HCC80R (02:000001) + HCS80 3-zone expansion, 6 zones |
 | Zone order on the HCC80R | 1 Lounge · 2 Family Room · 3 Kitchen · 4 Dining · 5 Hall · 6 Utility |
-| Demand | HCC80R runs the pump and actuators; downstairs BDR91 calls the boiler |
+| Demand | HCC80R runs the pump and actuators; the downstairs BDR91 drives the UF zone valve, whose end switch calls the boiler |
 
 ## Known plant issues (under investigation)
 
@@ -83,3 +83,4 @@ Splitting radiators and underfloor across two controllers gave room for 18 zones
 | Tundishes drip when hot water is used | Likely failed DHW expansion vessels and/or pressure relief valves on the unvented cylinders | Plumber to replace both vessels and both relief valves; cylinder inlet pressure gauges and tundish drip sensors to confirm ([D1](D1-roadmap.md)) |
 | Slow loss of heating-system pressure | Not the boiler's expansion vessel: recharged, and its diaphragm isn't leaking | Trend the new boiler pressure gauge; isolate circuits to locate it |
 | Missing pipe lagging in places | Avoidable heat loss on primaries and DHW | Complete the lagging |
+| **No automatic bypass** despite TRVs on every radiator and five two-port valves | The boiler manual requires one ([A6](A6-pump-overrun-and-bypass.md)) | Read the fault history for L1 lockouts; Gas Safe engineer to fit an ABV or one open radiator |

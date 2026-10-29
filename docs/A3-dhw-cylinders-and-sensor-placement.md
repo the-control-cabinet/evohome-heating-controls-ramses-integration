@@ -6,7 +6,7 @@
 
 | Item | Detail |
 |---|---|
-| Model | **Center Store** unvented indirect, **250 L**, product code 176705 (× 2: left and right) |
+| Model | **Centre Store** unvented indirect, **250 L**, product code 176705 (× 2: left and right) |
 | Heat source | Boiler primary circuit through the indirect coil, switched by a 2-port zone valve per cylinder |
 | Backup | Immersion heater (normally off; for boiler failure only) |
 | Terminal boxes | Two on the front: one at about **¼ height** (immersion element and its thermostat pocket) and one at about **⅗ height** (pocket, no electrics connected) |
@@ -29,26 +29,25 @@ The lower position matches common guidance to place the DHW sensor about ¼ to �
 
 The upper box also has pockets. They were left unused.
 
+## Where the CS92 physically sits (surveyed Oct 2026)
+
+The lower box is the **immersion element head**, with **two pockets**:
+
+| Pocket | Holds | Notes |
+|---|---|---|
+| **Top** | The **CS92** since 2018 | Originally the immersion's **Cotherm** element control (rod + capillary). Fitted **without heat-transfer paste**, which slows its response: add paste and plug the pocket mouth with insulation |
+| **Bottom** | The **boiler-control module's** stat and **overheat cut-out** probes | Safety-critical; nothing else goes in here |
+
 ## Consequences recorded
 
-- **Immersion backup:** the probes removed from the lower pocket were assumed to belong to the immersion heater circuit. If so, the immersion shouldn't be used as a backup until its own thermostat is correctly refitted.
-- **Before Evohome,** cylinder temperature appears to have been controlled by the cylinder's own installer-set thermostat; the occupant only had a timer.
+- **Immersion backup:** the probes removed in 2018 were the immersion's **Cotherm combined thermostat and safety cut-out**. Both Cotherms have been out since then, so the immersions are **disconnected** (switches labelled, the "Water heater" B16 RCBO off). The CS92 and the Cotherm can't share the top pocket, so using the immersion means a **swap**: see [A7](A7-immersion-backup-swap-procedure.md).
+- **Before Evohome,** cylinder temperature was set by each cylinder's **boiler-control module** (adjustable stat), enabled by the Danfoss TS715Si timer. Those stats are **still in circuit** in series with the Evohome relays, so the module's dial acts as an upper limit on top of the Evohome DHW setpoint: set it at or above the Evohome setpoint.
 
-## Open safety check: unvented cylinder high-limit cut-out
+## Safety check: unvented cylinder high-limit cut-out ✅ closed
 
-> ⚠️ **Safety item:** verify before relying on the system.
+An unvented cylinder heated indirectly must have an **overheat (high-limit) cut-out** that shuts the primary zone valve if the water overheats, **whatever** controller is in charge.
 
-An unvented cylinder heated indirectly must have an **overheat (high-limit) cut-out** that shuts the primary zone valve if the water overheats, **whatever** thermostat or controller is in charge. It's usually a manual-reset thermostat that interrupts the zone valve's supply, separate from the temperature-and-pressure relief valve.
-
-**Status:** believed to be still in the zone-valve circuit after the Evohome DHW kit was fitted, but **not yet verified**, and it's not known whether the cut-out is built into the cylinder or a separate device.
-
-**To verify (by a competent person):**
-1. Identify the cylinder's high-limit cut-out: usually in a cylinder control box, often with a red **manual reset** button.
-2. Confirm its sensing bulb is in a cylinder pocket, not left loose.
-3. Confirm it's wired **in series** with the supply to the cylinder's 2-port zone valve, so tripping it closes the valve regardless of the BDR91.
-4. Record the result here.
-
-This is a safety item and stays at the top of the [roadmap](D1-roadmap.md) until verified.
+**Verified 29 Oct 2026, both cylinders:** each panel's **boiler-control module** (adjustable stat + **manual-reset** cut-out) is fitted, its probes are in the element head's bottom pocket, and it is wired **in series with the cylinder's valve motor** (HW BDR91 output → panel → zone valve). A tripped cut-out closes the valve regardless of the BDR91. Full trace in [A4](A4-junction-box-survey-and-wiring.md#5-cylinder-wiring-panels).
 
 ## Planned cylinder instrumentation
 

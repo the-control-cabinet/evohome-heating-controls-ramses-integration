@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0] - 2026-10-29
+### Added
+- A4 Junction box survey and wiring: safe isolation, the four demand paths, 9-way / 6-way / switched-live terminal maps, cable core colours, BDR91 terminals, cylinder panels, colour-misuse findings and the planned tidy-up.
+- A5 As-built controls vs Evohome, with a reversal procedure and commissioning tests (from the 2018 notes, corrected by the survey).
+- A6 Pump overrun and the missing automatic bypass (Ideal Logic+ System S30 manual requirement, evidence to gather, remedy).
+- A7 Immersion backup: Cotherm swap procedure with a bench continuity pre-check.
+- A8 Wiring schematics in three stages: as built (2017-18), Evohome (2018 to now, as surveyed), planned 2026 tidy-up with opto taps.
+- data/junction-box-terminal-map.csv; survey photos in docs/images (metadata stripped).
+### Changed
+- Cylinder high-limit cut-out safety check closed (verified in series on both cylinders).
+- Design record corrected: UFH relay drives the UF zone valve; TF/MF heads fitted but disconnected with override latched; hot-water relays switch the TS715Si output, so the timer gates hot water.
+- A3: CS92 location (top pocket of the element head), heat paste, Cotherm history, cylinder stats as an upper limit.
+- Roadmap: bypass, valve position, re-energisation checks and the junction box tidy-up; opto inputs re-scoped. "Center Store" corrected to "Centre Store".
+
 ## [1.1.1] - 2026-10-28
 - Links to the now-published heating plant monitoring repo.
 

@@ -19,7 +19,8 @@
 > - **The cloud's limits** (polling, rate limits, no device-level data) led me to the 868 MHz radio and a **RAMSES-II gateway**.
 > - **The fault:** the day after the gateway's first set-up, **every zone on both controllers locked to 5 °C**. Eight hypotheses, each tested at the next schedule switchpoint, and an icon comparison led to a zone-by-zone rebuild that fixed it. A **packet-log audit** then showed the gateway never sent the offending command.
 > - **Rebuilt integration:** the released MQTT mode, a hand-written system schema, an upgrade to fix an underfloor bug, and **transmit enabled only after the audit**.
-> - **Still open:** the gateway's connectivity when it isn't on a PC's USB port.
+> - **October 2026, site survey:** after a Resideo controls wiring course, I isolated the plant and traced the junction box terminal by terminal. It corrected the design record (the UFH relay still drives its zone valve; the hot-water timer still gates both cylinders), **closed the cylinder cut-out safety check**, found a **missing automatic bypass**, and produced an as-built vs Evohome map with a reversal procedure.
+> - **Still open:** the gateway's connectivity when it isn't on a PC's USB port; the bypass (Gas Safe fix).
 
 > **Device IDs are masked.** Real RAMSES-II addresses are replaced with consistent placeholders that keep the device-type prefix (`01:000001` = controller 1, `04:…` = TRV, `34:…` = wall stat, `13:…` = BDR91, `18:000001` = the gateway). Every file uses the same mapping.
 
@@ -64,7 +65,7 @@ flowchart LR
 | Boiler | Ideal Logic+ S30 system boiler, S-plan (230 V switched-live control) |
 | Controllers | 2: radiators (12 zones) and underfloor (6 zones) |
 | Field devices | 14 × HR92 TRVs, 16 × T87RF wall stats, HCC80R + HCS80 UFH controller, 2 × CS92 cylinder sensors, 4 × BDR91 relays: **40 RF devices** in all ([inventory](data/device-inventory.csv)) |
-| Hot water | 2 × Center Store 250 L unvented indirect cylinders, one per controller |
+| Hot water | 2 × Centre Store 250 L unvented indirect cylinders, one per controller |
 | Boiler-demand paths | 4 BDR91 switched lives → 1 boiler switched-live input |
 | HA integrations | Cloud `evohome` + `evohome_1` (Aug 2026); `ramses_cc` via a ramses_esp gateway (Sep 2026) |
 
@@ -88,16 +89,16 @@ The house is split into two independent Evohome systems, each with its own zones
 
 | Decision | Reasoning |
 |---|---|
-| **TRVs and the HCC80R do the zoning; the CH relays only call the boiler** | On the radiator circuit the original CH zone-valve actuator is **disconnected** (valve open) and each HR92 controls its own radiator. On the underfloor circuit the HCC80R runs the pump and actuators. Both BDR91s just call the boiler when any zone needs heat |
+| **TRVs and the HCC80R do the zoning; the S-plan valves stay** | On the radiator circuits the TF and MF zone-valve heads are **fitted but disconnected, manual override latched**, each HR92 controls its own radiator, and the radiator BDR91 calls the boiler **directly**. The UFH BDR91 **still drives the UF zone valve**, which fires the boiler through its end switch (corrected by the [Oct 2026 survey](docs/A4-junction-box-survey-and-wiring.md)) |
 | **Wall stats as remote sensors** | Room temperature measured at a sensible height, away from the radiator, while the controller still drives the TRV or actuator |
-| **Boiler untouched** | All four BDR91s were wired into the installer's existing external junction box, replacing the old timer and room-stat switching. As understood, all four switched lives reach the boiler's single switched-live input (to be traced in the plant-room monitoring work) |
+| **Boiler untouched** | All four BDR91s were wired into the installer's existing external junction box. All four demands reach the boiler's single switched-live input: the radiator relay directly, the UFH and cylinder relays via their valves' end switches. The hot-water relays switch the **Danfoss TS715Si's output**, so the timer (permanent ON) still gates hot water |
 | **Two systems, not one** | Room for 18 zones and two DHW circuits. The cost is two RF systems to maintain, and one OpenTherm master per boiler, so Evohome's OpenTherm bridge can't serve both (see [roadmap](#7-roadmap-and-open-items)) |
 
 **Underfloor hydraulics:** mixing (blending) valve → pump → flow manifold with flow meters → loops → return manifold. The HCC80R zone order is Lounge, Family Room, Kitchen, Dining, Hall, Utility.
 
 ### 2.3 Hot-water cylinders and where the sensor went
 
-Each Center Store 250 L cylinder has two front boxes: one at about **¼ height** (immersion element and thermostat pocket) and one at about **⅗ height** (pocket, no electrics). The Evohome **CS92 probe went into the lower pocket**.
+Each Centre Store 250 L cylinder has two front boxes: one at about **¼ height** (immersion element and thermostat pocket) and one at about **⅗ height** (pocket, no electrics). The Evohome **CS92 probe went into the lower pocket**.
 
 **Why: stratification.** The coil is at the bottom. Heated water rises, so hot water collects at the **top first** and the hot layer grows **downwards** as the reheat goes on. The region just above the coil is the last to reach temperature.
 
@@ -106,7 +107,9 @@ Each Center Store 250 L cylinder has two front boxes: one at about **¼ height**
 | **Lower (¼)** ✅ | **Last**, once the hot layer reaches it | The controller stops only when **most of the cylinder** is hot, giving full usable volume | The **top can overshoot** the setpoint while the lower part catches up. Keep the setpoint sensible (about 55-60 °C); the high-limit cut-out is the backstop |
 | Upper (⅗) | **Early**, because the top heats first | Stops with the **lower part still cool**, giving less hot water | n/a |
 
-> ⚠️ **Open safety check:** on an unvented cylinder the **high-limit (overheat) cut-out** must stay wired in series with the zone valve, whatever controls the cylinder. It's believed to still be in circuit after the DHW kit was fitted, but it hasn't been verified, and it's not known whether it's built into the cylinder. It's at the top of the roadmap. The probes removed from the lower pocket were assumed to be the immersion's, so the immersion shouldn't be used as a backup until its own thermostat is confirmed.
+> ✅ **Safety check closed (29 Oct 2026):** on both cylinders the **boiler-control module** (adjustable stat + manual-reset overheat cut-out) is fitted and wired **in series with the zone valve motor**, so a trip closes the valve whatever Evohome does ([A4](docs/A4-junction-box-survey-and-wiring.md#5-cylinder-wiring-panels)).
+>
+> The lower box is the **immersion element head**: the CS92 sits in its **top pocket** (where the immersion's Cotherm element control went; both Cotherms have been out since 2018, so the immersions are disconnected), and the cut-out probes are in the **bottom pocket**. Using the immersion as a backup means swapping the Cotherm back in: [A7](docs/A7-immersion-backup-swap-procedure.md).
 
 ### 2.4 Commissioning and binding
 
@@ -129,6 +132,9 @@ All zones have **local override** enabled: a wall-stat change holds until the ne
 | Tundishes drip when hot water is used | Likely failed DHW expansion vessels and/or relief valves | Plumber to replace both; inlet pressure gauges and tundish drip sensors to confirm |
 | Slow loss of heating-system pressure | Not the boiler's expansion vessel (recharged, and its diaphragm isn't leaking) | Trend the new boiler pressure gauge; isolate circuits one at a time |
 | Missing pipe lagging | Avoidable primary and DHW losses | Complete it |
+| **No automatic bypass** | The Ideal Logic+ System S30 manual requires an ABV with TRVs on all radiators or two-port valves; there are HR92s everywhere, five two-port valves, and no ABV found ([A6](docs/A6-pump-overrun-and-bypass.md)) | Read the boiler fault history for L1 lockouts; Gas Safe engineer to fit an ABV or leave one radiator (≥ 0.6 kW) open |
+| TF/MF valves latched in manual override | May not be fully open, restricting the radiator circuits | Check the position; re-power the heads on a permanent live if needed |
+| Wiring identification | Blues used as switched lives, greys and a black used as neutrals; two floating Danfoss cores; hot-water BDR91s on stiff cable, loose | Tidy-up planned: sleeving, caps, labels, flex in trunking ([A4](docs/A4-junction-box-survey-and-wiring.md#7-planned-tidy-up-box-still-isolated)) |
 
 ---
 
@@ -357,7 +363,15 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 ## 7. Roadmap and open items
 
 ### Safety (first)
-- [ ] ⚠️ **Verify both cylinders' high-limit cut-outs:** identified, bulb in a pocket, wired **in series** with the zone valve (a competent person to check).
+- [x] ✅ **Both cylinders' high-limit cut-outs verified** fitted, sensing and wired in series with the zone valves (29 Oct 2026).
+- [ ] ⚠️ **Automatic bypass:** read the boiler fault history (L1), search the pipework, check the Benchmark sheet; Gas Safe engineer to fit an ABV or an open radiator ([A6](docs/A6-pump-overrun-and-bypass.md)).
+- [ ] On every re-energisation: **TS715Si on permanent ON** (it gates hot water), BDR91s reporting, heating and hot water both run.
+
+### Junction box tidy-up (box isolated)
+- [ ] Re-run the hot-water BDR91s in 3095Y 5-core flex via 25×16 trunking onto surface pattresses.
+- [ ] Wago 221 on the four opto-tapped joints; cap the Danfoss black and grey; sleeve misused colours; label every cable, strip position and the lid.
+- [ ] Wire the opto board in its own enclosure (plant monitoring repo).
+- [ ] Add heat-transfer paste to both CS92s.
 
 ### Gateway
 - [ ] Separate supply from Wi-Fi location (above), then move the gateway to a central position; update the issue on the firmware repository.
@@ -406,7 +420,11 @@ Evohome stays the **zone controller** throughout; its RAMSES-II data and BDR91 s
 | Packet-level analysis | Decoding 2309/2349/2E04; per-hour traffic counts |
 | Fault diagnosis | Eight-hypothesis elimination; proven vs unproven separated in the RCA |
 | Commissioning discipline | Read-only first; audited before enabling transmit |
-| Safety awareness | Unvented cylinder high-limit check; Gas Safe boundary for boiler-side work |
+| Safety awareness | Unvented cylinder high-limit check (closed by survey); Gas Safe boundary for boiler-side work |
+| Safe isolation | Isolation at the RCBO, meter proved on a live source, dead test at every terminal, induced voltage recognised and cross-checked ([A4](docs/A4-junction-box-survey-and-wiring.md)) |
+| As-built survey and documentation | Terminal-by-terminal trace, core-colour audit, as-built vs current record, a reversal procedure and three-stage wiring schematics ([A4](docs/A4-junction-box-survey-and-wiring.md), [A5](docs/A5-as-built-vs-evohome-and-reversal.md), [A8](docs/A8-wiring-schematics-three-stages.md)) |
+| Hydronic compliance | Bypass requirement checked against the boiler manual; remedy defined ([A6](docs/A6-pump-overrun-and-bypass.md)) |
+| Method statements | Immersion backup swap procedure with a bench continuity pre-check ([A7](docs/A7-immersion-backup-swap-procedure.md)) |
 | Change control | Released software only; written operating rules |
 
 ---
@@ -417,7 +435,7 @@ The README covers the whole journey. These hold the full detail:
 
 | Part | Documents |
 |---|---|
-| A · Design and install | [A1 System design](docs/A1-system-design.md) · [A2 Installation and commissioning](docs/A2-installation-and-commissioning.md) · [A3 DHW cylinders and sensor placement](docs/A3-dhw-cylinders-and-sensor-placement.md) |
+| A · Design and install | [A1 System design](docs/A1-system-design.md) · [A2 Installation and commissioning](docs/A2-installation-and-commissioning.md) · [A3 DHW cylinders and sensor placement](docs/A3-dhw-cylinders-and-sensor-placement.md) · [A4 Junction box survey and wiring](docs/A4-junction-box-survey-and-wiring.md) · [A5 As-built vs Evohome and reversal](docs/A5-as-built-vs-evohome-and-reversal.md) · [A6 Pump overrun and bypass](docs/A6-pump-overrun-and-bypass.md) · [A7 Immersion backup swap](docs/A7-immersion-backup-swap-procedure.md) · [A8 Wiring schematics: as built, Evohome, tidy-up](docs/A8-wiring-schematics-three-stages.md) |
 | B · Integration | [B0 Cloud integration](docs/B0-cloud-integration.md) · [B1 Gateway set-up](docs/B1-gateway-setup.md) · [B2 Schema](docs/B2-schema-and-device-model.md) · [B3 HA entities](docs/B3-home-assistant-entities.md) · [B4 Upgrade and known issues](docs/B4-upgrade-and-known-issues.md) · [B5 Transmit audit](docs/B5-transmit-and-packet-audit.md) · [B6 Gateway reliability](docs/B6-gateway-reliability.md) · [B7 Issues and lessons](docs/B7-integration-issues-and-lessons.md) |
 | C · Case study | [C1 Case study](docs/C1-fault-case-study.md) · [C2 Timeline](docs/C2-fault-timeline.md) · [C3 Hypotheses](docs/C3-hypotheses-and-tests.md) · [C4 Packet-log analysis](docs/C4-packet-log-analysis.md) · [C5 Fix procedure](docs/C5-fix-procedure.md) · [C6 Lessons and controls](docs/C6-lessons-and-controls.md) |
 | Roadmap | [D1 Roadmap](docs/D1-roadmap.md) |
@@ -429,10 +447,12 @@ The README covers the whole journey. These hold the full detail:
 ├── config/ramses-schema.yaml          ← both controllers (masked IDs, anonymised zone names)
 ├── data/device-inventory.csv          ← 40 RF devices
 ├── data/fault-timeline.csv
-├── docs/                              ← A1-A3, B0-B7, C1-C6, D1
+├── data/junction-box-terminal-map.csv ← surveyed Oct 2026
+├── docs/                              ← A1-A8, B0-B7, C1-C6, D1
+├── docs/images/                       ← survey photos (metadata stripped)
 └── scripts/packet-audit.sh · rename_rf_entities.py · list_ramses_devices.sh
 ```
 
 📺 [The Control Cabinet on YouTube](https://www.youtube.com/channel/UC5Cupmz7vlfcodpCX7k8iuQ)
 
-*Designed, installed and documented by James (install 2018; cloud integration August 2026; RAMSES-II and case study September-October 2026) · part of [The Control Cabinet BMS portfolio](https://github.com/the-control-cabinet). MIT Licence.*
+*Designed, installed and documented by James (install 2018; cloud integration August 2026; RAMSES-II and case study September-October 2026; site survey 29 October 2026) · part of [The Control Cabinet BMS portfolio](https://github.com/the-control-cabinet). MIT Licence.*
