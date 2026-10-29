@@ -98,7 +98,7 @@ The house is split into two independent Evohome systems, each with its own zones
 
 ### 2.3 Hot-water cylinders and where the sensor went
 
-Each Centre Store 250 L cylinder has two front boxes: one at about **¼ height** (immersion element and thermostat pocket) and one at about **⅗ height** (pocket, no electrics). The Evohome **CS92 probe went into the lower pocket**.
+Each Centre Store 250 L cylinder has two front boxes: one at about **¼ height** (immersion element and thermostat pocket) and one at about **⅗ height** (a circular opening onto the cylinder shell, **no pocket** and no electrics). The lower box holds **two pockets**, and the Evohome **CS92 probe went into its top pocket**.
 
 **Why: stratification.** The coil is at the bottom. Heated water rises, so hot water collects at the **top first** and the hot layer grows **downwards** as the reheat goes on. The region just above the coil is the last to reach temperature.
 

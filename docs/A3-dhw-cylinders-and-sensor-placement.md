@@ -9,12 +9,12 @@
 | Model | **Centre Store** unvented indirect, **250 L**, product code 176705 (× 2: left and right) |
 | Heat source | Boiler primary circuit through the indirect coil, switched by a 2-port zone valve per cylinder |
 | Backup | Immersion heater (normally off; for boiler failure only) |
-| Terminal boxes | Two on the front: one at about **¼ height** (immersion element and its thermostat pocket) and one at about **⅗ height** (pocket, no electrics connected) |
+| Terminal boxes | Two on the front: one at about **¼ height** (immersion element and its thermostat pocket) and one at about **⅗ height** (a circular opening onto the cylinder shell: **no pocket**, no electrics) |
 | Controlled by | Left cylinder: upstairs controller · Right cylinder: downstairs controller |
 
 ## Where the CS92 sensor went, and why
 
-The Evohome **CS92** probe went into the **lower pocket** (about ¼ height), in place of the probes that were already there.
+The Evohome **CS92** probe went into the **lower box** (about ¼ height), in the top of its two pockets, in place of the probes that were already there.
 
 **Reasoning: stratification.** The coil is at the bottom. Water warmed by the coil rises, so hot water collects at the **top first** and the hot layer grows **downwards** as the reheat continues. During a reheat the top is always the hottest part, and the region just above the coil is the last to reach temperature. Water below the coil stays cool.
 
@@ -27,7 +27,7 @@ A probe sitting very close to the coil can also be warmed locally, satisfy the c
 
 The lower position matches common guidance to place the DHW sensor about ¼ to ⅓ up the cylinder.
 
-The upper box also has pockets. They were left unused.
+The upper box has **no pocket**: just a circular opening onto the cylinder shell. A sensor there would also read too high for the reason above.
 
 ## Where the CS92 physically sits (surveyed Oct 2026)
 

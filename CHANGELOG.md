@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.2.2] - 2026-10-29
+- Cylinder boxes clarified: the lower box has two pockets; the upper box is a circular opening with no pocket.
+
 ## [1.2.1] - 2026-10-29
 - A8: terminal-level wiring schematics (SVG) for all three stages, alongside the control-logic views.
 
