@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.2.1] - 2026-10-29
+- A8: terminal-level wiring schematics (SVG) for all three stages, alongside the control-logic views.
+
 ## [1.2.0] - 2026-10-29
 ### Added
 - A4 Junction box survey and wiring: safe isolation, the four demand paths, 9-way / 6-way / switched-live terminal maps, cable core colours, BDR91 terminals, cylinder panels, colour-misuse findings and the planned tidy-up.

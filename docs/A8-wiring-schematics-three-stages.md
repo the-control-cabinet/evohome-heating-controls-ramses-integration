@@ -2,7 +2,7 @@
 
 [← Back to README](../README.md)
 
-Three schematics of the same plant, drawn the same way so they can be compared directly:
+Each stage has two drawings of the same plant: a **terminal-level wiring schematic** (every cable, core colour, device terminal, strip position, bar connection and earth) and a **control-logic view** (what switches what). The wiring schematics are SVG: open one and zoom in for detail.
 
 | Stage | Period | Source |
 |---|---|---|
@@ -10,9 +10,17 @@ Three schematics of the same plant, drawn the same way so they can be compared d
 | **2. Evohome** | 2018 to now | Surveyed terminal by terminal, 29 Oct 2026 ([A4](A4-junction-box-survey-and-wiring.md)) |
 | **3. Tidy-up** | Planned, Nov 2026 | The changes in [A4 §7](A4-junction-box-survey-and-wiring.md#7-planned-tidy-up-box-still-isolated) and the [opto board install](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome/blob/main/docs/11-opto-board-installation.md) |
 
-**Conventions.** Every device takes **permanent live, neutral and earth from the 9-way bars** (not drawn, to keep the diagrams readable). Lines show **switched lives** only, labelled with the core colour where it matters. Zone valves: **brown = motor** (opens the valve), **grey = end-switch feed** (permanent live), **orange = end-switch out** (closes when the valve is fully open). "SL joint" = the boiler switched-live joint; the boiler fires when it's live.
+**Wiring schematics:** the junction box sits in the middle, with the 9-way strip drawn as three linked bars (L, N, E), the 6-way strip, and the boiler switched-live joint (SL). Field devices are on the left, valves, boiler and cylinder panels on the right. Each line is one core, in its real colour. Stage 1 is reconstructed: the functions are right, but its 6-way row numbers follow the 2018 notes, not the surveyed strip.
+
+**Control-logic views.** Every device takes **permanent live, neutral and earth from the 9-way bars** (not drawn, to keep the diagrams readable). Lines show **switched lives** only, labelled with the core colour where it matters. Zone valves: **brown = motor** (opens the valve), **grey = end-switch feed** (permanent live), **orange = end-switch out** (closes when the valve is fully open). "SL joint" = the boiler switched-live joint; the boiler fires when it's live.
 
 ## 1. As built (S-plan, 2017-2018)
+
+### Wiring schematic
+
+![Stage 1 wiring schematic: as built](images/wiring-stage1-as-built.svg)
+
+### Control logic
 
 ```mermaid
 flowchart LR
@@ -48,6 +56,12 @@ flowchart LR
 Every heating and hot-water demand opens a valve; **only valve end switches** fire the boiler. When all five valves close, the pump overruns with no open zone ([A6](A6-pump-overrun-and-bypass.md)).
 
 ## 2. Evohome (2018 to now, as surveyed)
+
+### Wiring schematic
+
+![Stage 2 wiring schematic: Evohome as surveyed](images/wiring-stage2-evohome-as-surveyed.svg)
+
+### Control logic
 
 ```mermaid
 flowchart LR
@@ -93,6 +107,12 @@ flowchart LR
 - The **immersion element controls (Cotherms) were removed** and the CS92s took their pockets ([A3](A3-dhw-cylinders-and-sensor-placement.md)).
 
 ## 3. Planned tidy-up (2026)
+
+### Wiring schematic
+
+![Stage 3 wiring schematic: planned tidy-up](images/wiring-stage3-tidy-up-planned.svg)
+
+### Control logic
 
 The control logic is **unchanged**. What changes is how it's built, plus four monitoring taps.
 

@@ -1,0 +1,295 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1780" height="1330" viewBox="0 0 1780 1330" font-family="Arial, Helvetica, sans-serif">
+<rect width="1780" height="1330" fill="#ffffff"/>
+<rect x="470" y="120" width="650" height="900" rx="10" fill="#fbfaf6" stroke="#666" stroke-width="2"/>
+<rect x="60" y="130" width="240" height="96" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="68" y="145" font-size="11" text-anchor="start" font-weight="bold" fill="#222">TF room stat (2nd-floor landing)</text>
+<circle cx="300" cy="158" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="162" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">brown L</text>
+<circle cx="300" cy="176" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="180" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">grey N</text>
+<circle cx="300" cy="194" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="198" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">black call</text>
+<circle cx="300" cy="212" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="216" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">E (stat cable)</text>
+<rect x="60" y="275" width="240" height="96" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="68" y="290" font-size="11" text-anchor="start" font-weight="bold" fill="#222">MF room stat (1st-floor landing)</text>
+<circle cx="300" cy="303" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="307" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">brown L</text>
+<circle cx="300" cy="321" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="325" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">grey N</text>
+<circle cx="300" cy="339" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="343" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">black call</text>
+<circle cx="300" cy="357" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="361" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">E (stat cable)</text>
+<rect x="60" y="420" width="240" height="96" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="68" y="435" font-size="11" text-anchor="start" font-weight="bold" fill="#222">Heatmiser UFH controller</text>
+<text x="68" y="448" font-size="9" text-anchor="start" font-weight="normal" fill="#555">+ battery room stats</text>
+<circle cx="300" cy="456" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="460" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">L</text>
+<circle cx="300" cy="474" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="478" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">N</text>
+<circle cx="300" cy="492" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="496" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">call out</text>
+<circle cx="300" cy="510" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="514" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">E</text>
+<rect x="60" y="585" width="240" height="78" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="68" y="600" font-size="11" text-anchor="start" font-weight="bold" fill="#222">Danfoss TS715Si timer</text>
+<text x="68" y="613" font-size="9" text-anchor="start" font-weight="normal" fill="#555">own supply: not traceable (on the B6 circuit)</text>
+<circle cx="300" cy="621" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="625" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">output (brown)</text>
+<circle cx="300" cy="639" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="643" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">black (spare)</text>
+<circle cx="300" cy="657" r="3.2" fill="#fff" stroke="#333"/>
+<text x="294" y="661" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">grey (spare)</text>
+<rect x="1270" y="130" width="300" height="114" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="1278" y="145" font-size="11" text-anchor="start" font-weight="bold" fill="#222">TF zone valve (2nd-floor rads)</text>
+<text x="1278" y="158" font-size="9" text-anchor="start" font-weight="normal" fill="#555">V4043-type head</text>
+<circle cx="1270" cy="166" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="170" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">brown motor</text>
+<circle cx="1270" cy="184" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="188" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">blue N</text>
+<circle cx="1270" cy="202" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="206" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">grey ES in</text>
+<circle cx="1270" cy="220" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="224" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">orange ES out</text>
+<circle cx="1270" cy="238" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="242" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">E</text>
+<rect x="1270" y="275" width="300" height="114" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="1278" y="290" font-size="11" text-anchor="start" font-weight="bold" fill="#222">MF zone valve (1st-floor rads)</text>
+<text x="1278" y="303" font-size="9" text-anchor="start" font-weight="normal" fill="#555">V4043-type head</text>
+<circle cx="1270" cy="311" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="315" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">brown motor</text>
+<circle cx="1270" cy="329" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="333" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">blue N</text>
+<circle cx="1270" cy="347" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="351" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">grey ES in</text>
+<circle cx="1270" cy="365" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="369" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">orange ES out</text>
+<circle cx="1270" cy="383" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="387" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">E</text>
+<rect x="1270" y="420" width="300" height="132" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="1278" y="435" font-size="11" text-anchor="start" font-weight="bold" fill="#222">UF zone valve (underfloor)</text>
+<text x="1278" y="448" font-size="9" text-anchor="start" font-weight="normal" fill="#555">Honeywell 40003916-001 powerhead</text>
+<circle cx="1270" cy="456" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="460" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">lt-brown motor</text>
+<circle cx="1270" cy="474" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="478" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">blue N</text>
+<circle cx="1270" cy="492" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="496" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">grey ES in</text>
+<circle cx="1270" cy="510" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="514" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">orange ES out</text>
+<circle cx="1270" cy="528" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="532" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">white N/C (capped)</text>
+<circle cx="1270" cy="546" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="550" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">E</text>
+<rect x="1270" y="585" width="300" height="114" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="1278" y="600" font-size="11" text-anchor="start" font-weight="bold" fill="#222">Cylinder L zone valve</text>
+<circle cx="1270" cy="613" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="617" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">lt-brown motor</text>
+<circle cx="1270" cy="631" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="635" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">blue N</text>
+<circle cx="1270" cy="649" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="653" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">grey ES in</text>
+<circle cx="1270" cy="667" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="671" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">orange ES out</text>
+<circle cx="1270" cy="685" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="689" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">E</text>
+<rect x="1270" y="730" width="300" height="114" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="1278" y="745" font-size="11" text-anchor="start" font-weight="bold" fill="#222">Cylinder R zone valve</text>
+<circle cx="1270" cy="758" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="762" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">lt-brown motor</text>
+<circle cx="1270" cy="776" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="780" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">blue N</text>
+<circle cx="1270" cy="794" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="798" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">grey ES in</text>
+<circle cx="1270" cy="812" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="816" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">orange ES out</text>
+<circle cx="1270" cy="830" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="834" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">E</text>
+<rect x="1270" y="890" width="300" height="96" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="1278" y="905" font-size="11" text-anchor="start" font-weight="bold" fill="#222">Ideal Logic+ S30 (3-core flex)</text>
+<circle cx="1270" cy="918" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="922" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">brown perm L</text>
+<circle cx="1270" cy="936" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="940" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">black N</text>
+<circle cx="1270" cy="954" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="958" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">grey SL</text>
+<circle cx="1270" cy="972" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="976" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">E</text>
+<rect x="1270" y="1035" width="190" height="78" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="1278" y="1050" font-size="11" text-anchor="start" font-weight="bold" fill="#222">Cyl L panel: boiler control</text>
+<text x="1278" y="1063" font-size="9" text-anchor="start" font-weight="normal" fill="#555">stat + manual-reset cut-out</text>
+<circle cx="1270" cy="1071" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="1075" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">1 in (brown)</text>
+<circle cx="1270" cy="1089" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="1093" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">2 out (blue)</text>
+<circle cx="1270" cy="1107" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1276" y="1111" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">E</text>
+<rect x="1500" y="1035" width="190" height="78" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="1508" y="1050" font-size="11" text-anchor="start" font-weight="bold" fill="#222">Cyl R panel: boiler control</text>
+<text x="1508" y="1063" font-size="9" text-anchor="start" font-weight="normal" fill="#555">stat + manual-reset cut-out</text>
+<circle cx="1500" cy="1071" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1506" y="1075" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">1 in (brown)</text>
+<circle cx="1500" cy="1089" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1506" y="1093" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">2 out (blue)</text>
+<circle cx="1500" cy="1107" r="3.2" fill="#fff" stroke="#333"/>
+<text x="1506" y="1111" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">E</text>
+<rect x="540" y="58" width="250" height="78" rx="6" fill="#f7f7f7" stroke="#555"/>
+<text x="548" y="73" font-size="11" text-anchor="start" font-weight="bold" fill="#222">Supply in: Boiler B6 30 mA RCBO</text>
+<circle cx="540" cy="86" r="3.2" fill="#fff" stroke="#333"/>
+<text x="546" y="90" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">brown</text>
+<circle cx="540" cy="104" r="3.2" fill="#fff" stroke="#333"/>
+<text x="546" y="108" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">blue</text>
+<circle cx="540" cy="122" r="3.2" fill="#fff" stroke="#333"/>
+<text x="546" y="126" font-size="9.5" text-anchor="start" font-weight="normal" fill="#222">E</text>
+<polyline points="790,86 810,86 810,185" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<polyline points="790,104 824,104 824,235" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<polyline points="790,122 838,122 838,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="790,122 838,122 838,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<polyline points="1270,184 1100,184 1100,235" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<circle cx="1100" cy="235" r="3" fill="#1f5fbf"/>
+<polyline points="1270,202 1092,202 1092,185" fill="none" stroke="#8a8a8a" stroke-width="2.2"/>
+<circle cx="1092" cy="185" r="3" fill="#8a8a8a"/>
+<polyline points="1270,238 1084,238 1084,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="1270,238 1084,238 1084,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="1084" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="1270,220 1076,220 1076,960 960,960" fill="none" stroke="#f28c28" stroke-width="2.2"/>
+<polyline points="1270,329 1068,329 1068,235" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<circle cx="1068" cy="235" r="3" fill="#1f5fbf"/>
+<polyline points="1270,347 1060,347 1060,185" fill="none" stroke="#8a8a8a" stroke-width="2.2"/>
+<circle cx="1060" cy="185" r="3" fill="#8a8a8a"/>
+<polyline points="1270,383 1052,383 1052,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="1270,383 1052,383 1052,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="1052" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="1270,365 1044,365 1044,960 960,960" fill="none" stroke="#f28c28" stroke-width="2.2"/>
+<polyline points="1270,474 1036,474 1036,235" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<circle cx="1036" cy="235" r="3" fill="#1f5fbf"/>
+<polyline points="1270,492 1028,492 1028,185" fill="none" stroke="#8a8a8a" stroke-width="2.2"/>
+<circle cx="1028" cy="185" r="3" fill="#8a8a8a"/>
+<polyline points="1270,546 1020,546 1020,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="1270,546 1020,546 1020,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="1020" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="1270,510 1012,510 1012,960 960,960" fill="none" stroke="#f28c28" stroke-width="2.2"/>
+<polyline points="1270,631 1004,631 1004,235" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<circle cx="1004" cy="235" r="3" fill="#1f5fbf"/>
+<polyline points="1270,649 996,649 996,185" fill="none" stroke="#8a8a8a" stroke-width="2.2"/>
+<circle cx="996" cy="185" r="3" fill="#8a8a8a"/>
+<polyline points="1270,685 988,685 988,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="1270,685 988,685 988,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="988" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="1270,667 980,667 980,960 960,960" fill="none" stroke="#f28c28" stroke-width="2.2"/>
+<polyline points="1270,776 972,776 972,235" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<circle cx="972" cy="235" r="3" fill="#1f5fbf"/>
+<polyline points="1270,794 964,794 964,185" fill="none" stroke="#8a8a8a" stroke-width="2.2"/>
+<circle cx="964" cy="185" r="3" fill="#8a8a8a"/>
+<polyline points="1270,830 956,830 956,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="1270,830 956,830 956,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="956" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="1270,812 948,812 948,960 960,960" fill="none" stroke="#f28c28" stroke-width="2.2"/>
+<polyline points="1270,918 940,918 940,185" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<circle cx="940" cy="185" r="3" fill="#8B4513"/>
+<polyline points="1270,936 932,936 932,235" fill="none" stroke="#111111" stroke-width="2.2"/>
+<circle cx="932" cy="235" r="3" fill="#111111"/>
+<polyline points="1270,972 924,972 924,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="1270,972 924,972 924,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="924" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="1270,954 990,954 990,960 960,960" fill="none" stroke="#8a8a8a" stroke-width="2.2"/>
+<polyline points="1270,1107 916,1107 916,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="1270,1107 916,1107 916,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="916" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="1500,1107 908,1107 908,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="1500,1107 908,1107 908,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="908" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="300,158 486,158 486,185" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<circle cx="486" cy="185" r="3" fill="#8B4513"/>
+<polyline points="300,176 494,176 494,235" fill="none" stroke="#8a8a8a" stroke-width="2.2"/>
+<circle cx="494" cy="235" r="3" fill="#8a8a8a"/>
+<text x="308" y="172" font-size="8.5" text-anchor="start" font-weight="normal" fill="#8a8a8a">neutral</text>
+<polyline points="300,212 502,212 502,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="300,212 502,212 502,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="502" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="300,303 510,303 510,185" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<circle cx="510" cy="185" r="3" fill="#8B4513"/>
+<polyline points="300,321 518,321 518,235" fill="none" stroke="#8a8a8a" stroke-width="2.2"/>
+<circle cx="518" cy="235" r="3" fill="#8a8a8a"/>
+<text x="308" y="317" font-size="8.5" text-anchor="start" font-weight="normal" fill="#8a8a8a">neutral</text>
+<polyline points="300,357 526,357 526,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="300,357 526,357 526,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="526" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="300,194 534,194 534,440 690,440" fill="none" stroke="#111111" stroke-width="2.2"/>
+<polyline points="300,339 542,339 542,502 690,502" fill="none" stroke="#111111" stroke-width="2.2"/>
+<polyline points="300,456 550,456 550,185" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<circle cx="550" cy="185" r="3" fill="#8B4513"/>
+<polyline points="300,474 558,474 558,235" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<circle cx="558" cy="235" r="3" fill="#1f5fbf"/>
+<polyline points="300,510 566,510 566,285" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="300,510 566,510 566,285" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<circle cx="566" cy="285" r="3" fill="#3a9d3a"/>
+<polyline points="300,492 574,492 574,564 690,564" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<polyline points="300,621 582,621 582,626 690,626" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<polyline points="1270,166 900,166 900,440 770,440" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<polyline points="1270,311 892,311 892,502 770,502" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<polyline points="1270,456 884,456 884,564 770,564" fill="none" stroke="#C08040" stroke-width="2.2"/>
+<polyline points="1270,1071 876,1071 876,626 770,626" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<polyline points="1500,1071 868,1071 868,626 770,626" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<polyline points="1270,1089 860,1089 860,688 770,688" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<text x="1262" y="1085" font-size="8.5" text-anchor="end" font-weight="normal" fill="#1f5fbf">switched live</text>
+<polyline points="1270,613 852,613 852,688 770,688" fill="none" stroke="#C08040" stroke-width="2.2"/>
+<polyline points="1500,1089 844,1089 844,750 770,750" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<text x="1492" y="1085" font-size="8.5" text-anchor="end" font-weight="normal" fill="#1f5fbf">switched live</text>
+<polyline points="1270,758 836,758 836,750 770,750" fill="none" stroke="#C08040" stroke-width="2.2"/>
+<text x="24" y="34" font-size="20" text-anchor="start" font-weight="bold" fill="#222">Stage 1 · As built (S-plan, 2017-2018): terminal-level wiring</text>
+<text x="24" y="56" font-size="12" text-anchor="start" font-weight="normal" fill="#444">Reconstructed from the Dec 2018 notes; core colours from the Oct 2026 survey. 6-way rows as in the 2018 notes.</text>
+<text x="482" y="142" font-size="12" text-anchor="start" font-weight="bold" fill="#222">INSTALLER&#x27;S JUNCTION BOX (plant room)</text>
+<polyline points="480,185 1112,185" fill="none" stroke="#8B4513" stroke-width="7"/>
+<text x="1110" y="178" font-size="9.5" text-anchor="end" font-weight="normal" fill="#333">L BAR · 9-way pos 1-3 (linked)</text>
+<polyline points="480,235 1112,235" fill="none" stroke="#1f5fbf" stroke-width="7"/>
+<text x="1110" y="228" font-size="9.5" text-anchor="end" font-weight="normal" fill="#333">N BAR · 9-way pos 4-6 (linked)</text>
+<polyline points="480,285 1112,285" fill="none" stroke="#e5d400" stroke-width="8.4"/>
+<polyline points="480,285 1112,285" fill="none" stroke="#3a9d3a" stroke-width="6.4" stroke-dasharray="7,7"/>
+<text x="1110" y="278" font-size="9.5" text-anchor="end" font-weight="normal" fill="#333">E BAR · 9-way pos 7-9 (linked)</text>
+<text x="730" y="415" font-size="11" text-anchor="middle" font-weight="bold" fill="#222">6-WAY STRIP</text>
+<rect x="690" y="426" width="80" height="28" rx="3" fill="#fff" stroke="#444"/>
+<text x="730" y="444" font-size="11" text-anchor="middle" font-weight="bold" fill="#222">1</text>
+<text x="730" y="466" font-size="8.5" text-anchor="middle" font-weight="normal" fill="#444">TF call → TF valve</text>
+<rect x="690" y="488" width="80" height="28" rx="3" fill="#fff" stroke="#444"/>
+<text x="730" y="506" font-size="11" text-anchor="middle" font-weight="bold" fill="#222">2</text>
+<text x="730" y="528" font-size="8.5" text-anchor="middle" font-weight="normal" fill="#444">MF call → MF valve</text>
+<rect x="690" y="550" width="80" height="28" rx="3" fill="#fff" stroke="#444"/>
+<text x="730" y="568" font-size="11" text-anchor="middle" font-weight="bold" fill="#222">3</text>
+<text x="730" y="590" font-size="8.5" text-anchor="middle" font-weight="normal" fill="#444">UF call → UF valve</text>
+<rect x="690" y="612" width="80" height="28" rx="3" fill="#fff" stroke="#444"/>
+<text x="730" y="630" font-size="11" text-anchor="middle" font-weight="bold" fill="#222">4</text>
+<text x="730" y="652" font-size="8.5" text-anchor="middle" font-weight="normal" fill="#444">timer out → cyl panels</text>
+<rect x="690" y="674" width="80" height="28" rx="3" fill="#fff" stroke="#444"/>
+<text x="730" y="692" font-size="11" text-anchor="middle" font-weight="bold" fill="#222">5</text>
+<text x="730" y="714" font-size="8.5" text-anchor="middle" font-weight="normal" fill="#444">cyl L panel out → valve</text>
+<rect x="690" y="736" width="80" height="28" rx="3" fill="#fff" stroke="#444"/>
+<text x="730" y="754" font-size="11" text-anchor="middle" font-weight="bold" fill="#222">6</text>
+<text x="730" y="776" font-size="8.5" text-anchor="middle" font-weight="normal" fill="#444">cyl R panel out → valve</text>
+<rect x="900" y="944" width="60" height="32" rx="4" fill="#fff3e0" stroke="#c0661a" stroke-width="1.6"/>
+<text x="930" y="964" font-size="11" text-anchor="middle" font-weight="bold" fill="#222">SL</text>
+<text x="930" y="990" font-size="8.5" text-anchor="middle" font-weight="normal" fill="#a04d10">SL joint (2-way block)</text>
+<text x="24" y="1218" font-size="11" text-anchor="start" font-weight="bold" fill="#222">Key</text>
+<polyline points="24,1236 58,1236" fill="none" stroke="#8B4513" stroke-width="2.2"/>
+<text x="66" y="1240" font-size="10" text-anchor="start" font-weight="normal" fill="#222">Brown: live / call / motor</text>
+<polyline points="324,1236 358,1236" fill="none" stroke="#C08040" stroke-width="2.2"/>
+<text x="366" y="1240" font-size="10" text-anchor="start" font-weight="normal" fill="#222">Light brown: valve motor</text>
+<polyline points="624,1236 658,1236" fill="none" stroke="#1f5fbf" stroke-width="2.2"/>
+<text x="666" y="1240" font-size="10" text-anchor="start" font-weight="normal" fill="#222">Blue: neutral (or as labelled)</text>
+<polyline points="924,1236 958,1236" fill="none" stroke="#8a8a8a" stroke-width="2.2"/>
+<text x="966" y="1240" font-size="10" text-anchor="start" font-weight="normal" fill="#222">Grey: as labelled</text>
+<polyline points="1224,1236 1258,1236" fill="none" stroke="#111111" stroke-width="2.2"/>
+<text x="1266" y="1240" font-size="10" text-anchor="start" font-weight="normal" fill="#222">Black: as labelled</text>
+<polyline points="24,1256 58,1256" fill="none" stroke="#f28c28" stroke-width="2.2"/>
+<text x="66" y="1260" font-size="10" text-anchor="start" font-weight="normal" fill="#222">Orange: valve end switch out</text>
+<polyline points="324,1256 358,1256" fill="none" stroke="#e5d400" stroke-width="3.6"/>
+<polyline points="324,1256 358,1256" fill="none" stroke="#3a9d3a" stroke-width="1.6" stroke-dasharray="7,7"/>
+<text x="366" y="1260" font-size="10" text-anchor="start" font-weight="normal" fill="#222">Green/yellow: earth</text>
+<polyline points="624,1256 658,1256" fill="none" stroke="#d62828" stroke-width="2.2"/>
+<text x="666" y="1260" font-size="10" text-anchor="start" font-weight="normal" fill="#222">Red: Cotherm / opto</text>
+<polyline points="924,1256 958,1256" fill="none" stroke="#7b3fa0" stroke-width="2.2"/>
+<text x="966" y="1260" font-size="10" text-anchor="start" font-weight="normal" fill="#222">Purple: 3.3 V logic</text>
+<text x="24" y="1282" font-size="10" text-anchor="start" font-weight="normal" fill="#333">Every heating and hot-water demand opens a zone valve; only the valve end switches (orange) make the boiler switched live.</text>
+<text x="24" y="1297" font-size="10" text-anchor="start" font-weight="normal" fill="#333">Row numbering follows the 2018 notes, which do not match the strip as surveyed in 2026; exact as-built positions are not recoverable.</text>
+</svg>
