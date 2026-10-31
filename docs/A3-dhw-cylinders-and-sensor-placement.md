@@ -56,3 +56,24 @@ An unvented cylinder heated indirectly must have an **overheat (high-limit) cut-
 - **Outlet temperature** on each cylinder's hot outlet (strap-on NTC into a plant-room ESP32): the real temperature at the top of the cylinder. Comparing it with the CS92 shows how far the top overshoots the setpoint, and confirms the stratification reasoning above with data.
 
 The pressure gauges and drip sensors together diagnose the current tundish drips (expansion vessels and relief valves, which are being replaced) and give lasting protection monitoring for the unvented system.
+
+## Cylinder data plate (both cylinders)
+
+| Item | Value |
+|---|---|
+| Model | Centre Store unvented indirect 250 L (Wolseley, product code 176705) |
+| Max mains pressure | 16 bar |
+| Operating pressure / pressure reducing valve | 3.5 bar |
+| Rated pressure | 7 bar |
+| Expansion vessel charge | **3.5 bar** |
+| Expansion relief valve | **6 bar** |
+| Temperature/pressure relief valve | 90 °C / 10 bar |
+| Max primary circuit pressure | 3 bar |
+| Coil rating | 18 kW (primary flow 15 L/min at 80 °C) |
+| **Immersion** | **One element: 3 kW at 240 V / 2.8 kW at 230 V** |
+| Thermostat high limit | 85 °C (+4 / −6) |
+| Heat loss | 2.22 kWh/day at 65 °C |
+
+**Tundish drips:** with the expansion vessel charged at 3.5 bar, a vessel that has lost charge makes the expansion relief valve (6 bar) lift on each heat-up. Check the vessel charge first.
+
+**Immersions share one circuit:** both cylinders' immersions are fed from the **Water heater B16 RCBO** via two double-pole isolators. Each element draws about 12 A, so **use one at a time** (both together would be about 24 A on a 16 A circuit).

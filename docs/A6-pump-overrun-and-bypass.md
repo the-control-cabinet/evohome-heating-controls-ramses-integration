@@ -24,12 +24,29 @@ Raised by the Resideo course (TRVs, bypasses, pump overrun) and checked against 
 
 **Now:** better, not solved. With TF and MF latched open, the radiator circuits stay open unless **every HR92 is shut at once** (a warm house, or hot water only in summer). A latched valve may also not be fully open ([F14](https://github.com/the-control-cabinet/fdd-rules-heating-plant/blob/main/docs/01-rules.md)).
 
+## Fault history (read 30 Oct 2026)
+Function + RESTART held for 5 s shows the last three faults: **F1, FU, F1**.
+
+| Code | Meaning | Cause on this system |
+|---|---|---|
+| **F1** ×2 | Low system pressure | The **known slow pressure leak**: the sealed circuit is topped up about every two weeks |
+| **FU** | Flow/return difference > 50 °C (no circulation) | The boiler's **flow and return isolation valves left shut** after a plumber's visit; reopened |
+| L1 | Overheat / no-flow lockout | **Not recorded** (only three entries are kept) |
+
+No L1 is mildly reassuring about the bypass, not conclusive.
+
 ## Evidence still to gather
-1. **Boiler fault history** (function + RESTART held 5 s shows the last three faults): look for **L1** (overheat / no-flow lockout). Needs power.
 2. A search along the boiler's **flow and return** pipework (and airing cupboard, manifold area) for an ABV.
 3. The **Benchmark checklist**, if it survives.
 
-## Remedy (Gas Safe engineer, at the next service)
+## Gas Safe visit list
+1. **Bypass:** fit an automatic bypass valve, or leave one radiator ≥ 0.6 kW open on twin lockshields.
+2. **Slow pressure leak:** find it. Check the boiler's own **pressure relief valve discharge pipe** outside; a relief valve lifting as the system heats is a common hidden cause.
+3. **Boiler expansion vessel:** check and recharge (a low charge makes pressure swing and the relief valve lift).
+4. **Inhibitor:** test and re-dose after repeated top-ups (fresh water dilutes it and brings in oxygen).
+5. **Boiler earth:** the supply flex has no earth core ([A4](A4-junction-box-survey-and-wiring.md#core-level-map-ring-markers-fitted-31-oct-2026)); prove the earth path and fit a flex with a CPC.
+
+## Remedy for the bypass (Gas Safe engineer, at the next service)
 - Fit an **automatic bypass valve** between flow and return, set per the boiler's minimum flow, **or**
 - Put **twin lockshields on one radiator of at least about 0.6 kW** (remove its HR92), ideally one in the hall or landing.
 

@@ -1,0 +1,43 @@
+marker,position,core,cable,function,sleeve
+00,SL,Grey,BLR,Boiler switched live,Brown
+01,SL,Black,RAD,Radiator BDR91 output (TF stat cable),Brown
+02,SL,Orange,VUF,UFH valve end switch out,
+03,SL,Orange,VCL,Cyl L valve end switch out,
+04,SL,Orange,VCR,Cyl R valve end switch out,
+10,1 L,Link,,To position 2,
+11,1 L,Brown,HCC,UFH controller (HCC80R) live,
+12,1 L,Brown,RAD,Radiator BDR91 live (TF stat cable),
+13,1 L,Brown,UFH,UFH BDR91 live (MF stat cable),
+14,1 L,Brown,HWL,HW relay cyl L live (added 2018),
+15,1 L,Brown,HWR,HW relay cyl R live (added 2018),
+"20, 21",2 L,Links,,"From 1, to 3",
+22,2 L,Grey,VCL,Cyl L valve end-switch feed,Brown
+23,2 L,Grey,VCR,Cyl R valve end-switch feed,Brown
+30,3 L,Link,,From 2,
+31,3 L,Grey,VUF,UFH valve end-switch feed,Brown
+32,3 L,Brown,SUP,Incoming supply live (Boiler B6 RCBO),
+33,3 L,Brown,BLR,Boiler permanent live,
+40,4 N,Link,,To position 5,
+41,4 N,Grey,HCC,UFH controller neutral,Blue
+42,4 N,Grey,RAD,Radiator BDR91 neutral,Blue
+43,4 N,Grey,UFH,UFH BDR91 neutral,Blue
+44,4 N,Blue,HWL,HW relay cyl L neutral,
+45,4 N,Blue,HWR,HW relay cyl R neutral,
+"50, 51",5 N,Links,,"From 4, to 6",
+52,5 N,Blue,VCL,Cyl L valve motor neutral,
+53,5 N,Blue,VCR,Cyl R valve motor neutral,
+60,6 N,Link,,From 5,
+61,6 N,Blue,VUF,UFH valve motor neutral,
+62,6 N,Black,BLR,Boiler neutral,Blue
+63,6 N,Blue,SUP,Incoming supply neutral,
+70,7 E,Link,,To position 8,
+71,7 E,G/Y,VUF,UFH valve earth,
+72,7 E,G/Y,DAN,Danfoss cable earth,
+"80, 84",8 E,Links,,"From 7, to 9",
+81,8 E,G/Y,VCL,Cyl L valve earth,
+82,8 E,G/Y,VCR,Cyl R valve earth,
+83,8 E,G/Y,HCC,UFH controller earth,
+90,9 E,Link,,From 8,
+91,9 E,G/Y,SUP,Incoming supply earth,
+92,9 E,G/Y,RAD,TF stat cable earth,
+93,9 E,G/Y,UFH,MF stat cable earth,

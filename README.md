@@ -134,6 +134,8 @@ All zones have **local override** enabled: a wall-stat change holds until the ne
 | Missing pipe lagging | Avoidable primary and DHW losses | Complete it |
 | **No automatic bypass** | The Ideal Logic+ System S30 manual requires an ABV with TRVs on all radiators or two-port valves; there are HR92s everywhere, five two-port valves, and no ABV found ([A6](docs/A6-pump-overrun-and-bypass.md)) | Read the boiler fault history for L1 lockouts; Gas Safe engineer to fit an ABV or leave one radiator (≥ 0.6 kW) open |
 | TF/MF valves latched in manual override | May not be fully open, restricting the radiator circuits | Check the position; re-power the heads on a permanent live if needed |
+| **Boiler earth** | The boiler's supply flex has no earth core | Prove the earth path (continuity to the earth bar); Gas Safe to fit a flex with a CPC |
+| Slow pressure leak | Topped up about every two weeks; fault history shows F1 twice | Gas Safe: relief valve, expansion vessel, leak search, inhibitor |
 | Wiring identification | Blues used as switched lives, greys and a black used as neutrals; two floating Danfoss cores; hot-water BDR91s on stiff cable, loose | Tidy-up planned: sleeving, caps, labels, flex in trunking ([A4](docs/A4-junction-box-survey-and-wiring.md#7-planned-tidy-up-box-still-isolated)) |
 
 ---
@@ -448,6 +450,7 @@ The README covers the whole journey. These hold the full detail:
 ├── data/device-inventory.csv          ← 40 RF devices
 ├── data/fault-timeline.csv
 ├── data/junction-box-terminal-map.csv ← surveyed Oct 2026
+├── data/junction-box-core-map.csv     ← every core, by marker
 ├── docs/                              ← A1-A8, B0-B7, C1-C6, D1
 ├── docs/images/                       ← survey photos (metadata stripped)
 └── scripts/packet-audit.sh · rename_rf_entities.py · list_ramses_devices.sh

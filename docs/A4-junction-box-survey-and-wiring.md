@@ -89,6 +89,63 @@ Boiler flex **grey** (switched live) + cylinder L, cylinder R and UFH valve **en
 | Danfoss TS715Si cable | Brown → 6-way pos 3 (timer output); **black and grey left floating by the original installer** (to be capped and labelled) |
 | UFH valve head | Honeywell Home **40003916-001** (V4043H replacement powerhead). Its **white N/C core is unused in S-plan** and is capped in a Wago 221, per the manufacturer's instructions |
 
+### Core-level map (ring markers fitted, 31 Oct 2026)
+
+Every core on the 9-way strip and the switched-live joint carries a **two-digit clip-on marker**: first digit = position (0 = the switched-live joint), second = core at that position. Cable codes are the labels at each cable entry. The table below is the whole of the distribution wiring.
+
+| Marker | Pos | Core | Cable | Function | Sleeve |
+|---|---|---|---|---|---|
+| 00 | SL | Grey | BLR | Boiler switched live | Brown |
+| 01 | SL | Black | RAD | Radiator BDR91 output (TF stat cable) | Brown |
+| 02 | SL | Orange | VUF | UFH valve end switch out | |
+| 03 | SL | Orange | VCL | Cyl L valve end switch out | |
+| 04 | SL | Orange | VCR | Cyl R valve end switch out | |
+| 10 | 1 L | Link | | To position 2 | |
+| 11 | 1 L | Brown | HCC | UFH controller (HCC80R) live | |
+| 12 | 1 L | Brown | RAD | Radiator BDR91 live (TF stat cable) | |
+| 13 | 1 L | Brown | UFH | UFH BDR91 live (MF stat cable) | |
+| 14 | 1 L | Brown | HWL | HW relay cyl L live (added 2018) | |
+| 15 | 1 L | Brown | HWR | HW relay cyl R live (added 2018) | |
+| 20, 21 | 2 L | Links | | From 1, to 3 | |
+| 22 | 2 L | Grey | VCL | Cyl L valve end-switch feed | Brown |
+| 23 | 2 L | Grey | VCR | Cyl R valve end-switch feed | Brown |
+| 30 | 3 L | Link | | From 2 | |
+| 31 | 3 L | Grey | VUF | UFH valve end-switch feed | Brown |
+| 32 | 3 L | Brown | SUP | Incoming supply live (Boiler B6 RCBO) | |
+| 33 | 3 L | Brown | BLR | Boiler permanent live | |
+| 40 | 4 N | Link | | To position 5 | |
+| 41 | 4 N | Grey | HCC | UFH controller neutral | Blue |
+| 42 | 4 N | Grey | RAD | Radiator BDR91 neutral | Blue |
+| 43 | 4 N | Grey | UFH | UFH BDR91 neutral | Blue |
+| 44 | 4 N | Blue | HWL | HW relay cyl L neutral | |
+| 45 | 4 N | Blue | HWR | HW relay cyl R neutral | |
+| 50, 51 | 5 N | Links | | From 4, to 6 | |
+| 52 | 5 N | Blue | VCL | Cyl L valve motor neutral | |
+| 53 | 5 N | Blue | VCR | Cyl R valve motor neutral | |
+| 60 | 6 N | Link | | From 5 | |
+| 61 | 6 N | Blue | VUF | UFH valve motor neutral | |
+| 62 | 6 N | Black | BLR | Boiler neutral | Blue |
+| 63 | 6 N | Blue | SUP | Incoming supply neutral | |
+| 70 | 7 E | Link | | To position 8 | |
+| 71 | 7 E | G/Y | VUF | UFH valve earth | |
+| 72 | 7 E | G/Y | DAN | Danfoss cable earth | |
+| 80, 84 | 8 E | Links | | From 7, to 9 | |
+| 81 | 8 E | G/Y | VCL | Cyl L valve earth | |
+| 82 | 8 E | G/Y | VCR | Cyl R valve earth | |
+| 83 | 8 E | G/Y | HCC | UFH controller earth | |
+| 90 | 9 E | Link | | From 8 | |
+| 91 | 9 E | G/Y | SUP | Incoming supply earth | |
+| 92 | 9 E | G/Y | RAD | TF stat cable earth | |
+| 93 | 9 E | G/Y | UFH | MF stat cable earth | |
+
+Cable codes: SUP supply · BLR boiler · HCC UFH controller · RAD TF stat cable (radiator relay) · UFH MF stat cable (UFH relay) · HWL / HWR hot-water relay cables · VCL / VCR / VUF valve cables · VTF / VMF disconnected valve heads · CPL / CPR cylinder panel cables · DAN Danfoss cable · OPT opto cables.
+
+**What the core map settled or found:**
+- **The HCC80R supply is confirmed** (11 / 41 / 83), no longer assumed.
+- **The MF stat cable now carries the UFH relay;** its output is on the old 6-way position 4 with the UF valve motor. The TF and MF valves' end switches are not in the box (heads disconnected), so one relay (01) calls the boiler for both radiator floors.
+- ⚠️ **The boiler flex has no earth core** (brown, black, grey only). Its permanent live (33) and neutral (62) come from this box, so the boiler's earth path must be proved: continuity from the earth bar to the boiler case or gas pipe, then a flex with a CPC (Gas Safe list, [A6](A6-pump-overrun-and-bypass.md)).
+- **Earths cut at the entry:** the hot-water relay cables (replaced in the tidy-up) and the **cylinder panel cables** (to be connected to earth, or capped, in the tidy-up).
+
 ## 4. The BDR91s
 
 ![Landing BDR91 wall plate](images/landing-bdr91-wall-plate.jpg)
@@ -125,6 +182,8 @@ Panel connector block (positions 1-6 from the left): 1 = switched live in from t
 | Builder-installed intruder alarm on its own B6 RCBO, off | Unused; not related to the heating |
 | Smoke/heat/CO alarms on a separate circuit | Unaffected by heating isolation |
 | Hot-water BDR91s on stiff twin-and-earth, loose on the wall | Re-run in heat-resistant flex in trunking (below) |
+| **Boiler flex has no earth core** | Prove the boiler's earth path; replace the flex with one that has a CPC |
+| Cylinder panel cable earths cut and floating | Connect to earth or cap in the tidy-up |
 
 ## 7. Planned tidy-up (box still isolated)
 
@@ -132,7 +191,8 @@ Panel connector block (positions 1-6 from the left): 1 = switched live in from t
 |---|---|
 | Hot-water BDR91 re-wire | One **3095Y 5-core 0.75 mm² heat-resistant flex (H05V2V2-F, BASEC)** per relay: brown → L, blue → N, black → A (from the timer), grey → B (out), G/Y capped at the relay (BDR91 is double-insulated). 0.75 mm² is protected by the B6 RCBO |
 | Relay mounting | Each BDR91 on a **D-Line 1-gang 32 mm surface pattress** with knockouts for **25×16 mini trunking**; the 5-core splits inside the pattress to the BDR91's two rear openings |
-| Crowded joints | Choc blocks kept for the bars and two-core joints (single or twin ferrules). **Wago 221** only where an opto tap pushes a joint past two cores: 6-way pos 1, 2, 3 and the boiler switched-live joint |
+| Control joints | **The 6-way strip and the switched-live block are replaced by Wago 221s (W1-W7) in printed mounts:** W1/W2 (3-way: cylinder stat outputs + opto taps), W3 (5-way: timer out + both HW relay A + opto tap), W4-W6 (2-way: UFH relay → UF valve, HW relay B → panels), W7 (5-way + 3-way linked: boiler switched live + opto tap). Markers 00-04 move with their cores |
+| Distribution bars | 9-way choc block kept and tidied; an all-Wago version (3 / 4 / 4 linked 5-ways in printed mounts) is being dry-run for space |
 | Opto taps | Boiler switched live, timer output, and both cylinders' **stat-passing** points (pos 1, pos 2); relay states come from RAMSES-II. See the plant monitoring repo |
 | Identification | Sleeving as above; every cable labelled at both ends; strip positions and Wagos labelled; lid label naming both isolation points |
 | Verification before re-energising | Continuity of every moved joint against this map; then **TS715Si on permanent ON**, BDR91s reporting in HA, heating and hot water both run |

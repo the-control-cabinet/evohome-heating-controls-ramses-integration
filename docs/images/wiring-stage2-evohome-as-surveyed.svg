@@ -64,7 +64,7 @@
 <text x="294" y="867" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">E</text>
 <rect x="60" y="925" width="240" height="78" rx="6" fill="#f7f7f7" stroke="#555"/>
 <text x="68" y="940" font-size="11" text-anchor="start" font-weight="bold" fill="#222">HCC80R + HCS80 (UFH zones)</text>
-<text x="68" y="953" font-size="9" text-anchor="start" font-weight="normal" fill="#555">understairs; neutral assumed = 3rd grey at N bar</text>
+<text x="68" y="953" font-size="9" text-anchor="start" font-weight="normal" fill="#555">understairs; supply confirmed (markers 11 / 41 / 83)</text>
 <circle cx="300" cy="961" r="3.2" fill="#fff" stroke="#333"/>
 <text x="294" y="965" font-size="9.5" text-anchor="end" font-weight="normal" fill="#222">L</text>
 <circle cx="300" cy="979" r="3.2" fill="#fff" stroke="#333"/>

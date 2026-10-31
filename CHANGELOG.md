@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.0] - 2026-10-31
+- A4: core-level map of the 9-way strip and the switched-live joint (ring markers 00-93, cable codes); HCC80R supply confirmed; boiler flex found to have no earth core; cylinder panel and HW relay cable earths cut at entry; tidy-up plan updated (6-way and SL block → Wagos W1-W7 in printed mounts).
+- A6: boiler fault history (F1 ×2 slow leak, FU closed isolation valves, no L1) and the Gas Safe visit list.
+- A3/A7: cylinder data plate (pressures, element rating, high limit), Cotherm part and cut-out band, immersions one at a time.
+- data/junction-box-core-map.csv.
+
 ## [1.2.2] - 2026-10-29
 - Cylinder boxes clarified: the lower box has two pockets; the upper box is a circular opening with no pocket.
 

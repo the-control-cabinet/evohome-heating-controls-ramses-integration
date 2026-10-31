@@ -17,6 +17,8 @@ Moving the CS92 elsewhere isn't attractive: the upper panel's opening (about ⅗
 ## Cylinder and parts
 Centre Store unvented indirect 250 L (Wolseley own brand, product code 176705), ×2. **The manufacturer's immersion wiring diagram is the authority**; obtain it before the first swap. The two Cotherms are stored bagged and labelled.
 
+**Cotherm unit:** **BBSC0131**, safety cut-out marked **S89 °C −10K** (trips in the 79-89 °C band, matching the cylinder's 85 °C +4/−6 high limit), date code **02/2017** (original fit).
+
 **Cotherm leads:** a red and a black with **pin ends** (to panel connector block 4 and 5) and a red and a black with **6.3 mm spade tabs** (to the element studs). No L/N marking on the body.
 
 ## Pre-check (bench, unpowered)
@@ -28,7 +30,7 @@ Continuity at room temperature with the cut-out reset: **red to red** and **blac
 3. Insert the Cotherm's rod and capillary **fully** into the top pocket (don't kink the capillary); seat and secure the unit in the **Element control** position.
 4. Spade leads to the two element studs; refit the stud covers.
 5. Pin leads: **red → connector block 4 (L)**, **black → 5 (N)**. Confirm the element earth on the flange tag.
-6. Set the thermostat to about **60 °C**; refit the cover; restore B16; switch on. Check it heats and cycles.
+6. Set the thermostat to about **60 °C**; refit the cover; restore B16; switch on **this cylinder's isolator only** (each element is about 12 A, and both share the 16 A circuit). Check it heats and cycles.
 
 ## Reverse (boiler fixed)
 1. Isolate B16; prove dead; remove and re-bag the Cotherm.
