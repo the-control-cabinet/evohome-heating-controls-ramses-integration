@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.0] - 2026-11-02
+- B6 rewritten: gateway health measured from RF traffic (the MQTT online status can't see outages); the RF stall on the updated firmware (Wi-Fi and MQTT up, `cmd` answers, soft `reset` cures it; same on PC USB and wall adapter); timing pattern; upstream #50 with #48/#49; auto-restart watchdog and the repeat-guard lesson.
+- B4: gateway firmware update over USB (browser flasher, addresses, partition check); `!V` reply and the RF stall added to known issues.
+- config/ha-gateway-monitoring.yaml, ha-gateway-automations.yaml, ha-gateway-card.yaml; data/gateway-rf-stalls.csv.
+
 ## [1.3.0] - 2026-10-31
 - A4: core-level map of the 9-way strip and the switched-live joint (ring markers 00-93, cable codes); HCC80R supply confirmed; boiler flex found to have no earth core; cylinder panel and HW relay cable earths cut at entry; tidy-up plan updated (6-way and SL block → Wagos W1-W7 in printed mounts).
 - A6: boiler fault history (F1 ×2 slow leak, FU closed isolation valves, no L1) and the Gas Safe visit list.

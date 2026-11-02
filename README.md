@@ -447,6 +447,7 @@ The README covers the whole journey. These hold the full detail:
 ├── README.md
 ├── CHANGELOG.md · LICENSE
 ├── config/ramses-schema.yaml          ← both controllers (masked IDs, anonymised zone names)
+├── config/ha-gateway-*.yaml           ← gateway health sensors, watchdog automations, dashboard card
 ├── data/device-inventory.csv          ← 40 RF devices
 ├── data/fault-timeline.csv
 ├── data/junction-box-terminal-map.csv ← surveyed Oct 2026

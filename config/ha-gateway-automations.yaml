@@ -1,0 +1,115 @@
+# RAMSES-II gateway automations (automations.yaml format; or paste each into the editor's YAML mode)
+# Gateway ID masked as 18:000001. notify.notify = your notification target.
+
+# 3a. Auto-restart watchdog: soft reset over MQTT when RF stops while MQTT is up
+- alias: RAMSES gateway auto-restart
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.ramses_gateway_receiving
+      to: "off"
+      for:
+        minutes: 3          # + 2 min for "receiving" to go off = 5 min without RF
+  conditions:
+    - condition: state
+      entity_id: binary_sensor.ramses_gateway_online
+      state: "on"
+  actions:
+    - action: logbook.log
+      data:
+        name: RAMSES gateway
+        entity_id: binary_sensor.ramses_gateway_receiving
+        message: "No radio traffic for 5 min while on MQTT: sending soft reset"
+    - action: mqtt.publish
+      data:
+        topic: RAMSES/GATEWAY/18:000001/cmd/cmd
+        payload: reset
+    - wait_for_trigger:
+        - trigger: state
+          entity_id: binary_sensor.ramses_gateway_receiving
+          to: "on"
+      timeout:
+        minutes: 5
+      continue_on_timeout: true
+    - if:
+        - condition: template
+          value_template: "{{ wait.trigger is not none }}"
+      then:
+        - action: logbook.log
+          data:
+            name: RAMSES gateway
+            entity_id: binary_sensor.ramses_gateway_receiving
+            message: "Soft reset worked: receiving again"
+        - action: notify.notify
+          data:
+            title: "RAMSES gateway"
+            message: "Stick stalled and was restarted automatically. Receiving again."
+      else:
+        - action: logbook.log
+          data:
+            name: RAMSES gateway
+            entity_id: binary_sensor.ramses_gateway_receiving
+            message: "Soft reset did NOT restore radio traffic: needs a power cycle"
+        - action: notify.notify
+          data:
+            title: "RAMSES gateway – action needed"
+            message: "Soft reset didn't bring the stick back. Unplug and replug it."
+  mode: single
+  # No repeat guard: the trigger is a change to "off", so a dead stick can't loop it.
+
+# 3b. Down alert: only if the watchdog didn't fix it
+- alias: RAMSES gateway down
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.ramses_gateway_receiving
+      to: "off"
+      for:
+        minutes: 13         # = 15 min without RF
+  actions:
+    - action: notify.notify
+      data:
+        title: "RAMSES gateway"
+        message: "No radio traffic for 15 minutes. The automatic restart hasn't fixed it."
+  mode: single
+
+# 3c. RX gap logger: logs every gap over 60 s when traffic resumes
+- alias: RAMSES RX gap logged
+  triggers:
+    - trigger: state
+      entity_id: sensor.ramses_gateway_last_rx
+  conditions:
+    - condition: template
+      value_template: >
+        {{ trigger.from_state is not none
+           and trigger.from_state.state not in ['unknown', 'unavailable']
+           and (as_datetime(trigger.to_state.state) - as_datetime(trigger.from_state.state)).total_seconds() > 60 }}
+  actions:
+    - action: counter.increment
+      target:
+        entity_id: counter.ramses_rx_gaps
+    - action: logbook.log
+      data:
+        name: RAMSES gateway
+        entity_id: binary_sensor.ramses_gateway_receiving
+        message: >
+          No radio traffic for {{ (as_datetime(trigger.to_state.state) - as_datetime(trigger.from_state.state)).total_seconds() | round(0) }} s, now receiving again
+  mode: queued
+  max: 10
+
+# 3d. Recovery logger
+- alias: RAMSES gateway reconnect logged
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.ramses_gateway_receiving
+      from: "off"
+      to: "on"
+  actions:
+    - action: counter.increment
+      target:
+        entity_id: counter.ramses_reconnects
+    - action: logbook.log
+      data:
+        name: RAMSES gateway
+        entity_id: binary_sensor.ramses_gateway_receiving
+        message: >
+          Receiving again after {{ ((trigger.to_state.last_changed - trigger.from_state.last_changed).total_seconds() / 60) | round(1) }} min
+  mode: queued

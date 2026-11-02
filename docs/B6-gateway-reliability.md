@@ -2,50 +2,63 @@
 
 [← Back to README](../README.md)
 
-## Symptom
+**Status (2 Nov 2026): root cause narrowed to the gateway firmware's radio side; automatic recovery in place; fix awaited upstream.** The ESP-based RAMSES-II gateway periodically **stops receiving RF while its Wi-Fi and MQTT stay connected**. A soft restart over MQTT cures it, and Home Assistant now does that automatically.
 
-After some hours the gateway appeared **offline** in HA and stayed that way until its power was cycled. Several times.
+## 1. History
 
-## What was established
+| Phase | Symptom | Finding |
+|---|---|---|
+| Oct 2026, factory firmware | Gateway "offline" in HA after some hours; power cycle needed | Still answered ping and its serial console: Wi-Fi up, **MQTT not restored**. Stable on a laptop USB port (16 h+, 12.5 h+); unreliable on a wall adapter |
+| Issue raised upstream (IndaloTech/ramses_esp #47) | Stick stops retrying Wi-Fi after a drop | Maintainer released a network-stability update at the end of October |
+| 2 Nov 2026, updated firmware (flashed over USB, [B4](B4-upgrade-and-known-issues.md#gateway-firmware-update-usb-browser-flasher)) | **Wi-Fi reconnection now works**: the stick rejoined Wi-Fi by itself several times | But a **different fault** appeared: RF reception stops |
 
-| Observation | Meaning |
+## 2. Monitoring built to measure it
+
+The MQTT "online" status could not detect outages: the broker only noticed a dead connection when the stick reconnected, so "offline" and "online" arrived in the same second. Gateway health is therefore measured from **radio traffic**:
+
+| Point | Source | Purpose |
+|---|---|---|
+| Last RX | MQTT sensor on the `/rx` topic, timestamped on every message | Time since the last RF packet |
+| **Receiving** | Template binary sensor: last RX < 120 s ago | The real "gateway working" signal |
+| MQTT online | `RAMSES/GATEWAY/<id>` (online/offline) | Connection state only |
+| Firmware | `/info/version` | Version actually running |
+| On Wi-Fi + signal | Router integration (AsusRouter) tracker and its RSSI | Separates a Wi-Fi drop from a hang |
+| Gap and recovery counters, logbook entries | Automations | A record of every outage and its length |
+
+Config: [sensors](../config/ha-gateway-monitoring.yaml) · [automations](../config/ha-gateway-automations.yaml) · [dashboard card](../config/ha-gateway-card.yaml).
+
+## 3. The RF stall (updated firmware)
+
+| Observation during a stall | Meaning |
 |---|---|
-| While "offline" it **still answered ping** and its USB serial console | The Wi-Fi link was up, so this pointed at the **MQTT connection not being restored** rather than a total Wi-Fi loss |
-| Eight other ESP32 devices on the same network and router stayed connected | Not a general network problem |
-| On a laptop USB port, with the laptop kept awake: **16 h+** and **12.5 h+** with no gaps | Stable on that supply |
-| Earlier gaps on laptop power | Traced to the laptop **sleeping**, not the stick |
+| No `/rx` messages at all | Radio receive path stopped |
+| MQTT connected; Wi-Fi connected at −62 to −64 dBm | **Not Wi-Fi, not signal, not MQTT** |
+| Solid green LED | Matches another user's report (upstream #48); the maintainer separates this from a TX stall (blue LED, PR #44) |
+| `cmd` published to the command topic returns `ESP_OK` | **CPU and MQTT task alive** |
+| `reset` published to the command topic restarts it; RF resumes within about a minute | **Soft restart cures it**: no power cycle needed |
+| Same fault on a PC USB port and on a wall adapter | **Not the power supply** |
+| Wi-Fi dropped and rejoined several times during one stall, RF stayed dead | The Wi-Fi fix works; the radio side is separate |
 
-## Measuring it
+**Timing pattern:** every stall so far began shortly after a reconnect or a burst of host activity (an HA restart, Wi-Fi access-point changes, a Wi-Fi rejoin), and the stick can **re-stall within minutes of a reset**. Event log: [data/gateway-rf-stalls.csv](../data/gateway-rf-stalls.csv).
 
-Packets per hour from the logs. Gaps show exactly when it was offline:
+Reported upstream as IndaloTech/ramses_esp **#50**, cross-referenced to #48 (same symptom) and #49 (MQTT reconnect memory leak).
 
-```bash
-cat /config/ramses_rf_logs/packet_log.log* | cut -c1-13 | sort | uniq -c
-```
+## 4. Automatic recovery (watchdog)
 
-## Wall-adapter test: still failing (open issue)
+An automation publishes `reset` when **Receiving** has been off for 5 minutes **while MQTT is still connected** (the stall pattern), waits up to 5 minutes for traffic, then reports success or asks for a power cycle. A separate alert fires only if traffic has been missing for 15 minutes, i.e. the watchdog failed.
 
-On a plug-in **wall adapter** the gateway **still can't hold its connection reliably**. It's stable on a computer's USB port, so the difference is either:
+**Lesson from the first night:** a 15-minute "don't repeat" guard blocked the second reset when the stick re-stalled within minutes. The guard was unnecessary: the trigger is a **change** to "not receiving", so the watchdog can't loop on a stick that stays dead. It was removed.
 
-| Candidate | How to tell |
-|---|---|
-| **Supply:** the adapter can't meet the ESP32-S3's Wi-Fi transmit current peaks, or its 5 V sags or is noisy | Try a known-good 5 V 2 A+ supply and a short, thick USB cable; or a powered USB hub fed from the same wall socket. If it becomes stable, it was the supply |
-| **Wi-Fi coverage** at the wall-adapter location | Note the stick's RSSI and the router's client list at each location; test the wall adapter *where the PC is* (same position, different supply) to separate the two variables |
+## 5. Next steps
 
-**Current workaround:** powered from the PC's USB port. It's stable, but the location isn't central between the two controllers, so it's not the final position.
+1. Review the first full night of watchdog traces (stall count, minutes between stalls, every reset successful?) and update #50.
+2. Try any test build the maintainer publishes for the green-LED stall; keep the watchdog for a week after a fix.
+3. If asked for serial logs: disable the watchdog, catch a stall, connect USB before resetting.
+4. Gateway location: now at the central landing position on a wall adapter (−62 to −64 dBm through the nearest mesh node).
 
-## Next steps
+## Lessons
 
-1. Wall adapter **at the PC's location** (changes only the supply).
-2. If that fails: a better 5 V supply or cable at the same spot.
-3. If supply is ruled out: improve Wi-Fi at the central location (dedicated 2.4 GHz SSID, access point or mesh node), then move the stick there.
-4. At any stuck episode: does it ping, what does the serial log say, and did Mosquitto or HA restart just before?
-
-## Mitigations if it recurs
-
-- A smart-plug power-cycle automation (works whatever the cause).
-- Router: a dedicated 2.4 GHz SSID on a fixed channel; band steering and 802.11k/v/r off for it; check the router log for de-auths.
-
-## Issue report
-
-Raised as an issue on the firmware's public repository (IndaloTech/ramses_esp), including: hardware, MQTT mode, the ping and serial evidence, the comparison devices and related issues. **No response from the maintainer yet.** It will be updated with the supply/location test results and per-hour packet counts.
+- **Measure the service, not the connection.** "Connected" was true during every outage; only traffic told the truth.
+- **Separate the variables:** supply (PC vs wall adapter), Wi-Fi (router RSSI and presence), MQTT (online status, command replies) and radio (RX) each have their own point.
+- **A cheap test while it's broken is worth more than a restart.** One command (`cmd`) during a stall proved the CPU and MQTT were alive.
+- **A workaround is a control, not a fix.** The watchdog keeps the heating integration working; the fault stays open upstream.

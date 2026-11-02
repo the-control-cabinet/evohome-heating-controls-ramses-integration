@@ -1,0 +1,6 @@
+date,stall_start,recovered,power,recovery_method,wifi_during_stall,notes
+2026-11-02,10:10,10:18,PC USB,power cycle,connected,About 2 min after an HA restart (ramses_cc reconnect and polling)
+2026-11-02,12:15,13:09,wall adapter,power cycle,connected,During Wi-Fi access-point changes
+2026-11-02,13:27,20:56,wall adapter,MQTT reset (manual),"connected, rejoined several times",About 4 min after the stick rejoined Wi-Fi; cmd answered ESP_OK during the stall; solid green LED
+2026-11-02,evening,evening,wall adapter,MQTT reset (watchdog),connected,First automatic recovery
+2026-11-02,22:18,,wall adapter,MQTT reset (manual),connected,Re-stalled within minutes of the previous reset; watchdog blocked by its repeat guard (guard since removed)

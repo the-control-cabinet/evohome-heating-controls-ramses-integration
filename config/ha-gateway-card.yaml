@@ -1,0 +1,50 @@
+# RAMSES gateway dashboard card (vertical stack). Entity IDs as in ha-gateway-monitoring.yaml;
+# device_tracker.ramses_gateway and sensor.ramses_gateway_wi_fi_signal come from the router
+# integration (a template sensor of the tracker's rssi attribute: unit dBm, signal strength).
+type: vertical-stack
+cards:
+  - type: entities
+    title: RAMSES gateway
+    entities:
+      - entity: binary_sensor.ramses_gateway_receiving
+        name: Receiving radio traffic
+      - entity: sensor.ramses_gateway_last_rx
+        name: Last radio message
+        format: relative
+      - entity: device_tracker.ramses_gateway
+        name: On Wi-Fi (router)
+      - entity: sensor.ramses_gateway_wi_fi_signal
+        name: Wi-Fi signal
+      - entity: binary_sensor.ramses_gateway_online
+        name: MQTT connected
+      - entity: sensor.ramses_gateway_firmware
+        name: Firmware version
+      - entity: counter.ramses_rx_gaps
+        name: Radio gaps (> 60 s)
+      - entity: counter.ramses_reconnects
+        name: Recoveries
+      - type: attribute
+        entity: automation.ramses_gateway_down
+        attribute: last_triggered
+        name: Last "down" alert
+        format: relative
+  - type: history-graph
+    title: Receiving and Wi-Fi – last 3 days
+    hours_to_show: 72
+    entities:
+      - entity: binary_sensor.ramses_gateway_receiving
+        name: Receiving
+      - entity: device_tracker.ramses_gateway
+        name: On Wi-Fi
+  - type: history-graph
+    title: Wi-Fi signal – last 3 days
+    hours_to_show: 72
+    entities:
+      - entity: sensor.ramses_gateway_wi_fi_signal
+        name: Signal (dBm)
+  - type: logbook
+    title: Gateway events
+    hours_to_show: 72
+    entities:
+      - binary_sensor.ramses_gateway_receiving
+      - device_tracker.ramses_gateway

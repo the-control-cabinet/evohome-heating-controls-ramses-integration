@@ -1,0 +1,42 @@
+# RAMSES-II gateway health monitoring (Home Assistant)
+# Gateway ID masked as 18:000001 — replace with your gateway's ID in every topic.
+# This file goes in configuration.yaml (or a package). The automations are in
+# ha-gateway-automations.yaml (automations.yaml format). Counters are UI helpers:
+#   counter.ramses_rx_gaps, counter.ramses_reconnects
+# The Wi-Fi tracker/signal entities come from the router integration (AsusRouter):
+#   device_tracker.ramses_gateway (rename to match yours) and a template sensor of its rssi.
+
+# ---- 1. MQTT sensors -------------------------------------------------------
+mqtt:
+  sensor:
+    - name: "RAMSES gateway last RX"
+      unique_id: ramses_gateway_last_rx
+      state_topic: "RAMSES/GATEWAY/18:000001/rx"
+      value_template: "{{ now().isoformat() }}"   # timestamp of every RF packet
+      device_class: timestamp
+    - name: "RAMSES gateway firmware"
+      unique_id: ramses_gateway_firmware
+      state_topic: "RAMSES/GATEWAY/18:000001/info/version"
+  binary_sensor:
+    - name: "RAMSES gateway online"          # connection state only (see B6 §2)
+      unique_id: ramses_gateway_online
+      state_topic: "RAMSES/GATEWAY/18:000001"
+      payload_on: "online"
+      payload_off: "offline"
+      device_class: connectivity
+
+# ---- 2. Traffic-based health ----------------------------------------------
+template:
+  - binary_sensor:
+      - name: "RAMSES gateway receiving"
+        unique_id: ramses_gateway_receiving
+        device_class: connectivity
+        availability: "{{ has_value('sensor.ramses_gateway_last_rx') }}"
+        state: >
+          {{ (now() - as_datetime(states('sensor.ramses_gateway_last_rx'))).total_seconds() < 120 }}
+
+# Keep the per-packet sensor out of the database
+recorder:
+  exclude:
+    entities:
+      - sensor.ramses_gateway_last_rx
