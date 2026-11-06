@@ -1,0 +1,220 @@
+# =========================================================
+# UFH demand from the HCC80R, decoded from the RAMSES gateway's MQTT rx feed
+# Home Assistant package: /config/packages/ufh_hcc80r_demand.yaml
+# (configuration.yaml: homeassistant: packages: !include_dir_named packages)
+#
+# Device IDs are MASKED (repo-wide mapping): gateway 18:000001, HCC80R 02:000001,
+# downstairs controller 01:000002. Replace with your own before use.
+#
+# Why: ramses_cc's six UFH "circuit" / zone heat-demand sensors are fed by TWO
+# messages numbered differently, so each sensor shows whichever arrived last:
+#   1. Per-zone demand, HCC80R -> controller: 3150, length 002, payload ZZ DD,
+#      ZZ = Evohome zone (00 Lounge, 01 Family, 02 Kitchen, 03 Dining, 04 Hall, 05 Utility)
+#   2. Per-output broadcast, HCC80R -> itself: 3150, length 016, 8 x (II DD), II = output 1-8
+# Demand: DD hex / 2 = percent. See docs/B8-ufh-demand-decoding.md.
+#
+# Message format on RAMSES/GATEWAY/<id>/rx (JSON "msg"), split on spaces:
+#   [0] RSSI [1] verb [2] seq [3] src [4] via [5] dst [6] code [7] length [8] payload
+# =========================================================
+
+template:
+  # ---------- 1. True zone demands (per-zone messages) ----------
+  - trigger:
+      - trigger: mqtt
+        topic: "RAMSES/GATEWAY/18:000001/rx"
+    variables:
+      t: >-
+        {% set j = trigger.payload_json if trigger.payload_json is defined else {} %}
+        {{ (j.msg if j is mapping and j.msg is defined else '').split() }}
+      is_zone_msg: >-
+        {{ t | length >= 9 and t[3] == '02:000001' and t[5] == '01:000002'
+           and t[6] == '3150' and t[7] == '002' and t[8][:2] in
+           ['00','01','02','03','04','05'] }}
+      zone: "{{ t[8][:2] if is_zone_msg else '' }}"
+      value: "{{ ((t[8][2:4] | int(0, base=16)) / 2) | round(1) if is_zone_msg else 0 }}"
+    sensor:
+      - name: "UFH Zone Demand Lounge"
+        unique_id: ufh_zone_demand_lounge
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:heating-coil
+        state: "{{ value if zone == '00' else this.state }}"
+      - name: "UFH Zone Demand Family Room"
+        unique_id: ufh_zone_demand_family_room
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:heating-coil
+        state: "{{ value if zone == '01' else this.state }}"
+      - name: "UFH Zone Demand Kitchen"
+        unique_id: ufh_zone_demand_kitchen
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:heating-coil
+        state: "{{ value if zone == '02' else this.state }}"
+      - name: "UFH Zone Demand Dining Room"
+        unique_id: ufh_zone_demand_dining_room
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:heating-coil
+        state: "{{ value if zone == '03' else this.state }}"
+      - name: "UFH Zone Demand Hall"
+        unique_id: ufh_zone_demand_hall
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:heating-coil
+        state: "{{ value if zone == '04' else this.state }}"
+      - name: "UFH Zone Demand Utility Room"
+        unique_id: ufh_zone_demand_utility_room
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:heating-coil
+        state: "{{ value if zone == '05' else this.state }}"
+
+  # ---------- 2. HCC80R output demands (8-output broadcast) ----------
+  - trigger:
+      - trigger: mqtt
+        topic: "RAMSES/GATEWAY/18:000001/rx"
+    variables:
+      t: >-
+        {% set j = trigger.payload_json if trigger.payload_json is defined else {} %}
+        {{ (j.msg if j is mapping and j.msg is defined else '').split() }}
+      is_bcast: >-
+        {{ t | length >= 9 and t[3] == '02:000001' and t[5] == '02:000001'
+           and t[6] == '3150' and t[7] == '016' and t[8] | length == 32 }}
+      p: "{{ t[8] if is_bcast else '' }}"
+    sensor:
+      - name: "HCC80R Output 1 Demand (Lounge)"
+        unique_id: hcc80r_output_1_demand
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:valve
+        state: "{{ ((p[2:4] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+      - name: "HCC80R Output 2 Demand (Lounge)"
+        unique_id: hcc80r_output_2_demand
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:valve
+        state: "{{ ((p[6:8] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+      - name: "HCC80R Output 3 Demand (Family Room)"
+        unique_id: hcc80r_output_3_demand
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:valve
+        state: "{{ ((p[10:12] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+      - name: "HCC80R Output 4 Demand (Family Room)"
+        unique_id: hcc80r_output_4_demand
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:valve
+        state: "{{ ((p[14:16] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+      - name: "HCC80R Output 5 Demand (Kitchen)"
+        unique_id: hcc80r_output_5_demand
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:valve
+        state: "{{ ((p[18:20] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+      - name: "HCC80R Output 6 Demand (Dining Room)"
+        unique_id: hcc80r_output_6_demand
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:valve
+        state: "{{ ((p[22:24] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+      - name: "HCC80R Output 7 Demand (Hall)"
+        unique_id: hcc80r_output_7_demand
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:valve
+        state: "{{ ((p[26:28] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+      - name: "HCC80R Output 8 Demand (Utility)"
+        unique_id: hcc80r_output_8_demand
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:valve
+        state: "{{ ((p[30:32] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+
+  # ---------- 3. Zone temperatures and setpoints (plain sensors, clean graphs) ----------
+  - sensor:
+      - name: "UFH Zone Temperature Lounge"
+        unique_id: ufh_zone_temperature_lounge
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_lounge', 'current_temperature') is number }}"
+        state: "{{ state_attr('climate.rf_lounge', 'current_temperature') }}"
+      - name: "UFH Zone Temperature Family Room"
+        unique_id: ufh_zone_temperature_family_room
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_family_room', 'current_temperature') is number }}"
+        state: "{{ state_attr('climate.rf_family_room', 'current_temperature') }}"
+      - name: "UFH Zone Temperature Kitchen"
+        unique_id: ufh_zone_temperature_kitchen
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_kitchen', 'current_temperature') is number }}"
+        state: "{{ state_attr('climate.rf_kitchen', 'current_temperature') }}"
+      - name: "UFH Zone Temperature Dining Room"
+        unique_id: ufh_zone_temperature_dining_room
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_dining_room', 'current_temperature') is number }}"
+        state: "{{ state_attr('climate.rf_dining_room', 'current_temperature') }}"
+      - name: "UFH Zone Temperature Hall"
+        unique_id: ufh_zone_temperature_hall
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_hall', 'current_temperature') is number }}"
+        state: "{{ state_attr('climate.rf_hall', 'current_temperature') }}"
+      - name: "UFH Zone Temperature Utility Room"
+        unique_id: ufh_zone_temperature_utility_room
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_utility_room', 'current_temperature') is number }}"
+        state: "{{ state_attr('climate.rf_utility_room', 'current_temperature') }}"
+      - name: "UFH Zone Setpoint Lounge"
+        unique_id: ufh_zone_setpoint_lounge
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_lounge', 'temperature') is number }}"
+        state: "{{ state_attr('climate.rf_lounge', 'temperature') }}"
+      - name: "UFH Zone Setpoint Family Room"
+        unique_id: ufh_zone_setpoint_family_room
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_family_room', 'temperature') is number }}"
+        state: "{{ state_attr('climate.rf_family_room', 'temperature') }}"
+      - name: "UFH Zone Setpoint Kitchen"
+        unique_id: ufh_zone_setpoint_kitchen
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_kitchen', 'temperature') is number }}"
+        state: "{{ state_attr('climate.rf_kitchen', 'temperature') }}"
+      - name: "UFH Zone Setpoint Dining Room"
+        unique_id: ufh_zone_setpoint_dining_room
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_dining_room', 'temperature') is number }}"
+        state: "{{ state_attr('climate.rf_dining_room', 'temperature') }}"
+      - name: "UFH Zone Setpoint Hall"
+        unique_id: ufh_zone_setpoint_hall
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_hall', 'temperature') is number }}"
+        state: "{{ state_attr('climate.rf_hall', 'temperature') }}"
+      - name: "UFH Zone Setpoint Utility Room"
+        unique_id: ufh_zone_setpoint_utility_room
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        availability: "{{ state_attr('climate.rf_utility_room', 'temperature') is number }}"
+        state: "{{ state_attr('climate.rf_utility_room', 'temperature') }}"

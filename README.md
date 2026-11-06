@@ -6,7 +6,7 @@
 [![Portfolio](https://img.shields.io/badge/Portfolio-the--control--cabinet-24292f?logo=github)](https://github.com/the-control-cabinet)
 ![Protocol](https://img.shields.io/badge/Protocol-RAMSES--II%20868%20MHz-blue)
 ![Integration](https://img.shields.io/badge/HA-ramses__cc%200.60.10-41BDF5?logo=homeassistant)
-![Status](https://img.shields.io/badge/Status-Live%20%E2%80%A2%20gateway%20issue%20open-yellow)
+![Status](https://img.shields.io/badge/Status-Live%20%E2%80%A2%20gateway%20fix%20in%20test-yellowgreen)
 
 > **The short version**
 > - **2018, install:** I designed and installed Evohome myself:
@@ -20,7 +20,9 @@
 > - **The fault:** the day after the gateway's first set-up, **every zone on both controllers locked to 5 °C**. Eight hypotheses, each tested at the next schedule switchpoint, and an icon comparison led to a zone-by-zone rebuild that fixed it. A **packet-log audit** then showed the gateway never sent the offending command.
 > - **Rebuilt integration:** the released MQTT mode, a hand-written system schema, an upgrade to fix an underfloor bug, and **transmit enabled only after the audit**.
 > - **October 2026, site survey:** after a Resideo controls wiring course, I isolated the plant and traced the junction box terminal by terminal. It corrected the design record (the UFH relay still drives its zone valve; the hot-water timer still gates both cylinders), **closed the cylinder cut-out safety check**, found a **missing automatic bypass**, and produced an as-built vs Evohome map with a reversal procedure.
-> - **Still open:** the gateway's connectivity when it isn't on a PC's USB port; the bypass (Gas Safe fix).
+> - **November 2026, gateway stall solved:** the gateway kept going deaf while Wi-Fi and MQTT stayed up. Serial logging and backtraces decoded against the firmware's symbols traced it to a **stuck transmit**; a local build with the upstream PR #44 fix ran **two nights with no stalls** ([B6](docs/B6-gateway-reliability.md)).
+> - **Underfloor demand decoded:** the integration's UFH demand sensors mixed two differently numbered messages. Decoding them gave **trustworthy zone and output sensors** and showed how steeply the controller scales the UFH valve ([B8](docs/B8-ufh-demand-decoding.md)).
+> - **Still open:** the official gateway firmware fix (upstream #50); the bypass (Gas Safe fix); UFH settings review once optimum start has re-learnt.
 
 > **Device IDs are masked.** Real RAMSES-II addresses are replaced with consistent placeholders that keep the device-type prefix (`01:000001` = controller 1, `04:…` = TRV, `34:…` = wall stat, `13:…` = BDR91, `18:000001` = the gateway). Every file uses the same mapping.
 
@@ -438,7 +440,7 @@ The README covers the whole journey. These hold the full detail:
 | Part | Documents |
 |---|---|
 | A · Design and install | [A1 System design](docs/A1-system-design.md) · [A2 Installation and commissioning](docs/A2-installation-and-commissioning.md) · [A3 DHW cylinders and sensor placement](docs/A3-dhw-cylinders-and-sensor-placement.md) · [A4 Junction box survey and wiring](docs/A4-junction-box-survey-and-wiring.md) · [A5 As-built vs Evohome and reversal](docs/A5-as-built-vs-evohome-and-reversal.md) · [A6 Pump overrun and bypass](docs/A6-pump-overrun-and-bypass.md) · [A7 Immersion backup swap](docs/A7-immersion-backup-swap-procedure.md) · [A8 Wiring schematics (terminal level and logic): as built, Evohome, tidy-up](docs/A8-wiring-schematics-three-stages.md) |
-| B · Integration | [B0 Cloud integration](docs/B0-cloud-integration.md) · [B1 Gateway set-up](docs/B1-gateway-setup.md) · [B2 Schema](docs/B2-schema-and-device-model.md) · [B3 HA entities](docs/B3-home-assistant-entities.md) · [B4 Upgrade and known issues](docs/B4-upgrade-and-known-issues.md) · [B5 Transmit audit](docs/B5-transmit-and-packet-audit.md) · [B6 Gateway reliability](docs/B6-gateway-reliability.md) · [B7 Issues and lessons](docs/B7-integration-issues-and-lessons.md) |
+| B · Integration | [B0 Cloud integration](docs/B0-cloud-integration.md) · [B1 Gateway set-up](docs/B1-gateway-setup.md) · [B2 Schema](docs/B2-schema-and-device-model.md) · [B3 HA entities](docs/B3-home-assistant-entities.md) · [B4 Upgrade and known issues](docs/B4-upgrade-and-known-issues.md) · [B5 Transmit audit](docs/B5-transmit-and-packet-audit.md) · [B6 Gateway reliability](docs/B6-gateway-reliability.md) · [B7 Issues and lessons](docs/B7-integration-issues-and-lessons.md) · [B8 UFH demand decoding](docs/B8-ufh-demand-decoding.md) |
 | C · Case study | [C1 Case study](docs/C1-fault-case-study.md) · [C2 Timeline](docs/C2-fault-timeline.md) · [C3 Hypotheses](docs/C3-hypotheses-and-tests.md) · [C4 Packet-log analysis](docs/C4-packet-log-analysis.md) · [C5 Fix procedure](docs/C5-fix-procedure.md) · [C6 Lessons and controls](docs/C6-lessons-and-controls.md) |
 | Roadmap | [D1 Roadmap](docs/D1-roadmap.md) |
 
@@ -448,15 +450,18 @@ The README covers the whole journey. These hold the full detail:
 ├── CHANGELOG.md · LICENSE
 ├── config/ramses-schema.yaml          ← both controllers (masked IDs, anonymised zone names)
 ├── config/ha-gateway-*.yaml           ← gateway health sensors, watchdog automations, dashboard card
+├── config/ha-ufh-*.yaml               ← HCC80R demand package (MQTT-decoded) and UFH dashboard card
+├── firmware/ramses_esp-jc1/           ← local gateway test build: patch and notes
 ├── data/device-inventory.csv          ← 40 RF devices
+├── data/firmware-stall-comparison.csv ← stalls per firmware build
 ├── data/fault-timeline.csv
 ├── data/junction-box-terminal-map.csv ← surveyed Oct 2026
 ├── data/junction-box-core-map.csv     ← every core, by marker
-├── docs/                              ← A1-A8, B0-B7, C1-C6, D1
-├── docs/images/                       ← survey photos (metadata stripped)
+├── docs/                              ← A1-A8, B0-B8, C1-C6, D1
+├── docs/images/                       ← survey photos and dashboard screenshots (metadata stripped)
 └── scripts/packet-audit.sh · rename_rf_entities.py · list_ramses_devices.sh
 ```
 
 📺 [The Control Cabinet on YouTube](https://www.youtube.com/channel/UC5Cupmz7vlfcodpCX7k8iuQ)
 
-*Designed, installed and documented by James (install 2018; cloud integration August 2026; RAMSES-II and case study September-October 2026; site survey 29 October 2026) · part of [The Control Cabinet BMS portfolio](https://github.com/the-control-cabinet). MIT Licence.*
+*Designed, installed and documented by James (install 2018; cloud integration August 2026; RAMSES-II and case study September-October 2026; site survey 29 October 2026; gateway fix and UFH decoding November 2026) · part of [The Control Cabinet BMS portfolio](https://github.com/the-control-cabinet). MIT Licence.*

@@ -1,0 +1,9 @@
+build,base,start,end,hours,transmissions,stalls,notes
+0.5.3,release,2026-11-04 10:27,2026-11-04 14:35,4.1,,16,about every 15 min; each at the end of a polling sweep
+0.5.3 tx off,release,2026-11-02/03 night,,11.25,0,0,disable_sending: true (listen-only)
+0.5.3-testb,MQTT client rewrite,2026-11-04 15:36,2026-11-04 18:19,2.7,,7,one stall 1 h 40 min (re-stalled after resets; power cycle)
+0.5.3-testc,testb + debug lines,2026-11-05 09:08,2026-11-05 09:36,0.5,,4,decoded: tx_fifo_work polling tx_isr_queue in FRM_TX
+0.5.3-testc,testb + debug lines,2026-11-05 12:34,2026-11-05 12:42,0.13,,2,CC1101 tx mode reached; stops after TX: PREFIX
+0.5.3-testc,testb + debug lines,2026-11-05 12:50,2026-11-05 19:39,6.8,,1,single stall ~7 h until reflashed
+0.5.3-jc1,testb + PR #44 + safety nets,2026-11-04 19:24,2026-11-05 08:59,13.6,1646,0,no TX timeout or loop-limit warnings
+0.5.3-jc1,testb + PR #44 + safety nets,2026-11-05 19:51,2026-11-06 09:31,13.7,1687,0,second night

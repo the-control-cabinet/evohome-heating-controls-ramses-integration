@@ -1,0 +1,82 @@
+# UFH dashboard card (2-column grid). Entity IDs containing RAMSES device IDs are
+# MASKED to the repo mapping (bdr_13_000001-4, ctl_01_000002, ufc_02_000001).
+# The flow/return entities come from the plant-monitoring ESP32
+# (github.com/the-control-cabinet/heating-plant-monitoring-esphome).
+type: grid
+columns: 2
+square: false
+cards:
+  - type: history-graph
+    title: Boiler flow / return and relays
+    hours_to_show: 6
+    entities:
+      - entity: sensor.control_room_esp32_control_room_boiler_flow_temperature
+        name: Flow
+      - entity: sensor.control_room_esp32_control_room_boiler_return_temperature
+        name: Return
+      - entity: binary_sensor.bdr_13_000004_active
+        name: UFH
+      - entity: binary_sensor.bdr_13_000002_active
+        name: Radiators
+      - entity: binary_sensor.bdr_13_000003_active
+        name: HW right
+      - entity: binary_sensor.bdr_13_000001_active
+        name: HW left
+  - type: history-graph
+    title: UFH demand chain (zones → hub → valve)
+    hours_to_show: 6
+    entities:
+      - entity: sensor.ufc_02_000001_heat_demand_fc
+        name: HCC80R demand to boiler
+      - entity: sensor.ctl_01_000002_heat_demand
+        name: Downstairs hub demand
+      - entity: sensor.downstairs_hub_ufh_valve_demand
+        name: UFH valve demand (F9)
+  - type: history-graph
+    title: UFH zone demand
+    hours_to_show: 6
+    entities:
+      - entity: sensor.ufh_zone_demand_lounge
+        name: Lounge
+      - entity: sensor.ufh_zone_demand_family_room
+        name: Family room
+      - entity: sensor.ufh_zone_demand_kitchen
+        name: Kitchen
+      - entity: sensor.ufh_zone_demand_dining_room
+        name: Dining room
+      - entity: sensor.ufh_zone_demand_hall
+        name: Hall
+      - entity: sensor.ufh_zone_demand_utility_room
+        name: Utility
+  - type: history-graph
+    title: UFH zone temperature
+    hours_to_show: 6
+    entities:
+      - entity: sensor.ufh_zone_temperature_lounge
+        name: Lounge
+      - entity: sensor.ufh_zone_temperature_family_room
+        name: Family room
+      - entity: sensor.ufh_zone_temperature_kitchen
+        name: Kitchen
+      - entity: sensor.ufh_zone_temperature_dining_room
+        name: Dining room
+      - entity: sensor.ufh_zone_temperature_hall
+        name: Hall
+      - entity: sensor.ufh_zone_temperature_utility_room
+        name: Utility
+  - type: history-graph
+    title: UFH zone setpoint
+    hours_to_show: 6
+    entities:
+      - entity: sensor.ufh_zone_setpoint_lounge
+        name: Lounge
+      - entity: sensor.ufh_zone_setpoint_family_room
+        name: Family room
+      - entity: sensor.ufh_zone_setpoint_kitchen
+        name: Kitchen
+      - entity: sensor.ufh_zone_setpoint_dining_room
+        name: Dining room
+      - entity: sensor.ufh_zone_setpoint_hall
+        name: Hall
+      - entity: sensor.ufh_zone_setpoint_utility_room
+        name: Utility

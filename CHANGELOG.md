@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0] - 2026-11-06
+- B6: gateway RF stall diagnosed and fixed in a local build. Tx-off test (no stalls listen-only); serial capture; 0.5.3 / testb / testc / jc1 comparison; testc's debug lines and decoded backtraces (`tx_fifo_work` polling the TX ISR queue in `FRM_TX`: a stuck transmit, not an RX stall); the solid LED is the TX LED; jc1 (PR #44 + safety nets) two nights, ~3,300 transmissions, no stalls. Watchdog section updated to the multi-retry version.
+- firmware/ramses_esp-jc1: patch and notes (binary not published); data/firmware-stall-comparison.csv.
+- B8 (new): HCC80R demand decoding: per-zone vs per-output messages, the ramses_cc numbering mix-up, MQTT-decoded zone/output sensors plus zone temperature/setpoint sensors, the F9 valve-demand curve, hot water priority and setback/optimum-start observations.
+- config/ha-ufh-hcc80r-demand.yaml (HA package) and config/ha-ufh-dashboard-card.yaml; device inventory: HCC80R output allocation.
+- README: status, short version and document map.
+
 ## [1.4.0] - 2026-11-02
 - B6 rewritten: gateway health measured from RF traffic (the MQTT online status can't see outages); the RF stall on the updated firmware (Wi-Fi and MQTT up, `cmd` answers, soft `reset` cures it; same on PC USB and wall adapter); timing pattern; upstream #50 with #48/#49; auto-restart watchdog and the repeat-guard lesson.
 - B4: gateway firmware update over USB (browser flasher, addresses, partition check); `!V` reply and the RF stall added to known issues.

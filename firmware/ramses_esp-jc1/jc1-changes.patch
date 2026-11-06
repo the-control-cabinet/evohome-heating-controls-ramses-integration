@@ -1,0 +1,148 @@
+diff --git a/components/cc1101/cc1101.c b/components/cc1101/cc1101.c
+index 9fa43d4..6dc64d7 100644
+--- a/components/cc1101/cc1101.c
++++ b/components/cc1101/cc1101.c
+@@ -7,6 +7,7 @@
+  * Hardware interface to TI CC1101 radio chip
+  *
+  */
++#include <stdio.h>
+ #include <driver/spi_master.h>
+ #include <driver/gpio.h>
+ 
+@@ -133,27 +134,27 @@ uint8_t cc_write_fifo(uint8_t b) {
+  */
+ 
+ void cc_enter_idle_mode(void) {
+-  while ( CC_STATE( cc_strobe( CC_SIDLE ) ) != CC_STATE_IDLE );
++  { uint32_t guard = 0; while ( CC_STATE( cc_strobe( CC_SIDLE ) ) != CC_STATE_IDLE && guard++ < 100000 ){} if( guard >= 100000 ) printf("# CC1101: state change timeout (CC_SIDLE)\n"); }
+ }
+ 
+ void cc_enter_rx_mode(void) {
+-  while ( CC_STATE( cc_strobe( CC_SIDLE ) ) != CC_STATE_IDLE ){}
++  { uint32_t guard = 0; while ( CC_STATE( cc_strobe( CC_SIDLE ) ) != CC_STATE_IDLE && guard++ < 100000 ){} if( guard >= 100000 ) printf("# CC1101: state change timeout (CC_SIDLE)\n"); }
+ 
+   cc_write( CC_IOCFG0, 0x2E );      // GDO0 not needed
+   cc_write( CC_PKTCTRL0, 0x32 );	// Asynchronous, infinite packet
+ 
+   cc_strobe( CC_SFRX );
+-  while ( CC_STATE( cc_strobe( CC_SRX ) ) != CC_STATE_RX ){}
++  { uint32_t guard = 0; while ( CC_STATE( cc_strobe( CC_SRX ) ) != CC_STATE_RX && guard++ < 100000 ){} if( guard >= 100000 ) printf("# CC1101: state change timeout (CC_SRX)\n"); }
+ }
+ 
+ void cc_enter_tx_mode(void) {
+-  while ( CC_STATE( cc_strobe( CC_SIDLE ) ) != CC_STATE_IDLE ){}
++  { uint32_t guard = 0; while ( CC_STATE( cc_strobe( CC_SIDLE ) ) != CC_STATE_IDLE && guard++ < 100000 ){} if( guard >= 100000 ) printf("# CC1101: state change timeout (CC_SIDLE)\n"); }
+ 
+   cc_write( CC_PKTCTRL0, 0x02 );    // Fifo mode, infinite packet
+   cc_write( CC_IOCFG0, 0x02 );      // Falling edge, TX Fifo low
+ 
+   cc_strobe( CC_SFTX );
+-  while ( CC_STATE( cc_strobe( CC_STX ) ) != CC_STATE_TX ){}
++  { uint32_t guard = 0; while ( CC_STATE( cc_strobe( CC_STX ) ) != CC_STATE_TX && guard++ < 100000 ){} if( guard >= 100000 ) printf("# CC1101: state change timeout (CC_STX)\n"); }
+ }
+ 
+ void cc_fifo_end(void) {
+diff --git a/components/frame/frame.c b/components/frame/frame.c
+index c39386d..9003310 100644
+--- a/components/frame/frame.c
++++ b/components/frame/frame.c
+@@ -28,6 +28,7 @@ static const char * TAG = "FRM";
+ #include "ramses_led.h"
+ #include "cc1101.h"
+ #include "uart.h"
++#include "esp_timer.h"
+ #include "frame.h"
+ #include "message.h"
+ 
+@@ -395,8 +396,11 @@ static void tx_fifo_prime( void ) {
+   // So we can see an interrupt when it falls below threshold
+   // send sufficient data to fill FIFO above threshold
+   txBits = 0;
+-  while( !gpio_get_level( CONFIG_CC_GDO0_GPIO ) )
+-    tx_fifo_send_block();
++  { uint16_t guard = 0;
++    while( !gpio_get_level( CONFIG_CC_GDO0_GPIO ) && guard++ < 64 )
++      tx_fifo_send_block();
++    if( guard >= 64 ) printf("# FRAME: TX prime did not reach FIFO threshold\n");
++  }
+ }
+ 
+ static void tx_fifo_fill(void) {
+@@ -409,7 +413,14 @@ static void tx_fifo_fill(void) {
+ 
+     // Switch to rising edge to detect FIFO empty
+     gpio_set_intr_type( CONFIG_CC_GDO0_GPIO, GPIO_INTR_POSEDGE );
++    return;
+    }
++
++  // PR #44: if the FIFO is still below threshold after this refill, the falling
++  // edge has already happened and no interrupt will follow, so queue another refill
++  if( !gpio_get_level( CONFIG_CC_GDO0_GPIO ) ) {
++    xQueueSend( tx_isr_queue, NULL, 0 );
++  }
+ }
+ 
+ //---------------------------------------------------------------------------------
+@@ -430,13 +441,21 @@ static void tx_fifo_init(void) {
+ }
+ 
+ static void tx_fifo_start(void) {
++  xQueueReset( tx_isr_queue );
++  gpio_intr_disable( CONFIG_CC_GDO0_GPIO );
+   // Falling edge for FIFO low
+   gpio_set_intr_type( CONFIG_CC_GDO0_GPIO, GPIO_INTR_NEGEDGE );
++  gpio_isr_handler_add( CONFIG_CC_GDO0_GPIO, GDO0_ISR,  NULL );
++  gpio_intr_enable( CONFIG_CC_GDO0_GPIO );
+ 
+   tx_fifo_prime();
+   tx_state = TX_FIFO_FILL;
+ 
+-  gpio_isr_handler_add( CONFIG_CC_GDO0_GPIO, GDO0_ISR,  NULL );
++  // PR #44: if the FIFO already drained below threshold during priming, the edge
++  // was missed, so start the refill sequence explicitly
++  if( !gpio_get_level( CONFIG_CC_GDO0_GPIO ) ) {
++    xQueueSend( tx_isr_queue, NULL, 0 );
++  }
+ }
+ 
+ static void tx_fifo_work(void) {
+@@ -590,7 +609,10 @@ static void frame_rx_enable(void) {
+   last_cal = frm_time();
+ }
+ 
++static int64_t tx_start_us;
++
+ static void frame_tx_enable(void) {
++  tx_start_us = esp_timer_get_time();
+   uart_disable();
+   cc_enter_tx_mode();
+ 
+@@ -680,6 +702,16 @@ void frame_work(void) {
+     break;
+ 
+   case FRM_TX:
++    // Safety net: a RAMSES frame takes well under 100 ms on air. If TX has not
++    // completed in 500 ms the FIFO refill has stalled - abort and return to RX
++    // instead of spinning forever (radio task busy-loops while UART is disabled)
++    if( txFrm.state<FRM_TX_DONE && ( esp_timer_get_time() - tx_start_us ) > 500000 ) {
++      printf("# FRAME: TX timeout - aborting frame and returning to RX\n");
++      tx_fifo_stop();
++      gpio_intr_enable( CONFIG_CC_GDO0_GPIO );
++      txFrm.state = FRM_TX_DONE;
++    }
++
+     if( txFrm.state>=FRM_TX_DONE ) {
+       led_off(LED_TX);
+       frame_tx_done();
+diff --git a/sdkconfig.defaults b/sdkconfig.defaults
+index 667f7ac..9d041af 100644
+--- a/sdkconfig.defaults
++++ b/sdkconfig.defaults
+@@ -36,3 +36,6 @@ CONFIG_LOG_MAXIMUM_LEVEL_VERBOSE=y
+ CONFIG_LOG_MAXIMUM_LEVEL=5
+ CONFIG_LOG_MASTER_LEVEL=y
+ 
++
++# Local build: task watchdog reboots the stick instead of only printing a backtrace
++CONFIG_ESP_TASK_WDT_PANIC=y

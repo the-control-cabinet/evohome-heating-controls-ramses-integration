@@ -1,7 +1,7 @@
 ramses_id,class,device,controller,zone_or_role
 01:000001,CTL,Evohome controller,upstairs,radiators (12 zones) - main TCS
 01:000002,CTL,Evohome controller,downstairs,underfloor (6 zones); also zone 02 sensor
-02:000001,UFC,HCC80R UFH controller + HCS80,downstairs,circuits 00-05 -> zones 00-05
+02:000001,UFC,HCC80R UFH controller + HCS80,downstairs,8 outputs (1-2 Lounge; 3-4 Family; 5 Kitchen; 6 Dining; 7 Hall; 8 Utility) serving zones 00-05
 04:000001,TRV,HR92,upstairs,zone 00
 04:000002,TRV,HR92,upstairs,zone 01
 04:000003,TRV,HR92,upstairs,zone 02
