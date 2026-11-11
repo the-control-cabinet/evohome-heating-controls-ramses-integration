@@ -16,7 +16,8 @@
 - [ ] Continuity check of every moved joint against [the terminal map](../data/junction-box-terminal-map.csv) before re-energising.
 
 ## RAMSES-II gateway
-- [ ] **Connectivity on a wall adapter: open issue.** Stable on a PC's USB port, unreliable on a wall adapter. Separate supply from Wi-Fi location ([B6](B6-gateway-reliability.md)), then move the stick to a central position.
+- [ ] **Move the gateway to a central position (raised priority, 11 Nov).** From the dining room it misses many reports: CS92 temperatures arrived in ~10 K steps every ~25 min during a reheat, and a hub's hot water "off" reached HA ~8 min after the app showed it. Connectivity on a wall adapter: separate supply from Wi-Fi location ([B6](B6-gateway-reliability.md)).
+- [ ] **Cloud integration:** stalled after several HA restarts in a day (all cloud zones blank ~80 min); check recovery, consider `scan_interval: 600`, avoid repeated restarts ([B0](B0-cloud-integration.md)).
 - [ ] Update the issue raised with the firmware maintainer with the results (no response yet).
 - [ ] Copy the September packet logs to permanent storage; review retention.
 - [ ] Confirm the upstairs boiler-demand BDR91 (13:000002) is seen in captures.
@@ -62,7 +63,10 @@ These are being built on dedicated ESP32 boards in the control room and understa
 - [ ] Re-measure UFH and radiators after the ALS week: optimum start leads, morning shortfalls, starts per day.
 - [ ] Upstairs hub settings review (cycle rate, minimum on time, ALS, optimum start) against the downstairs hub.
 - [ ] Interim short-cycling mitigation (one TRV head off), then the bypass; flow temperature 70 → 65 °C as a separate step.
-- [ ] Cylinder stat check (left reheats short of the right): data first, then the dial.
+- [x] ~~Cylinder stat check~~: tops reached ~56-58 °C on 11 Nov; the left/right difference is now a reheat-speed question (normal-evening comparison, then zone valve, coil isolation, air).
+- [ ] **Legionella:** decide between a 60-61 °C setpoint (Evohome only, robust) and 58 °C plus a weekly HA/RAMSES pasteurising reheat (~65 °C, with a failsafe reset); then implement; check bath/shower mixing valves first ([A3](A3-dhw-cylinders-and-sensor-placement.md#legionella)).
+- [ ] **Left/right mapping checks:** which hub, BDR91 and CS92 serves which cylinder (boost one hub; long draw on one side); fix the "… Side of House" names.
+- [ ] **UFH loop test** for the Lounge/Family (and Utility) labels ([B9](B9-ufh-and-radiator-behaviour.md)).
 - [ ] One-zone setback test (12 °C vs 19 °C), measured on degree days and gas.
-- [ ] HA notifications for heating and RAMSES events (gateway offline, radio gaps, low zone temperatures, batteries, zones failing to reach setpoint).
+- [x] HA notifications: live in the plant monitoring alerts package (low zone temperatures, batteries, zones failing to reach setpoint, hot water); gateway alerts already in place.
 

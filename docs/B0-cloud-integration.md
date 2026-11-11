@@ -61,4 +61,8 @@ The gateway was added on 18 Sep, running **alongside** the cloud integration, no
 | Still used for | System mode (the controllers don't broadcast it over RF), app-level view | Device-level data, fast updates, controlled writes |
 | Entity names | Plain (`climate.<zone>`) | `climate.rf_<zone>` ([B3](B3-home-assistant-entities.md)) |
 
+### Note, 11 Nov 2026: the cloud side stalls after repeated restarts
+
+After several HA restarts in one day, every cloud zone (and the cloud hot water entities) stopped updating for ~80 min with blank temperatures, while the RAMSES entities carried on. Honeywell rate-limits logins more strictly than polling; each restart can trigger a login. Mitigation: reload rather than restart where possible, and a longer `scan_interval` (e.g. 600 s), as RAMSES now provides the live data.
+
 Continue with [B1 · Gateway set-up](B1-gateway-setup.md).

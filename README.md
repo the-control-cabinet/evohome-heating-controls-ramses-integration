@@ -376,7 +376,7 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 - [ ] Re-run the hot-water BDR91s in 3095Y 5-core flex via 25×16 trunking onto surface pattresses.
 - [ ] Wago 221 on the four opto-tapped joints; cap the Danfoss black and grey; sleeve misused colours; label every cable, strip position and the lid.
 - [ ] Wire the opto board in its own enclosure (plant monitoring repo).
-- [ ] Add heat-transfer paste to both CS92s.
+- [x] Heat-transfer paste on both CS92s (11 Nov).
 
 ### Gateway
 - [ ] Separate supply from Wi-Fi location (above), then move the gateway to a central position; update the issue on the firmware repository.
@@ -385,9 +385,9 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 ### Plant room: physical works (soon)
 | Item | Purpose |
 |---|---|
-| Replace both DHW **expansion vessels** and **relief valves** (plumber) | Cure the tundish drips |
-| **Pressure gauges on both cylinder cold inlets** (0-150 PSI) | Track working pressure and any rise towards the relief setting: a second diagnosis alongside the drip sensors |
-| **Tundish drip sensors** | Detect discharge as it happens |
+| ✅ Both DHW **expansion vessels** replaced 11 Nov (24 L, 3.5 bar; relief valves kept) | No tundish drips since · PRVs settle ~2.5 bar: strainers/cartridges next |
+| ✅ **Pressure gauges on both cylinder cold inlets** (between PRV and vessel) | Live; reheat peak 3.8 bar |
+| ✅ **Tundish drip sensors** | Live and water-tested |
 | **Complete the missing lagging** | Cut avoidable losses |
 | **Trace the slow system pressure loss** with the new boiler gauge | Boiler's expansion vessel ruled out; isolate circuits one at a time |
 
