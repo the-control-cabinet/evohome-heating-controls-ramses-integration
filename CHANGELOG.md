@@ -4,6 +4,7 @@
 - A3 addendum: the low CS92 pocket assessed (evidence, pros and cons, alternatives rejected), stratification readings (negative = artefact), legionella options (60-61 °C setpoint vs weekly pasteurising reheat), new hot water windows, Evohome naming.
 - B9: the Lounge/Family loop-label swap hypothesis and the Utility room warming without demand; one-zone-at-a-time loop test.
 - D1: legionella decision, left/right mapping checks, loop test, gateway move raised in priority (missed CS92 reports, delayed hub state), cloud integration stall; notifications done.
+- Graphs: the evening's UFH chain and zones (B9), the CS92 reports arriving in steps (D1).
 - B0: the cloud integration stalling after repeated HA restarts. README: vessels, inlet gauges, tundishes and paste done.
 
 ## [1.6.0] - 2026-11-11

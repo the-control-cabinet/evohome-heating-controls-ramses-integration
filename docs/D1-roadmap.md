@@ -17,6 +17,10 @@
 
 ## RAMSES-II gateway
 - [ ] **Move the gateway to a central position (raised priority, 11 Nov).** From the dining room it misses many reports: CS92 temperatures arrived in ~10 K steps every ~25 min during a reheat, and a hub's hot water "off" reached HA ~8 min after the app showed it. Connectivity on a wall adapter: separate supply from Wi-Fi location ([B6](B6-gateway-reliability.md)).
+
+  | | |
+  |---|---|
+  | ![Right CS92 in HA: steps and a 25 min gap during the reheat](images/cs92-right-sparse-reports-2026-11-11.png) | ![Left CS92 in HA: ~10 K steps during the reheat](images/cs92-left-sparse-reports-2026-11-11.png) |
 - [ ] **Cloud integration:** stalled after several HA restarts in a day (all cloud zones blank ~80 min); check recovery, consider `scan_interval: 600`, avoid repeated restarts ([B0](B0-cloud-integration.md)).
 - [ ] Update the issue raised with the firmware maintainer with the results (no response yet).
 - [ ] Copy the September packet logs to permanent storage; review retention.

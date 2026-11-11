@@ -37,6 +37,8 @@ So the controller, the HCC80R's commands and the hot water at the manifold are f
 - **The Utility room** warmed ~19.3 → 21.2 °C (2.7 K over its 18.5 °C setpoint) with **zero demand all evening**: a second mislabelled loop, heat from the Kitchen, or appliances.
 - Kitchen and Family room kept rising after their demand ended (UFH slab lag, partly).
 
+![Evening of 11 Nov: boiler relays and flow/return, the UFH demand chain, zone demand, temperature and setpoint (Lounge calling all evening; Utility warming with no demand)](images/ufh-evening-lounge-utility-2026-11-11.png)
+
 **Test:** one zone at a time (others at minimum, ~20 min each): Lounge, then Family room, then Utility; note which loops' flow pipes warm at the manifold and which rooms they serve. **Fix:** swap the bindings or the actuator plugs, then re-check that the Lounge warms.
 
 Status: open (loop test next).
