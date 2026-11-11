@@ -6,7 +6,7 @@
 [![Portfolio](https://img.shields.io/badge/Portfolio-the--control--cabinet-24292f?logo=github)](https://github.com/the-control-cabinet)
 ![Protocol](https://img.shields.io/badge/Protocol-RAMSES--II%20868%20MHz-blue)
 ![Integration](https://img.shields.io/badge/HA-ramses__cc%200.60.10-41BDF5?logo=homeassistant)
-![Status](https://img.shields.io/badge/Status-Live%20%E2%80%A2%20gateway%20fix%20in%20test-yellowgreen)
+![Status](https://img.shields.io/badge/Status-Live%20%E2%80%A2%20gateway%20move%20and%20UFH%20fault%20open-yellowgreen)
 
 > **The short version**
 > - **2018, install:** I designed and installed Evohome myself:
@@ -23,7 +23,9 @@
 > - **November 2026, gateway stall solved:** the gateway kept going deaf while Wi-Fi and MQTT stayed up. Serial logging and backtraces decoded against the firmware's symbols traced it to a **stuck transmit**; a local build with the upstream PR #44 fix ran **two nights with no stalls** ([B6](docs/B6-gateway-reliability.md)).
 > - **Underfloor demand decoded:** the integration's UFH demand sensors mixed two differently numbered messages. Decoding them gave **trustworthy zone and output sensors** and showed how steeply the controller scales the UFH valve ([B8](docs/B8-ufh-demand-decoding.md)).
 > - **Measuring behaviour:** short cycling without a bypass (37 starts by mid-afternoon on a UFH-only day; [A6](docs/A6-pump-overrun-and-bypass.md)), advanced load scaling Normal → Partial and its effect on the UFH valve and optimum start, a Lounge UFH fault traced to after the HCC80R ([B9](docs/B9-ufh-and-radiator-behaviour.md)), and cylinder stratification with the CS92s pasted ([A3](docs/A3-dhw-cylinders-and-sensor-placement.md)).
-> - **Still open:** the official gateway firmware fix (upstream #50); the bypass (Gas Safe fix); the Lounge fault; the upstairs settings review.
+> - **November 2026, hot water:** new expansion vessels fitted; with the plant monitoring's gauges and outlet NTCs, the **low CS92 pocket was assessed** (tops ~56-58 °C after reheats: adequate; pros and cons, stratification artefacts and the **legionella** options in [A3](docs/A3-dhw-cylinders-and-sensor-placement.md#addendum-11-nov-2026-evening-probe-position-stratification-readings-and-legionella)); hot water windows widened to 06:00-08:30 and 18:30-21:00 after the old window cut a reheat short.
+> - **Radio reception:** from its current position the gateway misses many reports (CS92 temperatures in ~10 K steps every ~25 min; a hub's hot water "off" reaching HA ~8 min late), so **moving it** is now a priority.
+> - **Still open:** the official gateway firmware fix (upstream #50); the bypass (Gas Safe fix); the **Lounge fault** (leading lead: Lounge and Family room loop labels swapped, test next); the legionella setpoint decision; the upstairs settings review.
 
 > **Device IDs are masked.** Real RAMSES-II addresses are replaced with consistent placeholders that keep the device-type prefix (`01:000001` = controller 1, `04:…` = TRV, `34:…` = wall stat, `13:…` = BDR91, `18:000001` = the gateway). Every file uses the same mapping.
 
@@ -110,6 +112,8 @@ Each Centre Store 250 L cylinder has two front boxes: one at about **¼ height**
 | **Lower (¼)** ✅ | **Last**, once the hot layer reaches it | The controller stops only when **most of the cylinder** is hot, giving full usable volume | The **top can overshoot** the setpoint while the lower part catches up. Keep the setpoint sensible (about 55-60 °C); the high-limit cut-out is the backstop |
 | Upper (⅗) | **Early**, because the top heats first | Stops with the **lower part still cool**, giving less hot water | n/a |
 
+**Measured, 11 Nov 2026:** after full reheats the cylinder tops (strap-on outlet NTCs, captured during draws) reached **~56-58 °C** with the probes at 59-60 °C, against a 58 °C setpoint: the lower position works as designed. Its costs are small (the probe sits in the coil's warm plume while heating; more, shorter reheats; a 1-2 K overshoot). At 58 °C the cylinders never reach **60 °C throughout**, so the setpoint (60-61 °C) or a weekly pasteurising reheat is being decided ([A3](docs/A3-dhw-cylinders-and-sensor-placement.md#legionella)).
+
 > ✅ **Safety check closed (29 Oct 2026):** on both cylinders the **boiler-control module** (adjustable stat + manual-reset overheat cut-out) is fitted and wired **in series with the zone valve motor**, so a trip closes the valve whatever Evohome does ([A4](docs/A4-junction-box-survey-and-wiring.md#5-cylinder-wiring-panels)).
 >
 > The lower box is the **immersion element head**: the CS92 sits in its **top pocket** (where the immersion's Cotherm element control went; both Cotherms have been out since 2018, so the immersions are disconnected), and the cut-out probes are in the **bottom pocket**. Using the immersion as a backup means swapping the Cotherm back in: [A7](docs/A7-immersion-backup-swap-procedure.md).
@@ -132,7 +136,8 @@ All zones have **local override** enabled: a wall-stat change holds until the ne
 
 | Issue | Current understanding | Next step |
 |---|---|---|
-| Tundishes drip when hot water is used | Likely failed DHW expansion vessels and/or relief valves | Plumber to replace both; inlet pressure gauges and tundish drip sensors to confirm |
+| ✅ Tundishes dripped when hot water was used | Failed DHW expansion vessels: **replaced 11 Nov**; no tundish events since, reheat peak 3.8 bar | PRVs settle at ~2.5 bar (marked 3.5): strainers/cartridges at the next visit, then match the vessels' pre-charge |
+| Lounge UFH cold while calling | Leading lead: Lounge and Family room loop labels swapped; the Utility also warms without demand ([B9](docs/B9-ufh-and-radiator-behaviour.md)) | One-zone-at-a-time loop test |
 | Slow loss of heating-system pressure | Not the boiler's expansion vessel (recharged, and its diaphragm isn't leaking) | Trend the new boiler pressure gauge; isolate circuits one at a time |
 | Missing pipe lagging | Avoidable primary and DHW losses | Complete it |
 | **No automatic bypass** | The Ideal Logic+ System S30 manual requires an ABV with TRVs on all radiators or two-port valves; there are HR92s everywhere, five two-port valves, and no ABV found ([A6](docs/A6-pump-overrun-and-bypass.md)) | Read the boiler fault history for L1 lockouts; Gas Safe engineer to fit an ABV or leave one radiator (≥ 0.6 kW) open |
@@ -255,6 +260,8 @@ Current workaround: powered from the PC, which isn't a central position. Next st
 
 Packets per hour (`cut -c1-13 | sort | uniq -c` on the logs) show any gap exactly. The issue has been raised on the firmware's public repository; no response yet.
 
+**Reception (11 Nov 2026):** from the dining room the gateway receives the house's traffic, but misses much of it from the far end: the CS92 probes' temperatures reached HA in ~10 K steps about every 25 minutes during a reheat, and the upstairs hub's hot water "off" arrived ~8 minutes after the app showed it. Moving the gateway to a central position is now a priority.
+
 ---
 
 ## 4. Part C · Fault case study: the permanent 5 °C override
@@ -362,6 +369,8 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 | Control from HA | Hall zone temporary 13 °C set and cancelled: passed |
 | 5 °C fault | Fixed on both controllers; no recurrence on the released MQTT mode |
 | Gateway connectivity | Stable on a PC's USB port; unreliable on a wall adapter (open) |
+| HA notifications | Live (plant monitoring alerts package): zones below 5.5 °C, zones not warming, batteries, hot water; plus the gateway alerts |
+| Hot water probe position | Assessed with real top temperatures: adequate (11 Nov) |
 
 ---
 
@@ -378,8 +387,14 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 - [ ] Wire the opto board in its own enclosure (plant monitoring repo).
 - [x] Heat-transfer paste on both CS92s (11 Nov).
 
+### Heating and hot water behaviour
+- [ ] **Lounge loop test** (one zone at a time; swap bindings or actuator plugs) ([B9](docs/B9-ufh-and-radiator-behaviour.md)).
+- [ ] **Legionella:** 60-61 °C setpoint, or a weekly HA/RAMSES pasteurising reheat with a failsafe; then implement.
+- [ ] **Left/right mapping checks:** which hub, BDR91 and CS92 serves which cylinder; fix the names.
+- [ ] Upstairs hub settings review; flow temperature 70 → 65 °C after the bypass; one-zone setback test.
+
 ### Gateway
-- [ ] Separate supply from Wi-Fi location (above), then move the gateway to a central position; update the issue on the firmware repository.
+- [ ] **Move the gateway to a central position (priority):** missed reports from the far end (above). Separate supply from Wi-Fi location first; update the issue on the firmware repository.
 - [ ] Keep the September packet logs permanently; confirm the upstairs boiler-demand BDR91 appears in captures.
 
 ### Plant room: physical works (soon)
