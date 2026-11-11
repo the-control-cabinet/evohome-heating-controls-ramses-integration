@@ -54,3 +54,18 @@ Pre-Evohome radiator valve types (whether a landing radiator was originally TRV-
 
 ## Monitoring hook
 FDD rule **F13 (overrun with no flow path)** watches for flow temperature rising during overrun, or a lockout shortly after a call ends, using the boiler flow NTC and the boiler switched-live opto input.
+
+## Measured: short cycling without a bypass (7-9 Nov 2026)
+
+The plant-monitoring clamp and flow/return probes now show what the missing bypass does in practice:
+
+| Condition | Burns | Pattern |
+|---|---|---|
+| UFH only open (weekend day) | **37 starts by 14:00**, ~47 s per burn | Flow ~68-70 °C, return ~28-32 °C, **ΔT 35-40 K** |
+| Weekday morning, UFH only | 10 starts in 31 min of firing | ~3 min per start |
+| Radiators + cylinders open | **One ~40 min burn** | ΔT ~15 K |
+
+With only the UFH zone valve open, the boiler sees too little flow, overheats its flow quickly and cycles. The Ideal Logic+ System manual requires an **automatic bypass** where every radiator has a TRV or two-port valve (or one radiator with twin lockshields at the 10% minimum load, ~6.1 kW minimum output for the S30). The boiler has no bypass of its own (frost protection and the daily pump exercise only).
+
+**Interim options, in order:** (1) remove one TRV head in a room that tolerates heat (the manual's alternative), (2) the installer-menu minimum pump speed (P1/P7, default 70%) later. **Fix:** an ABV at the Gas Safe visit. Flow temperature stays at 70 °C until then (65 °C as a later, separate step, limited by the 58 °C cylinders).
+

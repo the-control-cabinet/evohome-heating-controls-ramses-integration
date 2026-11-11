@@ -77,3 +77,12 @@ The pressure gauges and drip sensors together diagnose the current tundish drips
 **Tundish drips:** with the expansion vessel charged at 3.5 bar, a vessel that has lost charge makes the expansion relief valve (6 bar) lift on each heat-up. Check the vessel charge first.
 
 **Immersions share one circuit:** both cylinders' immersions are fed from the **Water heater B16 RCBO** via two double-pole isolators. Each element draws about 12 A, so **use one at a time** (both together would be about 24 A on a 16 A circuit).
+
+## Update, 11 Nov 2026: paste, stratification and the cylinders' settings
+
+- **Heat-transfer paste** added to both CS92 probes: the pockets are wider than the probes, so the gap was air. A thin coat on the probe, pushed home and nudged against the pocket wall, makes the probe follow the water faster (visible during reheats, not at steady temperature).
+- **Stratification** is now measured: plant-monitoring outlet NTCs at the top, the CS92 at the bottom. After morning showers: top ~45-49 °C, bottom ~14-15 °C. The CS92's low position means Evohome reheats by **volume used**, and the reheat itself mixes the cylinder back to ~58 °C. Overnight loss at the bottom probe ~5 K in ~10 h.
+- **Left vs right:** the left cylinder's bottom peaked ~51 °C against ~56 °C on the right. Being checked: probe contact (paste) versus the cylinder's own stat (dial 1-5 = 30-70 °C, position 4 ≈ 60 °C) cutting off before Evohome's 58 °C. Test: relay still on while that cylinder stops warming.
+- **Centre Store Unvented Indirect 250 L settings** (installation manual): PRV **3.5 bar**, vessel pre-charge **3.5 bar** (24 L), expansion relief **6 bar**, T&P **90 °C / 10 bar**. Intermittent expansion-valve discharge on warm-up = vessel charge below 3.5 bar. Both vessels and relief valves replaced 11 Nov.
+- **Probe leads** extended ~2 m (18 AWG twin, Wagos; out of Honeywell's 1.5 m spec but electrically negligible for a resistive probe), transceivers on backplates near the cylinders.
+

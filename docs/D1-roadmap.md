@@ -12,7 +12,7 @@
 - [ ] Hot-water BDR91s re-run in **3095Y 5-core 0.75 mm²** flex via 25×16 mini trunking onto D-Line surface pattresses.
 - [ ] **Wago 221** on the four opto-tapped joints; twin ferrules on two-core choc block positions; Danfoss black and grey capped.
 - [ ] Sleeving for misused colours; every cable, strip position and the lid labelled with both isolation points.
-- [ ] Heat-transfer paste on both CS92s.
+- [x] Heat-transfer paste on both CS92s (11 Nov 2026).
 - [ ] Continuity check of every moved joint against [the terminal map](../data/junction-box-terminal-map.csv) before re-energising.
 
 ## RAMSES-II gateway
@@ -56,3 +56,13 @@
 | M4 | Flow/return temperatures, pressures and leak plates on the plant-room ESP32s | A full picture of the boiler and primary circuits |
 
 These are being built on dedicated ESP32 boards in the control room and understairs plant space. The monitoring build is documented in its own repository: [heating-plant-monitoring-esphome](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome).
+
+## Heating behaviour (November 2026)
+- [ ] **Lounge UFH fault** ([B9](B9-ufh-and-radiator-behaviour.md)): HCC80R red sensor slot on outputs 1-2, then the actuator/loop check.
+- [ ] Re-measure UFH and radiators after the ALS week: optimum start leads, morning shortfalls, starts per day.
+- [ ] Upstairs hub settings review (cycle rate, minimum on time, ALS, optimum start) against the downstairs hub.
+- [ ] Interim short-cycling mitigation (one TRV head off), then the bypass; flow temperature 70 → 65 °C as a separate step.
+- [ ] Cylinder stat check (left reheats short of the right): data first, then the dial.
+- [ ] One-zone setback test (12 °C vs 19 °C), measured on degree days and gas.
+- [ ] HA notifications for heating and RAMSES events (gateway offline, radio gaps, low zone temperatures, batteries, zones failing to reach setpoint).
+

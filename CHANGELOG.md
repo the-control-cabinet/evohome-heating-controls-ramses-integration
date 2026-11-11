@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.6.0] - 2026-11-11
+- A6: measured short cycling without a bypass (starts, burn lengths, ΔT by condition) and the Ideal manual's bypass requirement; interim options.
+- New B9: advanced load scaling Normal → Partial (F9 valve demand and optimum-start leads before/after); the Lounge UFH fault (red sensor slot and heat-going-elsewhere leads).
+- A3: CS92 heat-transfer paste, stratification measured with the plant-monitoring outlet NTCs, left/right reheat difference, Centre Store settings (3.5 bar PRV and pre-charge, 6 bar ERV), probe lead extension.
+- D1 roadmap: heating-behaviour items and HA notifications.
+
 ## [1.5.0] - 2026-11-06
 - B6: gateway RF stall diagnosed and fixed in a local build. Tx-off test (no stalls listen-only); serial capture; 0.5.3 / testb / testc / jc1 comparison; testc's debug lines and decoded backtraces (`tx_fifo_work` polling the TX ISR queue in `FRM_TX`: a stuck transmit, not an RX stall); the solid LED is the TX LED; jc1 (PR #44 + safety nets) two nights, ~3,300 transmissions, no stalls. Watchdog section updated to the multi-retry version.
 - firmware/ramses_esp-jc1: patch and notes (binary not published); data/firmware-stall-comparison.csv.
