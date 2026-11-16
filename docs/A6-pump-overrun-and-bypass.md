@@ -69,3 +69,8 @@ With only the UFH zone valve open, the boiler sees too little flow, overheats it
 
 **Interim options, in order:** (1) remove one TRV head in a room that tolerates heat (the manual's alternative), (2) the installer-menu minimum pump speed (P1/P7, default 70%) later. **Fix:** an ABV at the Gas Safe visit. Flow temperature stays at 70 °C until then (65 °C as a later, separate step, limited by the 58 °C cylinders).
 
+## Addendum (12-16 Nov 2026)
+
+- **12 Nov morning, radiators only:** 37 starts by 08:30, 9 in the last hour; long burns only when radiators and UFH call together (12 Nov evening: 91 starts, 5.3 h firing).
+- **15 Nov 04:15-04:37, flow-confirmed:** ~50 s burns every ~2.6 minutes with only the radiators calling. Details and the boiler-state findings: [plant monitoring doc 16](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome/blob/main/docs/16-boiler-states-short-cycling-and-v3.md).
+- **Settings in the meantime:** upstairs cycle rate 6 → 3/h and minimum on 1 → 5 min (14 Nov); hot water overrun 5 min on both controllers (gives the boiler's pump overrun somewhere to go). Lowering the flow temperature would make cycling worse. The bypass remains the fix.

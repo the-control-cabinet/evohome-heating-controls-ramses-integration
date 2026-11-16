@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.8.0] - 2026-11-16
+- 12-13 Nov detail: docs 02/03/04/05/08/13 addenda (NTC offset, clamp AC check, GPIO6 boiler gauge and gauge boxes, long-term statistics and the daily cold-minimum decay check, inlet span checks with a tyre gauge, ADC-pin filtering lesson, 5 V decoupling, outlet NTC position, mains and inlet-group losses, tundish counter history, GPIO21); hardware/gauge-box; hot water card v4.
+- New B10: schedules in Home Assistant: the schedule card, snapshot/restore package and write guards; the 15 Nov hot water write that reported success but was rejected (final ack `FF` vs `00`); the controllers' own DHW record (byte 0 = `01`) vs ramses_rf's (`00`); the "– OVERRIDE" screen title red herring; the read path proven after re-enabling sending and clearing the cache; reported upstream as ramses_cc #1427; card v5/v5.1 (hot water read-only, "sent – not confirmed" + Confirm from hub, override marker) and package v4.
+- New B11: RF health: gateway moved to the landing (12 Nov) and signal before/after; the CS92 transceiver hung on the wall (−102 → −67 dBm); single-packet "very weak" readings are glitches; the controllers' own RF comms check (every link tested 5/5 or Excellent) and both fault logs (battery entries; the upstairs controller's ordinary AA cells); jc1 ten-day result (one stall, auto-recovered); radio-gap logger 60 → 120 s.
+- New B12: controller settings and change log: 14 Nov (upstairs TPI, downstairs overrun) and 16 Nov (hot water 60 °C both; upstairs priority off, warm weather saver, sunny rooms); hot water windows verified from the controllers' data; decisions and the Sat 21 review.
+- B9 addendum: the Lounge/Family loop-label swap confirmed and fixed by rebinding (12 Nov), the stored-schema UFH circuit mapping fix (14 Nov), Utility warmth from the manifold, Hall vs Landing, Family/Dining morning shortfall watch.
+- config: evohome-schedule-card.js (v5.1), evohome_schedule_backup.yaml (v4), loader (?v=6), card settings; ha-gateway-automations.yaml gap threshold 120 s. data: rf-comms-check-2026-11-16.csv.
+- README: status, short version, document map; D1 roadmap updated.
+
 ## [1.7.0] - 2026-11-11 (evening)
 - A3 addendum: the low CS92 pocket assessed (evidence, pros and cons, alternatives rejected), stratification readings (negative = artefact), legionella options (60-61 °C setpoint vs weekly pasteurising reheat), new hot water windows, Evohome naming.
 - B9: the Lounge/Family loop-label swap hypothesis and the Utility room warming without demand; one-zone-at-a-time loop test.
@@ -10,7 +19,7 @@
 ## [1.6.0] - 2026-11-11
 - A6: measured short cycling without a bypass (starts, burn lengths, ΔT by condition) and the Ideal manual's bypass requirement; interim options.
 - New B9: advanced load scaling Normal → Partial (F9 valve demand and optimum-start leads before/after); the Lounge UFH fault (red sensor slot and heat-going-elsewhere leads).
-- A3: CS92 heat-transfer paste, stratification measured with the plant-monitoring outlet NTCs, left/right reheat difference, Centre Store settings (3.5 bar PRV and pre-charge, 6 bar ERV), probe lead extension.
+- A3: CS92 heat-transfer paste, stratification measured with the plant-monitoring outlet NTCs, left/right reheat difference, Centre Store settings (3.5 bar pressure reducing valve and pre-charge, 6 bar expansion relief valve), probe lead extension.
 - D1 roadmap: heating-behaviour items and HA notifications.
 
 ## [1.5.0] - 2026-11-06

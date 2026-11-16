@@ -71,7 +71,7 @@
         message: "No radio traffic for 15 minutes. The automatic restart hasn't fixed it."
   mode: single
 
-# 3c. RX gap logger: logs every gap over 60 s when traffic resumes
+# 3c. RX gap logger: logs every gap over 120 s (raised from 60 s on 16 Nov: a 60 s silence is normal on a quiet system) when traffic resumes
 - alias: RAMSES RX gap logged
   triggers:
     - trigger: state
@@ -81,7 +81,7 @@
       value_template: >
         {{ trigger.from_state is not none
            and trigger.from_state.state not in ['unknown', 'unavailable']
-           and (as_datetime(trigger.to_state.state) - as_datetime(trigger.from_state.state)).total_seconds() > 60 }}
+           and (as_datetime(trigger.to_state.state) - as_datetime(trigger.from_state.state)).total_seconds() > 120 }}
   actions:
     - action: counter.increment
       target:

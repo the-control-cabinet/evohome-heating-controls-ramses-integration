@@ -1,0 +1,7 @@
+date,controller,test,device,ramses_id,result,gateway_rssi_dbm,note
+2026-11-16,downstairs,zones (Lounge),HCC80R,02:000001,5/5 (all 8 LEDs),-60..-62,one link covers all six UFH zones
+2026-11-16,downstairs,heat demand,UFH/boiler BDR91,13:000004,5 (red LED),-63,
+2026-11-16,downstairs,hot water,right HW BDR91,13:000003,5 (red LED); Excellent,-72..-75,controller summary: actuator two-way total 2 excellent 2
+2026-11-16,upstairs,heat demand,radiator BDR91,13:000002,5,-61,
+2026-11-16,upstairs,hot water,left HW BDR91,13:000001,5,-84,weak at the gateway only
+2026-11-16,upstairs,zones (zone 00),Master Bedroom HR92,04:000001,Excellent,-71..-74,HR92 put in its own rf check first; without it: Not received (asleep)

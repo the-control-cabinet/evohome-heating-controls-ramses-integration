@@ -1,0 +1,8 @@
+# Loads the Evohome schedule card's code on every dashboard (14 Nov 2026).
+# Used instead of a dashboard "resource" entry (the Resources page was not available).
+# The file itself lives in /config/www/evohome-schedule-card.js (served at /local/...).
+# When the card file is updated, bump the ?v= number (v=6 -> v=7 ...) and restart, so browsers fetch the new copy.
+
+frontend:
+  extra_module_url:
+    - /local/evohome-schedule-card.js?v=6

@@ -74,3 +74,16 @@ These are being built on dedicated ESP32 boards in the control room and understa
 - [ ] One-zone setback test (12 °C vs 19 °C), measured on degree days and gas.
 - [x] HA notifications: live in the plant monitoring alerts package (low zone temperatures, batteries, zones failing to reach setpoint, hot water); gateway alerts already in place.
 
+
+
+## Update (16 Nov 2026)
+- [x] ~~Lounge UFH fault~~: loop labels swapped; fixed by rebinding ([B9](B9-ufh-and-radiator-behaviour.md#addendum-12-16-nov-2026)).
+- [x] ~~Left/right mapping checks~~: boost test 12 Nov; names fixed.
+- [x] ~~Legionella decision~~: 60 °C on both controllers from 16 Nov ([B12](B12-hub-settings-and-change-log.md)); weekly high-temperature heat from HA parked until the write path is proven.
+- [x] ~~Upstairs settings review~~: TPI 14 Nov, priority/weather features 16 Nov; results reviewed Sat 21 Nov.
+- [x] ~~Gateway move~~: landing, 12 Nov ([B11](B11-rf-health-and-hub-checks.md)); controllers' RF check all 5/5.
+- [ ] Schedule writes: upstream fix (#1427), then one verified zone test write ([B10](B10-schedules-in-home-assistant.md)).
+- [ ] Family room / Dining room morning shortfall watch; then re-enable sunny rooms for the Family room and Lounge.
+- [ ] Batteries: upstairs controller (rechargeable NiMH), Lounge wall stat, HR92s.
+- [ ] Gateway: smart plug for remote power cycling; per-device "not heard for 2-3 nights" alert.
+- [ ] Landing setpoint trial (20 → 18 °C) after the current changes.

@@ -1,0 +1,7 @@
+type: custom:evohome-schedule-card
+title: Heating and hot water schedules
+names:
+  water_heater.stored_hw: Right cylinder
+  water_heater.stored_hw_2: Left cylinder
+collapsed:
+  - Radiators (upstairs hub)

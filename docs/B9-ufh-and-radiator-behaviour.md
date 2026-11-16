@@ -42,3 +42,12 @@ So the controller, the HCC80R's commands and the hot water at the manifold are f
 **Test:** one zone at a time (others at minimum, ~20 min each): Lounge, then Family room, then Utility; note which loops' flow pipes warm at the manifold and which rooms they serve. **Fix:** swap the bindings or the actuator plugs, then re-check that the Lounge warms.
 
 Status: open (loop test next).
+
+
+## Addendum (12-16 Nov 2026)
+
+- **Loop test (12 Nov):** with the Lounge at 25 °C and the Family room held at 12 °C, the *Family room* floor warmed and the Lounge stayed cold: the installer's "Lounge" and "Family room" loop labels were swapped. Fixed without mains work by clearing and rebinding the HCC80R zones (Lounge → outputs 3-4, Family room → 1-2), relabelling, and re-testing (zones 3-4 opened, 1-2 stayed off). The Lounge then warmed 18.4 → 19.4 °C on its first evening and now reaches 20 °C. Optimum start and ALS re-learn by themselves (global settings, no reset).
+- **Stored schema (14 Nov):** ramses_cc re-applied an old 1:1 UFH circuit mapping at every restart; the corrected mapping (circuit 00→zone 02 Kitchen, 01→00 Lounge, 02→03 Dining, 03→04 Hall, 04→01 Family, 05→05 Utility) was written into the schema and verified after a restart.
+- **Utility room:** warm with no demand and its HCC80R LED off: its own loops are closed; the heat comes from the adjacent manifold and pipework (lagging will cut it).
+- **Hall vs Landing:** the Landing (radiators) is always 1-3 K warmer than the Hall below and never falls below ~19.5 °C at its 12 °C setback: heated from below. A Landing setpoint trial (20 → 18 °C) follows the current changes.
+- **Morning shortfall watch (from 16 Nov):** Kitchen reaches setpoint; Hall close; **Family room** (19.0 → 19.5 °C vs 20) and **Dining room** (17.6 → 18.4 °C vs 19) fall short after ~3 h at 85-95 % demand. Watched for 3-4 mornings before changing anything (options: earlier start, cold weather boost for those zones, the Dining room's stairwell loss). Both cylinders now reheat until 08:30 in the same period, which is part of the picture.

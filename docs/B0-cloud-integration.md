@@ -66,3 +66,7 @@ The gateway was added on 18 Sep, running **alongside** the cloud integration, no
 After several HA restarts in one day, every cloud zone (and the cloud hot water entities) stopped updating for ~80 min with blank temperatures, while the RAMSES entities carried on. Honeywell rate-limits logins more strictly than polling; each restart can trigger a login. Mitigation: reload rather than restart where possible, and a longer `scan_interval` (e.g. 600 s), as RAMSES now provides the live data.
 
 Continue with [B1 · Gateway set-up](B1-gateway-setup.md).
+
+## Addendum (12 Nov 2026)
+
+The cloud integration stalled after repeated HA restarts and recovered by itself. Two cloud integrations (one per controller) on one account double the logins per restart; the cause was the restarts, not polling, so `scan_interval` stays at its default.

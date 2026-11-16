@@ -83,7 +83,7 @@ The pressure gauges and drip sensors together diagnose the current tundish drips
 - **Heat-transfer paste** added to both CS92 probes: the pockets are wider than the probes, so the gap was air. A thin coat on the probe, pushed home and nudged against the pocket wall, makes the probe follow the water faster (visible during reheats, not at steady temperature).
 - **Stratification** is now measured: plant-monitoring outlet NTCs at the top, the CS92 at the bottom. After morning showers: top ~45-49 °C, bottom ~14-15 °C. The CS92's low position means Evohome reheats by **volume used**, and the reheat itself mixes the cylinder back to ~58 °C. Overnight loss at the bottom probe ~5 K in ~10 h.
 - **Left vs right:** the left cylinder's bottom peaked ~51 °C against ~56 °C on the right. Being checked: probe contact (paste) versus the cylinder's own stat (dial 1-5 = 30-70 °C, position 4 ≈ 60 °C) cutting off before Evohome's 58 °C. Test: relay still on while that cylinder stops warming.
-- **Centre Store Unvented Indirect 250 L settings** (installation manual): PRV **3.5 bar**, vessel pre-charge **3.5 bar** (24 L), expansion relief **6 bar**, T&P **90 °C / 10 bar**. Intermittent expansion-valve discharge on warm-up = vessel charge below 3.5 bar. Both vessels and relief valves replaced 11 Nov.
+- **Centre Store Unvented Indirect 250 L settings** (installation manual): pressure reducing valve **3.5 bar**, vessel pre-charge **3.5 bar** (24 L), expansion relief **6 bar**, T&P **90 °C / 10 bar**. Intermittent expansion-valve discharge on warm-up = vessel charge below 3.5 bar. Both vessels and relief valves replaced 11 Nov.
 - **Probe leads** extended ~2 m (18 AWG twin, Wagos; out of Honeywell's 1.5 m spec but electrically negligible for a resistive probe), transceivers on backplates near the cylinders.
 
 ## Addendum, 11 Nov 2026 (evening): probe position, stratification readings and legionella
@@ -94,7 +94,7 @@ from heating-plant-monitoring-esphome docs/14).
 ### Context
 - Two Centre Store Unvented Indirect 250 L cylinders. Each has one usable sensor pocket, low down
   (about a quarter of the way up). The upper panel has a sensor housing but no pocket behind it.
-- The Evohome CS92A probes (07:045307 left, 07:040975 right) took over the pockets used by the
+- The Evohome CS92A probes (07:000001 left, 07:000002 right) took over the pockets used by the
   immersion thermostats, so the immersions were isolated and labelled "disconnected".
 - Probes refitted with heat-transfer paste on 11 Nov 2026.
 - The top of each cylinder is observed with a strap-on, lagged NTC on the hot outlet pipe
@@ -172,3 +172,11 @@ Both hubs: **06:00-08:30** (overlapping the heating's start, so no extra early b
 ### Evohome naming
 
 The hot water zone is fixed as "Hot Water" on the controller and in the app, so the hub **locations** can be renamed to say which cylinder each serves; HA names carry the cylinder. Which hub, BDR91 and CS92 belongs to which cylinder is to be verified by test (boost one hub outside its windows and watch the cylinders' inlet pressures; a long draw drops that cylinder's probe).
+
+## Addendum (12-16 Nov 2026): mapping, ten days of reheats, 60 °C
+
+- **Left/right mapping verified by boost tests (12 Nov):** the downstairs controller → right hot water BDR91 → right cylinder (inlet 2.6 → 3.5+ bar; outlet and probe 17 → 26 °C); the upstairs controller → left. HA's mapping was right; only the "… Side of House" names were wrong (renamed). Cloud entities: `domestic_hot_water` = upstairs/left, `_2` = downstairs/right.
+- **Ten days of reheats (2-12 Nov):** the old 19:30-20:30 evening window cut most evening reheats short (probe 45-55 °C at the window end on six evenings); the morning window finished them (58.8-59.1 °C). The 18:30-21:00 window fixed a long-standing under-heating.
+- **Left vs right reheat speed:** no consistent difference (12 Nov boosts, each alone: right 1.36 min/°C, left 1.19 min/°C). The earlier "left 15 % slower" used gauge percentages, the wrong measure. The 10 Nov "left ~51 vs right ~56 °C" was a window cut-off from a 15 °C start, not probe contact. Paste effect not separable from the readings' step size.
+- **A missed "off" (3 Nov):** the right cylinder's heat demand stayed at 100 % for ~12 h while its probe fell 50 → 16 °C: one more reason the gateway moved ([B11](B11-rf-health-and-hub-checks.md)) and the hot water alerts now use the relay states.
+- **Setpoint:** 60 °C on both controllers from 16 Nov ([B12](B12-hub-settings-and-change-log.md)).

@@ -1,0 +1,272 @@
+# Evohome schedules: snapshot, restore, write guards and write log over RAMSES RF
+# (16 Nov 2026, v4: hot water writes permanently off (ramses_cc issue #1427); writes logged as "sent";
+#  new "confirm from hub" script: reload RAMSES (clears the library cache), wait, read from the hub, compare).
+#
+# Snapshot: "Evohome: snapshot zone schedules" reads every RAMSES zone (get_zone_schedule) and both
+#   cylinders (get_dhw_schedule) and stores them in sensor.evohome_schedule_snapshot
+#   (state = time taken; attribute "schedules" = {entity_id: schedule}). Read-only: always allowed.
+# Restore: "Evohome: restore zone schedules" writes snapshot ZONE schedules back (set_zone_schedule),
+#   ONE AT A TIME, stopping at the first error. Cylinders are never written (skipped).
+#   Same guards as the card: editing switch on, gateway healthy. Each restore is logged as "sent".
+# Confirm: "Evohome: confirm schedule from hub" reloads the RAMSES integration, waits 2 min, reads the
+#   schedule from the hub and compares it with what was sent: result "confirmed from hub" or
+#   "NOT CONFIRMED". A confirmed unchanged zone write turns on the zone round-trip helper.
+# Write log: every write (card or restore) is recorded in the logbook and in
+#   sensor.evohome_schedule_last_write (entity, days, before, after, result); the card's Undo uses it.
+#
+# Guard helpers (all off by default):
+#   input_boolean.evohome_schedule_editing       - master switch: no schedule writes unless on
+#   input_boolean.evohome_zone_roundtrip_passed  - set on ONLY by the confirm script (unchanged zone write
+#                                                  confirmed from the hub)
+#   input_boolean.evohome_dhw_roundtrip_passed   - no longer used (hot water writes are off); leave off
+# Gateway healthy = online, receiving for at least 10 min (no drop-out), last packet < 60 s ago.
+# Note: ramses_rf's read-back after a write returns its own cached copy of what it just sent, and it
+#   ignores the hub's final ack (FF = rejected), so a write is only "sent" until confirmed from the hub.
+# Day numbering: 0 = Monday ... 6 = Sunday.
+
+input_boolean:
+  evohome_schedule_editing:
+    name: "Evohome schedule editing"
+    icon: mdi:pencil-lock
+  evohome_zone_roundtrip_passed:
+    name: "Evohome zone round-trip test passed"
+    icon: mdi:check-decagram
+  evohome_dhw_roundtrip_passed:
+    name: "Evohome hot water round-trip test passed"
+    icon: mdi:check-decagram
+
+template:
+  - trigger:
+      - trigger: event
+        event_type: evohome_schedule_snapshot
+    sensor:
+      - name: "Evohome schedule snapshot"
+        unique_id: evohome_schedule_snapshot
+        device_class: timestamp
+        icon: mdi:calendar-clock
+        state: "{{ now().isoformat() }}"
+        attributes:
+          schedules: "{{ trigger.event.data.schedules }}"
+          zone_count: "{{ trigger.event.data.schedules | count }}"
+          missing: "{{ trigger.event.data.missing }}"
+
+  - trigger:
+      - trigger: event
+        event_type: evohome_schedule_write
+    sensor:
+      - name: "Evohome schedule last write"
+        unique_id: evohome_schedule_last_write
+        device_class: timestamp
+        icon: mdi:calendar-edit
+        state: "{{ now().isoformat() }}"
+        attributes:
+          entity_id: "{{ trigger.event.data.entity_id }}"
+          days: "{{ trigger.event.data.days }}"
+          source: "{{ trigger.event.data.source }}"
+          result: "{{ trigger.event.data.result }}"
+          before: "{{ trigger.event.data.before }}"
+          after: "{{ trigger.event.data.after }}"
+
+  - binary_sensor:
+      - name: "Evohome gateway healthy for writes"
+        unique_id: evohome_gateway_healthy_for_writes
+        icon: mdi:access-point-check
+        # as_timestamp with a default never errors (as_datetime without one does when last_rx is unknown).
+        state: >
+          {% set rx = as_timestamp(states('sensor.ramses_gateway_last_rx'), 0) %}
+          {% set recv = states.binary_sensor.ramses_gateway_receiving %}
+          {{ is_state('binary_sensor.ramses_gateway_online', 'on')
+             and recv is not none and recv.state == 'on'
+             and (now() - recv.last_changed).total_seconds() > 600
+             and (now().timestamp() - rx) < 60 }}
+        attributes:
+          reason: >
+            {% set rx = as_timestamp(states('sensor.ramses_gateway_last_rx'), 0) %}
+            {% set recv = states.binary_sensor.ramses_gateway_receiving %}
+            {% if not is_state('binary_sensor.ramses_gateway_online', 'on') %}gateway offline
+            {% elif recv is none or recv.state != 'on' %}gateway not receiving
+            {% elif (now() - recv.last_changed).total_seconds() <= 600 %}receiving for under 10 min (recent drop-out or restart)
+            {% elif (now().timestamp() - rx) >= 60 %}no packet in the last 60 s
+            {% else %}ok{% endif %}
+
+script:
+  evohome_snapshot_zone_schedules:
+    alias: "Evohome: snapshot zone schedules"
+    icon: mdi:content-save
+    mode: single
+    sequence:
+      - variables:
+          items: >
+            {% set ents = expand(integration_entities('ramses_cc')) %}
+            {{ (ents | selectattr('domain', 'eq', 'climate')
+                     | selectattr('attributes.zone_index', 'defined')
+                     | map(attribute='entity_id') | list)
+               + (ents | selectattr('domain', 'eq', 'water_heater')
+                       | map(attribute='entity_id') | list) }}
+      - repeat:
+          for_each: "{{ items }}"
+          sequence:
+            - action: >
+                ramses_cc.get_{{ 'dhw' if repeat.item.startswith('water_heater.') else 'zone' }}_schedule
+              target:
+                entity_id: "{{ repeat.item }}"
+              continue_on_error: true
+            - wait_template: "{{ state_attr(repeat.item, 'schedule') is not none }}"
+              timeout: "00:01:00"
+              continue_on_timeout: true
+            - delay: "00:00:03"
+      - variables:
+          got: >
+            {% set ns = namespace(items=[]) %}
+            {% for e in items if state_attr(e, 'schedule') is not none %}
+              {% set ns.items = ns.items + [(e, state_attr(e, 'schedule'))] %}
+            {% endfor %}
+            {{ dict(ns.items) }}
+          missing: >
+            {{ items | reject('in', got.keys() | list) | list }}
+      - event: evohome_schedule_snapshot
+        event_data:
+          schedules: "{{ got }}"
+          missing: "{{ missing }}"
+
+  # Called by the card and the restore script with variables: zone, days, source, result, before, after.
+  # (No "fields" block and no templated logbook entity, to keep config validation simple.)
+  evohome_record_schedule_write:
+    alias: "Evohome: record schedule write"
+    icon: mdi:notebook-edit
+    mode: queued
+    max: 10
+    sequence:
+      - action: logbook.log
+        data:
+          name: "Evohome schedule"
+          message: >
+            {{ zone | default('?') }}: {{ source | default('card') }} write {{ result | default('?') }}
+            {%- if days is defined and days %} ({{ days }}){% endif %}
+      - event: evohome_schedule_write
+        event_data:
+          entity_id: "{{ zone | default('') }}"
+          days: "{{ days | default('') }}"
+          source: "{{ source | default('card') }}"
+          result: "{{ result | default('') }}"
+          before: "{{ before | default([]) }}"
+          after: "{{ after | default([]) }}"
+
+  evohome_restore_zone_schedules:
+    alias: "Evohome: restore zone schedules"
+    icon: mdi:backup-restore
+    mode: single
+    fields:
+      zones:
+        name: Zones / cylinders
+        description: "Entities to restore (leave empty for everything in the snapshot)."
+        required: false
+        selector:
+          entity:
+            domain:
+              - climate
+              - water_heater
+            integration: ramses_cc
+            multiple: true
+    sequence:
+      - variables:
+          snap: "{{ state_attr('sensor.evohome_schedule_snapshot', 'schedules') or {} }}"
+          targets: >
+            {% set wanted = zones if zones is defined and zones else snap.keys() | list %}
+            {{ wanted | select('in', snap.keys() | list) | list }}
+      # Guards
+      - if:
+          - condition: state
+            entity_id: input_boolean.evohome_schedule_editing
+            state: "off"
+        then:
+          - stop: "Schedule editing is switched off (input_boolean.evohome_schedule_editing)."
+            error: true
+      - if:
+          - condition: state
+            entity_id: binary_sensor.evohome_gateway_healthy_for_writes
+            state: "off"
+        then:
+          - stop: "Gateway not healthy for writes."
+            error: true
+      # Hot water is never written (ramses_cc issue #1427): drop cylinders from the list.
+      - variables:
+          targets: "{{ targets | reject('match', 'water_heater\\.') | list }}"
+      - condition: template
+        value_template: "{{ targets | count > 0 }}"
+      # One at a time; read back each; stop at the first failure.
+      - repeat:
+          for_each: "{{ targets }}"
+          sequence:
+            - variables:
+                before: "{{ state_attr(repeat.item, 'schedule') or [] }}"
+            - action: ramses_cc.set_zone_schedule
+              target:
+                entity_id: "{{ repeat.item }}"
+              data:
+                schedule: "{{ snap[repeat.item] | to_json }}"
+              continue_on_error: true
+            - action: script.evohome_record_schedule_write
+              data:
+                zone: "{{ repeat.item }}"
+                days: "all"
+                source: "restore"
+                result: "sent"
+                before: "{{ before }}"
+                after: "{{ snap[repeat.item] }}"
+            - delay: "00:00:10"
+
+  # Called by the card ("Confirm from hub") with variables: zone, expected, before, days, source, roundtrip.
+  # Reload clears ramses_rf's cached schedule, so the read that follows comes from the hub itself.
+  evohome_confirm_schedule_from_hub:
+    alias: "Evohome: confirm schedule from hub"
+    icon: mdi:check-network
+    mode: single
+    sequence:
+      - action: homeassistant.reload_config_entry
+        target:
+          entity_id: "{{ zone }}"
+      - delay: "00:02:00"
+      - action: "ramses_cc.get_{{ 'dhw' if zone.startswith('water_heater.') else 'zone' }}_schedule"
+        target:
+          entity_id: "{{ zone }}"
+        continue_on_error: true
+      - wait_template: "{{ state_attr(zone, 'schedule') is not none }}"
+        timeout: "00:01:30"
+        continue_on_timeout: true
+      - delay: "00:00:03"
+      - variables:
+          got: >
+            {% set ns = namespace(a=[]) %}
+            {% for d in (state_attr(zone, 'schedule') or []) | sort(attribute='day_of_week') %}
+              {% for p in d.switchpoints | sort(attribute='time_of_day') %}
+                {% set v = (p.heat_setpoint | float(0) | round(1)) if p.heat_setpoint is defined and p.heat_setpoint is not none else p.enabled %}
+                {% set ns.a = ns.a + [d.day_of_week | string ~ '@' ~ p.time_of_day ~ '=' ~ v | string] %}
+              {% endfor %}
+            {% endfor %}
+            {{ ns.a | join(',') }}
+          want: >
+            {% set ns = namespace(a=[]) %}
+            {% for d in (expected or []) | sort(attribute='day_of_week') %}
+              {% for p in d.switchpoints | sort(attribute='time_of_day') %}
+                {% set v = (p.heat_setpoint | float(0) | round(1)) if p.heat_setpoint is defined and p.heat_setpoint is not none else p.enabled %}
+                {% set ns.a = ns.a + [d.day_of_week | string ~ '@' ~ p.time_of_day ~ '=' ~ v | string] %}
+              {% endfor %}
+            {% endfor %}
+            {{ ns.a | join(',') }}
+          ok: "{{ got | length > 0 and got == want }}"
+      - action: script.evohome_record_schedule_write
+        data:
+          zone: "{{ zone }}"
+          days: "{{ days | default('') }}"
+          source: "{{ source | default('card') }}"
+          result: "{{ 'confirmed from hub' if ok else 'NOT CONFIRMED' }}"
+          before: "{{ before | default([]) }}"
+          after: "{{ expected }}"
+      - if:
+          - condition: template
+            value_template: "{{ ok and (roundtrip | default(false)) and zone.startswith('climate.') }}"
+        then:
+          - action: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.evohome_zone_roundtrip_passed

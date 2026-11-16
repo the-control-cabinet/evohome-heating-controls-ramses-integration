@@ -5,8 +5,8 @@
 [![YouTube](https://img.shields.io/badge/YouTube-The%20Control%20Cabinet-red?logo=youtube)](https://www.youtube.com/channel/UC5Cupmz7vlfcodpCX7k8iuQ)
 [![Portfolio](https://img.shields.io/badge/Portfolio-the--control--cabinet-24292f?logo=github)](https://github.com/the-control-cabinet)
 ![Protocol](https://img.shields.io/badge/Protocol-RAMSES--II%20868%20MHz-blue)
-![Integration](https://img.shields.io/badge/HA-ramses__cc%200.60.10-41BDF5?logo=homeassistant)
-![Status](https://img.shields.io/badge/Status-Live%20%E2%80%A2%20gateway%20move%20and%20UFH%20fault%20open-yellowgreen)
+![Integration](https://img.shields.io/badge/HA-ramses__cc%200.61.4-41BDF5?logo=homeassistant)
+![Status](https://img.shields.io/badge/Status-Live%20%E2%80%A2%20schedule%20writes%20reported%20upstream-yellowgreen)
 
 > **The short version**
 > - **2018, install:** I designed and installed Evohome myself:
@@ -24,8 +24,11 @@
 > - **Underfloor demand decoded:** the integration's UFH demand sensors mixed two differently numbered messages. Decoding them gave **trustworthy zone and output sensors** and showed how steeply the controller scales the UFH valve ([B8](docs/B8-ufh-demand-decoding.md)).
 > - **Measuring behaviour:** short cycling without a bypass (37 starts by mid-afternoon on a UFH-only day; [A6](docs/A6-pump-overrun-and-bypass.md)), advanced load scaling Normal → Partial and its effect on the UFH valve and optimum start, a Lounge UFH fault traced to after the HCC80R ([B9](docs/B9-ufh-and-radiator-behaviour.md)), and cylinder stratification with the CS92s pasted ([A3](docs/A3-dhw-cylinders-and-sensor-placement.md)).
 > - **November 2026, hot water:** new expansion vessels fitted; with the plant monitoring's gauges and outlet NTCs, the **low CS92 pocket was assessed** (tops ~56-58 °C after reheats: adequate; pros and cons, stratification artefacts and the **legionella** options in [A3](docs/A3-dhw-cylinders-and-sensor-placement.md#addendum-11-nov-2026-evening-probe-position-stratification-readings-and-legionella)); hot water windows widened to 06:00-08:30 and 18:30-21:00 after the old window cut a reheat short.
-> - **Radio reception:** from its current position the gateway misses many reports (CS92 temperatures in ~10 K steps every ~25 min; a hub's hot water "off" reaching HA ~8 min late), so **moving it** is now a priority.
-> - **Still open:** the official gateway firmware fix (upstream #50); the bypass (Gas Safe fix); the **Lounge fault** (leading lead: Lounge and Family room loop labels swapped, test next); the legionella setpoint decision; the upstairs settings review.
+> - **Radio reception:** from its current position the gateway misses many reports (CS92 temperatures in ~10 K steps every ~25 min; a hub's hot water "off" reaching HA ~8 min late), so it was **moved to the landing** on 12 Nov; the controllers' own RF check then showed every controller-to-device link at 5/5: the weak figures are the gateway's view only ([B11](docs/B11-rf-health-and-hub-checks.md)).
+> - **Underfloor fault found:** the installer's Lounge/Family loop labels were swapped; rebinding the HCC80R zones fixed the cold Lounge ([B9](docs/B9-ufh-and-radiator-behaviour.md#addendum-12-16-nov-2026)).
+> - **Schedules from Home Assistant:** a card to view, snapshot and edit both controllers' schedules. A hot water write reported success but the controller **rejected it** (final ack `FF`); decoding showed the library sends one byte differently from the controllers' own records. Reading is now verified from the controllers' data; hot water writes are off and the bug is **reported upstream** (ramses_cc #1427) ([B10](docs/B10-schedules-in-home-assistant.md)).
+> - **Settings with a change log:** hot water at **60 °C** on both controllers, hot water priority off, weather features per room, each change time-stamped for review ([B12](docs/B12-hub-settings-and-change-log.md)).
+> - **Still open:** the official gateway firmware fix (upstream #50); the schedule write fix (upstream #1427, then one verified zone test write); the bypass (Gas Safe fix); the Family room/Dining room morning shortfall watch; the settings review on 21 Nov.
 
 > **Device IDs are masked.** Real RAMSES-II addresses are replaced with consistent placeholders that keep the device-type prefix (`01:000001` = controller 1, `04:…` = TRV, `34:…` = wall stat, `13:…` = BDR91, `18:000001` = the gateway). Every file uses the same mapping.
 
@@ -136,7 +139,7 @@ All zones have **local override** enabled: a wall-stat change holds until the ne
 
 | Issue | Current understanding | Next step |
 |---|---|---|
-| ✅ Tundishes dripped when hot water was used | Failed DHW expansion vessels: **replaced 11 Nov**; no tundish events since, reheat peak 3.8 bar | PRVs settle at ~2.5 bar (marked 3.5): strainers/cartridges at the next visit, then match the vessels' pre-charge |
+| ✅ Tundishes dripped when hot water was used | Failed DHW expansion vessels: **replaced 11 Nov**; no tundish events since, reheat peak 3.8 bar | pressure reducing valves settle at ~2.5 bar (marked 3.5): strainers/cartridges at the next visit, then match the vessels' pre-charge |
 | Lounge UFH cold while calling | Leading lead: Lounge and Family room loop labels swapped; the Utility also warms without demand ([B9](docs/B9-ufh-and-radiator-behaviour.md)) | One-zone-at-a-time loop test |
 | Slow loss of heating-system pressure | Not the boiler's expansion vessel (recharged, and its diaphragm isn't leaking) | Trend the new boiler pressure gauge; isolate circuits one at a time |
 | Missing pipe lagging | Avoidable primary and DHW losses | Complete it |
@@ -400,8 +403,8 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 ### Plant room: physical works (soon)
 | Item | Purpose |
 |---|---|
-| ✅ Both DHW **expansion vessels** replaced 11 Nov (24 L, 3.5 bar; relief valves kept) | No tundish drips since · PRVs settle ~2.5 bar: strainers/cartridges next |
-| ✅ **Pressure gauges on both cylinder cold inlets** (between PRV and vessel) | Live; reheat peak 3.8 bar |
+| ✅ Both DHW **expansion vessels** replaced 11 Nov (24 L, 3.5 bar; relief valves kept) | No tundish drips since · pressure reducing valves settle ~2.5 bar: strainers/cartridges next |
+| ✅ **Pressure gauges on both cylinder cold inlets** (between pressure reducing valve and vessel) | Live; reheat peak 3.8 bar |
 | ✅ **Tundish drip sensors** | Live and water-tested |
 | **Complete the missing lagging** | Cut avoidable losses |
 | **Trace the slow system pressure loss** with the new boiler gauge | Boiler's expansion vessel ruled out; isolate circuits one at a time |
@@ -456,7 +459,7 @@ The README covers the whole journey. These hold the full detail:
 | Part | Documents |
 |---|---|
 | A · Design and install | [A1 System design](docs/A1-system-design.md) · [A2 Installation and commissioning](docs/A2-installation-and-commissioning.md) · [A3 DHW cylinders and sensor placement](docs/A3-dhw-cylinders-and-sensor-placement.md) · [A4 Junction box survey and wiring](docs/A4-junction-box-survey-and-wiring.md) · [A5 As-built vs Evohome and reversal](docs/A5-as-built-vs-evohome-and-reversal.md) · [A6 Pump overrun and bypass](docs/A6-pump-overrun-and-bypass.md) · [A7 Immersion backup swap](docs/A7-immersion-backup-swap-procedure.md) · [A8 Wiring schematics (terminal level and logic): as built, Evohome, tidy-up](docs/A8-wiring-schematics-three-stages.md) |
-| B · Integration | [B0 Cloud integration](docs/B0-cloud-integration.md) · [B1 Gateway set-up](docs/B1-gateway-setup.md) · [B2 Schema](docs/B2-schema-and-device-model.md) · [B3 HA entities](docs/B3-home-assistant-entities.md) · [B4 Upgrade and known issues](docs/B4-upgrade-and-known-issues.md) · [B5 Transmit audit](docs/B5-transmit-and-packet-audit.md) · [B6 Gateway reliability](docs/B6-gateway-reliability.md) · [B7 Issues and lessons](docs/B7-integration-issues-and-lessons.md) · [B8 UFH demand decoding](docs/B8-ufh-demand-decoding.md) · [B9 UFH and radiator behaviour](docs/B9-ufh-and-radiator-behaviour.md) |
+| B · Integration | [B0 Cloud integration](docs/B0-cloud-integration.md) · [B1 Gateway set-up](docs/B1-gateway-setup.md) · [B2 Schema](docs/B2-schema-and-device-model.md) · [B3 HA entities](docs/B3-home-assistant-entities.md) · [B4 Upgrade and known issues](docs/B4-upgrade-and-known-issues.md) · [B5 Transmit audit](docs/B5-transmit-and-packet-audit.md) · [B6 Gateway reliability](docs/B6-gateway-reliability.md) · [B7 Issues and lessons](docs/B7-integration-issues-and-lessons.md) · [B8 UFH demand decoding](docs/B8-ufh-demand-decoding.md) · [B9 UFH and radiator behaviour](docs/B9-ufh-and-radiator-behaviour.md) · [B10 Schedules in HA](docs/B10-schedules-in-home-assistant.md) · [B11 RF health](docs/B11-rf-health-and-hub-checks.md) · [B12 Settings and change log](docs/B12-hub-settings-and-change-log.md) |
 | C · Case study | [C1 Case study](docs/C1-fault-case-study.md) · [C2 Timeline](docs/C2-fault-timeline.md) · [C3 Hypotheses](docs/C3-hypotheses-and-tests.md) · [C4 Packet-log analysis](docs/C4-packet-log-analysis.md) · [C5 Fix procedure](docs/C5-fix-procedure.md) · [C6 Lessons and controls](docs/C6-lessons-and-controls.md) |
 | Roadmap | [D1 Roadmap](docs/D1-roadmap.md) |
 
@@ -473,7 +476,7 @@ The README covers the whole journey. These hold the full detail:
 ├── data/fault-timeline.csv
 ├── data/junction-box-terminal-map.csv ← surveyed Oct 2026
 ├── data/junction-box-core-map.csv     ← every core, by marker
-├── docs/                              ← A1-A8, B0-B8, C1-C6, D1
+├── docs/                              ← A1-A8, B0-B12, C1-C6, D1
 ├── docs/images/                       ← survey photos and dashboard screenshots (metadata stripped)
 └── scripts/packet-audit.sh · rename_rf_entities.py · list_ramses_devices.sh
 ```
