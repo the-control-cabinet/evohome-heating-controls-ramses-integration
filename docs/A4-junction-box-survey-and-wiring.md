@@ -196,3 +196,25 @@ Panel connector block (positions 1-6 from the left): 1 = switched live in from t
 | Opto taps | Boiler switched live, timer output, and both cylinders' **stat-passing** points (pos 1, pos 2); relay states come from RAMSES-II. See the plant monitoring repo |
 | Identification | Sleeving as above; every cable labelled at both ends; strip positions and Wagos labelled; lid label naming both isolation points |
 | Verification before re-energising | Continuity of every moved joint against this map; then **TS715Si on permanent ON**, BDR91s reporting in HA, heating and hot water both run |
+
+## 8. Stage 1a as built (17 Nov 2026)
+
+The tidy-up in section 7 was split: **Stage 1a** (functional) rebuilt every joint in Wagos and landed the opto taps in one session; **Stage 1b** (cutting to length, sleeving, re-running the hot-water relays in 3095Y on D-Line pattresses, the cylinder panel earths, final photos) follows. Every core was ring-marked before the choc blocks came out. Full slot-by-slot record: [data/junction-box-wago-map.csv](../data/junction-box-wago-map.csv).
+
+| Group | Build | Notes |
+|---|---|---|
+| Earth bar | Four 5-way Wagos, linked, in a printed 4-slot mount; laid out in cable-entry order | Links from the old bar's solid copper, sleeved green/yellow (at least the supply earth's size) |
+| Neutral bar | Four 5-way, linked | 13 neutrals incl. the three opto cables; one spare |
+| Live bar | Four 5-way, linked | 10 lives; the boiler permanent live (33) passes **twice through the current clamp** on its way in |
+| Control joints | One 5-slot strip of 5-way Wagos: **W7a + W7b** (boiler switched live, two Wagos linked: 6 connections), **W8**, **W3**, **W4**; four loose 3-ways **W6, W5, W2, W1** until a second strip is printed | Each Wago is one joint; only W7a-W7b and W8-W7 are linked |
+| Caps | One core per 2-way Wago | Danfoss black and grey, opto cable A's spare, the relay cables' white spares, every live core of the two radiator zone valve heads |
+
+**New core markers** (the 6-way strip had none): **W + joint + slot** (W31 = W3 slot 1), so they never clash with 00-93; opto signal cores take the marker of the slot they land in; opto blues 66-68, earths 96-98; the radiator zone valve heads 34/35 (end-switch feed), 05/06 (end switch), 64/65 (neutral), 94/95 (earth), W84/W85 (motor).
+
+**W8 built early.** The plan had W8 (radiator relay output) waiting for Stage 2. It was built now, holding the relay output (01), the IN8 opto tap and a link to W7, so the radiators still fire the boiler directly and IN8 works from day one. At Stage 2 (after the bypass) the link comes out and the TF/MF valve motors land on W8, their end switches in W7.
+
+**Re-energised 17 Nov 21:08.** All four BDR91s and all eight opto inputs came on and off with their demands. After the power cut the UFH relay waited for its controller's next command (a press of its button bridged the gap; the controller took it back within its cycle).
+
+**Open from Stage 1a (safety, first job next):**
+- the UFH zone valve earth (71) has no slot yet, and the two hot-water relay cable earths share one Wago port (one conductor per port): add a linked Wago and separate them;
+- an earth found entering with the boiler cable, although the survey recorded the boiler flex as having no earth core: trace it before relying on it (proving the boiler's earth path stays on the Gas Safe list).

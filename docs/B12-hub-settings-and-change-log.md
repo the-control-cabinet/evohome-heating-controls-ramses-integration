@@ -4,12 +4,12 @@
 
 One change at a time, each with a time stamp, so the data can say what each change did. Change points are reviewed against boiler starts, burn lengths and room temperatures.
 
-## Current settings (16 Nov 2026)
+## Current settings (18 Nov 2026)
 
 | Setting | Upstairs (radiators, left cylinder) | Downstairs (UFH, right cylinder) |
 |---|---|---|
 | Cycle rate / minimum on time | 3/h / 5 min (was 6/h / 1 min) | 3/h / 5 min |
-| Advanced load scaling | Disabled (review parked) | Partial (since 7 Nov) |
+| Advanced load scaling | Disabled (review parked) | **Disabled** (since 17 Nov 09:14; Partial from 7 Nov) |
 | Optimum start / stop | On, max 2 h / on | On, max 3 h / on |
 | Hot water setpoint / differential / overrun | **60 °C** (was 58) / 5 K / 5 min | **60 °C** (was 58) / 5 K / 5 min (was 0) |
 | Hot water priority | **Disabled** (was enabled) | Disabled |
@@ -26,6 +26,9 @@ One change at a time, each with a time stamp, so the data can say what each chan
 | 15 Nov | Weekend hot water 06:00-10:00 (app/controller) | Later showers at weekends; the downstairs Saturday did not stick until 16 Nov |
 | 16 Nov ~10:22 | Weekday hot water morning end 07:30 → 08:30 (both) | Showers ~07:20 emptied the right cylinder and the window closed mid-reheat |
 | 16 Nov 12:07-12:11 | Hot water 58 → 60 °C (both); upstairs priority disabled; upstairs warm weather saver on (all zones); upstairs sunny rooms (three rooms) | HSE storage guidance (≥ 60 °C); weekly high-temperature heat not yet possible from HA; ~£5-8/yr extra standing loss estimated |
+| 17 Nov 09:14 | **Downstairs advanced load scaling Partial → Disabled** | ALS cut the UFH relay to ~49 % duty with zones asking ~78 %; first result: relay on 195 vs 96 min, rooms warmer by 08:38 ([B9](B9-ufh-and-radiator-behaviour.md#addendum-17-18-nov-2026-als-off-and-the-hcc80r-bindings)) |
+| 17 Nov ~09:57-12:13 | HCC80R: stray zones 7/8 cleared; zone 6 re-bound to Utility (after a wrong first bind to the Family room); ramses_cc system state cleared | Old sensor bindings were driving outputs 7/8 ([B8](B8-ufh-demand-decoding.md#7-addendum-14-17-nov-2026-new-output-map-and-a-broadcast-that-got-shorter)) |
+| 17 Nov 16:50-21:08 | Junction box isolated; Stage 1a Wago rewire, opto board connected, clamp 2 turns | [A4 §8](A4-junction-box-survey-and-wiring.md#8-stage-1a-as-built-17-nov-2026); boiler states v3 live the same day (plant monitoring repo) |
 
 ## Decisions and reasoning
 

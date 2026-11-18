@@ -1,20 +1,42 @@
 # =========================================================
-# UFH demand from the HCC80R, decoded from the RAMSES gateway's MQTT rx feed
-# Home Assistant package: /config/packages/ufh_hcc80r_demand.yaml
-# (configuration.yaml: homeassistant: packages: !include_dir_named packages)
+# UFH demand from the HCC80R (02:000001), decoded from the RAMSES gateway's MQTT rx feed
+# Created 5 Nov 2026. Home Assistant package: /config/packages/ufh_hcc80r_demand.yaml
 #
 # Device IDs are MASKED (repo-wide mapping): gateway 18:000001, HCC80R 02:000001,
 # downstairs controller 01:000002. Replace with your own before use.
 #
-# Why: ramses_cc's six UFH "circuit" / zone heat-demand sensors are fed by TWO
-# messages numbered differently, so each sensor shows whichever arrived last:
-#   1. Per-zone demand, HCC80R -> controller: 3150, length 002, payload ZZ DD,
-#      ZZ = Evohome zone (00 Lounge, 01 Family, 02 Kitchen, 03 Dining, 04 Hall, 05 Utility)
-#   2. Per-output broadcast, HCC80R -> itself: 3150, length 016, 8 x (II DD), II = output 1-8
-# Demand: DD hex / 2 = percent. See docs/B8-ufh-demand-decoding.md.
+# Why: ramses_cc's six "UFL circuit" / zone heat-demand sensors are fed by TWO message
+# types that are numbered differently, so each sensor shows whichever arrived last:
+#   1. Per-zone demand, HCC80R -> downstairs hub (01:000002): 3150, length 002,
+#      payload ZZ DD, ZZ = Evohome zone (00 Lounge, 01 Family, 02 Kitchen,
+#      03 Dining, 04 Hall, 05 Utility).
+#   2. Per-output broadcast, HCC80R -> itself: 3150, payload N x (II DD), II = HCC80R output (00-07).
+#      It lists only the outputs that are bound: length 016 (8 outputs) until 17 Nov 09:47, then
+#      012 (6 outputs) once the stray 7/8 bindings were cleared. An output not listed = 0 % demand.
+# Demand: DD hex / 200 = fraction, so DD / 2 = percent.
+# Verified 5 Nov 20:21-20:23: zones 76,79,0,0,0,0; outputs 76,76,79,79,5,0,0,0.
+# Do NOT use ramses_cc's sensor.<zone>_heat_demand / "UFL Circuit" sensors downstairs.
 #
-# Message format on RAMSES/GATEWAY/<id>/rx (JSON "msg"), split on spaces:
+# HCC80R outputs: re-wired and re-bound 14 Nov 2026 so each room's loops sit on one output:
+#   1 Kitchen (2 loops), 2 Lounge (2 loops), 3 Dining (1), 4 Hall/WC (1), 5 Family room (2), 6 Utility (1),
+#   7 and 8 spare (no hub zone; 16 Nov they showed demand from a stray binding left from the old setup).
+#   Verified 16 Nov 20:47 from live data: outputs 1-6 = Kitchen 5, Lounge 73, Dining 32, Hall 0, Family 28,
+#   Utility 0, matching the hub's zone demands. (Superseded map, 3 Nov: 1-2 Lounge, 3-4 Family, 5 Kitchen,
+#   6 Dining, 7 Hall, 8 Utility.)
+# 17 Nov 2026: output sensor NAMES updated to the 14 Nov map. unique_ids (and so entity IDs and history)
+#   are unchanged: the entity IDs still carry the old labels (e.g. sensor.hcc80r_output_1_demand_lounge is
+#   now the Kitchen output).
+# 17 Nov 2026 (evening): output decoder reads any broadcast length (was 016 only, so the output sensors
+#   froze at 09:47 when the HCC80R switched to the 6-output 012 broadcast). Verified 21:57:
+#   009601C802C803A004C80500 = Kitchen 75, Lounge 100, Dining 100, Hall 80, Family 100, Utility 0,
+#   matching the per-zone demands.
+#
+# Message format on RAMSES/GATEWAY/18:000001/rx (JSON "msg"), split on spaces:
 #   [0] RSSI [1] verb [2] seq [3] src [4] via [5] dst [6] code [7] length [8] payload
+#
+# Zone temperature / setpoint sensors (section 3): plain sensors from the
+# climate.rf_* entities, so history graphs show clean lines (climate entities
+# draw "heating" shading that floods a multi-zone graph).
 # =========================================================
 
 template:
@@ -70,7 +92,7 @@ template:
         icon: mdi:heating-coil
         state: "{{ value if zone == '05' else this.state }}"
 
-  # ---------- 2. HCC80R output demands (8-output broadcast) ----------
+  # ---------- 2. HCC80R output demands (per-output broadcast, any length) ----------
   - trigger:
       - trigger: mqtt
         topic: "RAMSES/GATEWAY/18:000001/rx"
@@ -80,59 +102,71 @@ template:
         {{ (j.msg if j is mapping and j.msg is defined else '').split() }}
       is_bcast: >-
         {{ t | length >= 9 and t[3] == '02:000001' and t[5] == '02:000001'
-           and t[6] == '3150' and t[7] == '016' and t[8] | length == 32 }}
+           and t[6] == '3150' and t[7] | int(0) >= 2
+           and t[8] | length == (t[7] | int(0)) * 2 and t[8][:2] != 'FC' }}
       p: "{{ t[8] if is_bcast else '' }}"
+      # Demand per output 1-8 (index 0-7); an output missing from the broadcast is unbound = 0 %.
+      vals: >-
+        {% set out = namespace(l=[]) %}
+        {% for n in range(8) %}
+          {% set ns = namespace(v=0) %}
+          {% for i in range(0, p | length, 4) %}
+            {% if p[i:i+2] == '%02d' | format(n) %}{% set ns.v = (p[i+2:i+4] | int(0, base=16)) / 2 %}{% endif %}
+          {% endfor %}
+          {% set out.l = out.l + [ns.v | round(1)] %}
+        {% endfor %}
+        {{ out.l }}
     sensor:
-      - name: "HCC80R Output 1 Demand (Lounge)"
+      - name: "HCC80R Output 1 Demand (Kitchen)"
         unique_id: hcc80r_output_1_demand
         unit_of_measurement: "%"
         state_class: measurement
         icon: mdi:valve
-        state: "{{ ((p[2:4] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+        state: "{{ vals[0] if is_bcast else this.state }}"
       - name: "HCC80R Output 2 Demand (Lounge)"
         unique_id: hcc80r_output_2_demand
         unit_of_measurement: "%"
         state_class: measurement
         icon: mdi:valve
-        state: "{{ ((p[6:8] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
-      - name: "HCC80R Output 3 Demand (Family Room)"
+        state: "{{ vals[1] if is_bcast else this.state }}"
+      - name: "HCC80R Output 3 Demand (Dining Room)"
         unique_id: hcc80r_output_3_demand
         unit_of_measurement: "%"
         state_class: measurement
         icon: mdi:valve
-        state: "{{ ((p[10:12] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
-      - name: "HCC80R Output 4 Demand (Family Room)"
+        state: "{{ vals[2] if is_bcast else this.state }}"
+      - name: "HCC80R Output 4 Demand (Hall)"
         unique_id: hcc80r_output_4_demand
         unit_of_measurement: "%"
         state_class: measurement
         icon: mdi:valve
-        state: "{{ ((p[14:16] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
-      - name: "HCC80R Output 5 Demand (Kitchen)"
+        state: "{{ vals[3] if is_bcast else this.state }}"
+      - name: "HCC80R Output 5 Demand (Family Room)"
         unique_id: hcc80r_output_5_demand
         unit_of_measurement: "%"
         state_class: measurement
         icon: mdi:valve
-        state: "{{ ((p[18:20] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
-      - name: "HCC80R Output 6 Demand (Dining Room)"
+        state: "{{ vals[4] if is_bcast else this.state }}"
+      - name: "HCC80R Output 6 Demand (Utility)"
         unique_id: hcc80r_output_6_demand
         unit_of_measurement: "%"
         state_class: measurement
         icon: mdi:valve
-        state: "{{ ((p[22:24] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
-      - name: "HCC80R Output 7 Demand (Hall)"
+        state: "{{ vals[5] if is_bcast else this.state }}"
+      - name: "HCC80R Output 7 Demand (spare)"
         unique_id: hcc80r_output_7_demand
         unit_of_measurement: "%"
         state_class: measurement
         icon: mdi:valve
-        state: "{{ ((p[26:28] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
-      - name: "HCC80R Output 8 Demand (Utility)"
+        state: "{{ vals[6] if is_bcast else this.state }}"
+      - name: "HCC80R Output 8 Demand (spare)"
         unique_id: hcc80r_output_8_demand
         unit_of_measurement: "%"
         state_class: measurement
         icon: mdi:valve
-        state: "{{ ((p[30:32] | int(0, base=16)) / 2) | round(1) if is_bcast else this.state }}"
+        state: "{{ vals[7] if is_bcast else this.state }}"
 
-  # ---------- 3. Zone temperatures and setpoints (plain sensors, clean graphs) ----------
+  # ---------- 3. Zone temperatures and setpoints (from climate.rf_*) ----------
   - sensor:
       - name: "UFH Zone Temperature Lounge"
         unique_id: ufh_zone_temperature_lounge
@@ -176,6 +210,7 @@ template:
         state_class: measurement
         availability: "{{ state_attr('climate.rf_utility_room', 'current_temperature') is number }}"
         state: "{{ state_attr('climate.rf_utility_room', 'current_temperature') }}"
+
       - name: "UFH Zone Setpoint Lounge"
         unique_id: ufh_zone_setpoint_lounge
         unit_of_measurement: "°C"

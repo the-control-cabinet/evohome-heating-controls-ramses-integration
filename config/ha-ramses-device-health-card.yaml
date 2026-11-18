@@ -1,0 +1,24 @@
+type: vertical-stack
+cards:
+  - type: entities
+    title: RAMSES device health
+    entities:
+      - entity: binary_sensor.ramses_device_not_heard
+        name: Any device not heard
+      - entity: sensor.ramses_device_longest_silence
+        name: Longest silence now
+      - type: attribute
+        entity: sensor.ramses_device_longest_silence
+        attribute: device
+        name: Quietest device
+      - entity: sensor.ramses_device_longest_silence_72_h_max
+        name: Longest silence (72 h max)
+      - entity: input_number.ramses_not_heard_threshold_hours
+        name: Alert threshold
+  - type: markdown
+    content: |
+      | Device | Silent | Last RSSI | Best RSSI |
+      |:---|---:|---:|---:|
+      {% for d in state_attr('sensor.ramses_device_longest_silence', 'devices') or [] -%}
+      | {{ d.name }} | {{ (d.h * 60) | round(0) | int }} min | {{ d.last_rssi if d.last_rssi is not none else '–' }} | {{ d.best_rssi if d.best_rssi is not none else '–' }} |
+      {% endfor %}

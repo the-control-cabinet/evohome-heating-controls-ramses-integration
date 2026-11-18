@@ -51,3 +51,11 @@ The left hot water BDR91 reads −84 dBm at the gateway but 5/5 from its control
 - **0.5.3-jc1** (local build: PR #44 TX refill fix + TX limits + watchdog reboot): ~6-16 Nov, **one RF stall** (15 Nov 19:34), recovered by the HA watchdog's soft `reset` within ~16 s. Two longer outages on 8 and 10 Nov were the laptop it was then plugged into losing power, not the stall.
 - **Radio-gap logger threshold raised 60 → 120 s** (16 Nov), matching the *receiving* sensor; a 60 s silence is normal on a quiet system and had inflated the counter (213). Counter reset.
 - The serial logging script (resending debug commands after a reboot) is retired: the stick no longer has a serial connection. An upstream update for #50 is drafted but not posted.
+
+## 6. Per-device "not heard" monitoring (16 Nov)
+
+Package [config/ha-ramses-device-not-heard.yaml](../config/ha-ramses-device-not-heard.yaml) and card [config/ha-ramses-device-health-card.yaml](../config/ha-ramses-device-health-card.yaml):
+- Once a minute, every `ramses_cc` device status entity with a `last_seen` attribute (controllers, BDR91s, CS92s, wall stats, TRVs, HCC80R; 37 devices) is checked: hours since the gateway last heard it, last-known and best signal. Built from `integration_entities`, so new devices join automatically.
+- A device silent for longer than a threshold helper (6 h to start) is written to the logbook at once; a **phone message at 08:05 only when the list of silent devices has changed** (one message per problem), and a clear when they recover.
+- A statistics sensor keeps the **longest silence over 72 h**: after night 1 it was 1.98 h (the CS92s are the quietest, ~1-2 h). The threshold gets tightened just above that ceiling after a few nights.
+- After the junction box was re-energised (17 Nov) every device was heard again within 0.34 h.

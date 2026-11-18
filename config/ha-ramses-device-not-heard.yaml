@@ -1,0 +1,158 @@
+# RAMSES device "not heard" monitoring (16 Nov 2026)
+# Every ramses_cc device status entity (binary_sensor.*_status with a last_seen attribute: hubs,
+# BDR91s, CS92s, T87RFs, HR92s, HCC80R) is checked once a minute: hours since the gateway last heard
+# it, plus its last-known and best RSSI. The gateway/pool entities have no last_seen and are skipped.
+# A device silent longer than the threshold helper is logged at once; a phone message at 08:05 only
+# when the list of silent devices has changed since the last message (one message per problem). "Longest silence (72 h max)" shows the normal ceiling: review it
+# after 2-3 nights and tighten the threshold just above it.
+# Note: last_seen without a time zone is read as UTC (London = UTC in winter; up to 1 h early in BST).
+
+input_number:
+  ramses_not_heard_threshold_hours:
+    name: "RAMSES not-heard threshold"
+    min: 1
+    max: 72
+    step: 0.5
+    mode: slider
+    unit_of_measurement: "h"
+    icon: mdi:radio-tower
+    # no "initial": set 6 once after installing; tighten after reviewing the 72 h max
+
+input_text:
+  ramses_not_heard_last_notified:
+    name: "RAMSES not-heard: last notified"
+    max: 255
+    # holds the silent-device list last sent to the phone; cleared when all are heard again
+
+template:
+  - triggers:
+      - trigger: time_pattern
+        minutes: "/1"
+      - trigger: homeassistant
+        event: start
+    actions:
+      - variables:
+          devices: >
+            {% set ns = namespace(items=[]) %}
+            {% for e in integration_entities('ramses_cc') if e is match('binary_sensor\..*_status$') %}
+              {% set ls = state_attr(e, 'last_seen') %}
+              {% if ls is not none %}
+                {% set t = ls if ls is datetime else as_datetime(ls | string) %}
+                {% if t is not none %}
+                  {% if t.tzinfo is none %}{% set t = as_local(t) %}{% endif %}
+                  {% set ns.items = ns.items + [{
+                    'name': (state_attr(e, 'friendly_name') or e) | replace('Evohome ', '') | replace(' Status', ''),
+                    'entity': e,
+                    'h': (((now() - t).total_seconds()) / 3600) | round(2),
+                    'last_rssi': state_attr(e, 'last_known_rssi'),
+                    'best_rssi': state_attr(e, 'best_rssi')
+                  }] %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.items | sort(attribute='h', reverse=true) }}
+          threshold: "{{ states('input_number.ramses_not_heard_threshold_hours') | float(6) }}"
+    sensor:
+      - name: "RAMSES device longest silence"
+        unique_id: ramses_device_longest_silence
+        unit_of_measurement: "h"
+        state_class: measurement
+        icon: mdi:radio-tower
+        state: "{{ (devices | map(attribute='h') | max) if devices | count > 0 else 0 }}"
+        attributes:
+          device: "{{ devices[0].name if devices | count > 0 else 'none' }}"
+          device_count: "{{ devices | count }}"
+          devices: "{{ devices }}"
+    binary_sensor:
+      - name: "RAMSES device not heard"
+        unique_id: ramses_device_not_heard
+        device_class: problem
+        icon: mdi:radio-tower-off
+        state: "{{ devices | selectattr('h', 'gt', threshold) | list | count > 0 }}"
+        attributes:
+          threshold_hours: "{{ threshold }}"
+          silent: "{{ devices | selectattr('h', 'gt', threshold) | map(attribute='name') | list }}"
+
+sensor:
+  - platform: statistics
+    name: "RAMSES device longest silence (72 h max)"
+    unique_id: ramses_device_longest_silence_72h_max
+    entity_id: sensor.ramses_device_longest_silence
+    state_characteristic: value_max
+    max_age:
+      hours: 72
+    sampling_size: 5000
+    keep_last_sample: true
+
+automation:
+  # Logbook entry as soon as a device passes the threshold (no phone push)
+  - id: ramses_device_not_heard_log
+    alias: "RAMSES device not heard - log"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: binary_sensor.ramses_device_not_heard
+        to: "on"
+        for:
+          minutes: 10
+      - trigger: state
+        entity_id: binary_sensor.ramses_device_not_heard
+        from: "on"
+        to: "off"
+    actions:
+      - action: logbook.log
+        data:
+          name: "RAMSES not heard"
+          message: >
+            {% if is_state('binary_sensor.ramses_device_not_heard', 'on') %}
+            Silent over {{ state_attr('binary_sensor.ramses_device_not_heard', 'threshold_hours') }} h:
+            {{ state_attr('binary_sensor.ramses_device_not_heard', 'silent') | join(', ') }}
+            {% else %}All devices heard again{% endif %}
+          entity_id: binary_sensor.ramses_device_not_heard
+
+  # Phone message at 08:05 only when the list of silent devices has changed since the last message
+  # (one message per problem, not per day). Cleared when every device is heard again.
+  - id: ramses_device_not_heard_daily
+    alias: "RAMSES device not heard - morning check"
+    mode: single
+    triggers:
+      - trigger: time
+        at: "08:05:00"
+    variables:
+      silent_now: "{{ state_attr('binary_sensor.ramses_device_not_heard', 'silent') | default([], true) | sort | join(', ') }}"
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.ramses_device_not_heard
+        state: "on"
+      - condition: template
+        value_template: "{{ silent_now[:255] != states('input_text.ramses_not_heard_last_notified') }}"
+    actions:
+      - action: notify.mobile_app_jamess_iphone
+        data:
+          title: "RAMSES: device not heard"
+          message: >
+            Not heard for over {{ state_attr('binary_sensor.ramses_device_not_heard', 'threshold_hours') }} h:
+            {% for d in state_attr('sensor.ramses_device_longest_silence', 'devices')
+                 | selectattr('h', 'gt', state_attr('binary_sensor.ramses_device_not_heard', 'threshold_hours') | float(6)) %}
+            {{ d.name }} ({{ d.h | round(1) }} h, last RSSI {{ d.last_rssi }}){{ ',' if not loop.last }}
+            {% endfor %}
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.ramses_not_heard_last_notified
+        data:
+          value: "{{ silent_now[:255] }}"
+
+  - id: ramses_device_not_heard_clear
+    alias: "RAMSES device not heard - clear"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: binary_sensor.ramses_device_not_heard
+        from: "on"
+        to: "off"
+    actions:
+      - action: input_text.set_value
+        target:
+          entity_id: input_text.ramses_not_heard_last_notified
+        data:
+          value: ""

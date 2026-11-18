@@ -28,7 +28,10 @@
 > - **Underfloor fault found:** the installer's Lounge/Family loop labels were swapped; rebinding the HCC80R zones fixed the cold Lounge ([B9](docs/B9-ufh-and-radiator-behaviour.md#addendum-12-16-nov-2026)).
 > - **Schedules from Home Assistant:** a card to view, snapshot and edit both controllers' schedules. A hot water write reported success but the controller **rejected it** (final ack `FF`); decoding showed the library sends one byte differently from the controllers' own records. Reading is now verified from the controllers' data; hot water writes are off and the bug is **reported upstream** (ramses_cc #1427) ([B10](docs/B10-schedules-in-home-assistant.md)).
 > - **Settings with a change log:** hot water at **60 °C** on both controllers, hot water priority off, weather features per room, each change time-stamped for review ([B12](docs/B12-hub-settings-and-change-log.md)).
-> - **Still open:** the official gateway firmware fix (upstream #50); the schedule write fix (upstream #1427, then one verified zone test write); the bypass (Gas Safe fix); the Family room/Dining room morning shortfall watch; the settings review on 21 Nov.
+> - **Advanced load scaling off for the underfloor (17 Nov):** two mornings of data showed it holding the UFH relay at ~49 % duty while zones asked ~78 %. Disabled: the next morning the relay ran 195 minutes instead of 96 and the rooms finished warmer despite a colder start ([B9](docs/B9-ufh-and-radiator-behaviour.md#addendum-17-18-nov-2026-als-off-and-the-hcc80r-bindings)).
+> - **HCC80R bindings cleaned up:** stray sensor bindings from the old setup were driving two spare outputs; cleared, with lessons on the controller's two binding slots and checking the hub's zone before binding ([B9](docs/B9-ufh-and-radiator-behaviour.md#hcc80r-binding-lessons-17-nov)). The output broadcast then got shorter, which the decoder now handles ([B8](docs/B8-ufh-demand-decoding.md#7-addendum-14-17-nov-2026-new-output-map-and-a-broadcast-that-got-shorter)).
+> - **Junction box Stage 1a (17 Nov):** every joint rebuilt in Wagos with core markers, the opto taps for the plant monitoring landed, and the radiator relay joint (W8) built early so its opto input works now ([A4 §8](docs/A4-junction-box-survey-and-wiring.md#8-stage-1a-as-built-17-nov-2026)). Per-device "not heard" monitoring for every RAMSES device ([B11](docs/B11-rf-health-and-hub-checks.md#6-per-device-not-heard-monitoring-16-nov)).
+> - **Still open:** the junction box earth bar and Stage 1b tidy; the Lounge door-end loop (wiring on output 2); the official gateway firmware fix (upstream #50); the schedule write fix (upstream #1427, then one verified zone test write); the bypass (Gas Safe fix); the settings review on 21 Nov.
 
 > **Device IDs are masked.** Real RAMSES-II addresses are replaced with consistent placeholders that keep the device-type prefix (`01:000001` = controller 1, `04:…` = TRV, `34:…` = wall stat, `13:…` = BDR91, `18:000001` = the gateway). Every file uses the same mapping.
 
@@ -470,12 +473,14 @@ The README covers the whole journey. These hold the full detail:
 ├── config/ramses-schema.yaml          ← both controllers (masked IDs, anonymised zone names)
 ├── config/ha-gateway-*.yaml           ← gateway health sensors, watchdog automations, dashboard card
 ├── config/ha-ufh-*.yaml               ← HCC80R demand package (MQTT-decoded) and UFH dashboard card
+├── config/ha-ramses-device-*.yaml     ← per-device "not heard" monitoring package and health card
 ├── firmware/ramses_esp-jc1/           ← local gateway test build: patch and notes
 ├── data/device-inventory.csv          ← 40 RF devices
 ├── data/firmware-stall-comparison.csv ← stalls per firmware build
 ├── data/fault-timeline.csv
 ├── data/junction-box-terminal-map.csv ← surveyed Oct 2026
 ├── data/junction-box-core-map.csv     ← every core, by marker
+├── data/junction-box-wago-map.csv     ← Stage 1a Wago layout, slot by slot (17 Nov 2026)
 ├── docs/                              ← A1-A8, B0-B12, C1-C6, D1
 ├── docs/images/                       ← survey photos and dashboard screenshots (metadata stripped)
 └── scripts/packet-audit.sh · rename_rf_entities.py · list_ramses_devices.sh

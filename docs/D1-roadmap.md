@@ -87,3 +87,13 @@ These are being built on dedicated ESP32 boards in the control room and understa
 - [ ] Batteries: upstairs controller (rechargeable NiMH), Lounge wall stat, HR92s.
 - [ ] Gateway: smart plug for remote power cycling; per-device "not heard for 2-3 nights" alert.
 - [ ] Landing setpoint trial (20 → 18 °C) after the current changes.
+
+## Update (18 Nov 2026)
+- [x] ~~Junction box Stage 1 (functional)~~: Stage 1a done 17 Nov, opto board commissioned ([A4 §8](A4-junction-box-survey-and-wiring.md#8-stage-1a-as-built-17-nov-2026)).
+- [ ] **Junction box earth bar (safety):** UFH valve earth to land, hot-water relay earths into separate ports, trace the earth found with the boiler cable.
+- [ ] Junction box Stage 1b tidy; Stage 2 (radiator zone valves on W8) after the automatic bypass.
+- [x] ~~Downstairs ALS~~: disabled 17 Nov; first morning much better ([B9](B9-ufh-and-radiator-behaviour.md#addendum-17-18-nov-2026-als-off-and-the-hcc80r-bindings)). Upstairs ALS decision at the Sat 21 review.
+- [x] ~~HCC80R stray bindings~~: zones 7/8 cleared, zone 6 re-bound.
+- [ ] Lounge door-end loop: no power on output 2 (wiring); then a per-output check.
+- [x] ~~Per-device "not heard" alert~~: live ([B11 §6](B11-rf-health-and-hub-checks.md#6-per-device-not-heard-monitoring-16-nov)); tighten the threshold after the 72 h review.
+- [ ] After the morning watch (~19 Nov): sunny rooms for the Family room and Lounge, cold weather boost, UFH mixing temperature 45 °C trial and pump mode III → CP1 (plant monitoring repo), one at a time.

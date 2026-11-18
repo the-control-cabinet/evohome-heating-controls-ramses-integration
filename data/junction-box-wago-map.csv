@@ -1,0 +1,80 @@
+group,wago,slot,marker,cable,colour,function,stage_note
+E bar,E (4x 221-415 linked),1,91,SUP,G/Y,incoming supply earth,
+E bar,E,2,?,BLR?,G/Y,earth found with the boiler cable; survey recorded the boiler flex as having no earth core,to trace
+E bar,E,3,83,HCC,G/Y,HCC80R UFH controller earth,
+E bar,E,4,95,VMF,G/Y,MF radiator zone valve head earth,
+E bar,E,5-6,-,-,G/Y,link,
+E bar,E,7,94,VTF,G/Y,TF radiator zone valve head earth,
+E bar,E,8,72,DAN,G/Y,TS715Si timer cable earth,
+E bar,E,9,92,RAD,G/Y,TF stat cable (radiator BDR91) earth,
+E bar,E,10-11,-,-,G/Y,link,
+E bar,E,12,93,UFH,G/Y,MF stat cable (UFH BDR91) earth,
+E bar,E,13,98,OPT-C,G/Y,opto cable C earth,
+E bar,E,14,97,OPT-B,G/Y,opto cable B earth,
+E bar,E,15-16,-,-,G/Y,link,
+E bar,E,17,96,OPT-A,G/Y,opto cable A earth,
+E bar,E,18,-,HWL+HWR,G/Y,both hot-water relay cable earths twisted into one port,to fix: one conductor per port
+E bar,E,19,81,VCL,G/Y,cyl L zone valve earth,
+E bar,E,20,82,VCR,G/Y,cyl R zone valve earth,
+E bar,(extension),-,71,VUF,G/Y,UFH zone valve earth,to fix: no slot at Stage 1a; add a linked Wago
+N bar,N (4x 221-415 linked),-,63,SUP,blue,incoming supply neutral,
+N bar,N,-,62,BLR,black,boiler neutral,sleeve blue at 1b
+N bar,N,-,41,HCC,grey,HCC80R neutral,
+N bar,N,-,42,RAD,grey,radiator BDR91 neutral,
+N bar,N,-,43,UFH,grey,UFH BDR91 neutral,
+N bar,N,-,44,HWL,blue,left hot-water BDR91 neutral,
+N bar,N,-,45,HWR,blue,right hot-water BDR91 neutral,
+N bar,N,-,52,VCL,blue,cyl L valve motor neutral,
+N bar,N,-,53,VCR,blue,cyl R valve motor neutral,
+N bar,N,-,61,VUF,blue,UFH valve motor neutral,
+N bar,N,-,66,OPT-A,blue,opto cable A neutral,
+N bar,N,-,67,OPT-B,blue,opto cable B neutral,
+N bar,N,-,68,OPT-C,blue,opto cable C neutral,
+L bar,L (221-415 linked),-,32,SUP,brown,incoming supply live (Boiler B6 RCBO),
+L bar,L,-,33,BLR,brown,boiler permanent live (2 turns through the current clamp),
+L bar,L,-,11,HCC,brown,HCC80R live,
+L bar,L,-,12,RAD,brown,radiator BDR91 live,
+L bar,L,-,13,UFH,brown,UFH BDR91 live,
+L bar,L,-,14,HWL,brown,left hot-water BDR91 live,
+L bar,L,-,15,HWR,brown,right hot-water BDR91 live,
+L bar,L,-,22,VCL,grey,cyl L valve end-switch feed,
+L bar,L,-,23,VCR,grey,cyl R valve end-switch feed,
+L bar,L,-,31,VUF,grey,UFH valve end-switch feed,
+W7 boiler switched live,strip 1 (221-415),1,00,BLR,grey,boiler switched live,sleeve brown at 1b
+W7 boiler switched live,strip 1,2,02,VUF,orange,UFH valve end switch out,
+W7 boiler switched live,strip 1,3,03,VCL,orange,cyl L valve end switch out,
+W7 boiler switched live,strip 1,4,04,VCR,orange,cyl R valve end switch out,
+W7 boiler switched live,strip 1,5,-,-,brown,link to strip 2,
+W7 boiler switched live,strip 2 (221-415),1,-,-,brown,link from strip 1,
+W7 boiler switched live,strip 2,2,-,-,brown,link from W8 (radiator call),removed at Stage 2
+W7 boiler switched live,strip 2,3,W78,OPT-A,black,opto IN1 boiler call,
+W8 radiator relay output,strip 3 (221-415),1,01,RAD,black,radiator BDR91 output,
+W8 radiator relay output,strip 3,2,W82,OPT-C,brown,opto IN8 radiator relay,
+W8 radiator relay output,strip 3,3,-,-,brown,link to W7,removed at Stage 2
+W8 radiator relay output,strip 3,4-5,-,-,-,spare,Stage 2: TF and MF valve motor lives (W84 W85)
+W3 timer output,strip 4 (221-415),1,W31,DAN,brown,TS715Si output,
+W3 timer output,strip 4,2,W32,HWL,black,left hot-water BDR91 terminal A,
+W3 timer output,strip 4,3,W33,HWR,black,right hot-water BDR91 terminal A,
+W3 timer output,strip 4,4,W34,OPT-A,grey,opto IN2 timer,
+W4 UFH relay to UFH valve,strip 5 (221-415),1,W41,UFH,black,UFH BDR91 output,
+W4 UFH relay to UFH valve,strip 5,2,W42,VUF,-,UFH valve motor live,
+W4 UFH relay to UFH valve,strip 5,3,W43,OPT-C,grey,opto IN7 UFH relay,
+W6 left relay out to left panel,loose 3-way,1,W61,HWL,grey,left hot-water BDR91 terminal B,second 4-slot strip at 1b
+W6 left relay out to left panel,loose 3-way,2,W62,CPL,brown,cyl L panel in,
+W6 left relay out to left panel,loose 3-way,3,W63,OPT-B,black,opto IN3 HW relay left,
+W5 right relay out to right panel,loose 3-way,1,W51,HWR,grey,right hot-water BDR91 terminal B,
+W5 right relay out to right panel,loose 3-way,2,W52,CPR,brown,cyl R panel in,
+W5 right relay out to right panel,loose 3-way,3,W53,OPT-B,grey,opto IN4 HW relay right,
+W2 left stat out to left valve,loose 3-way,1,W21,CPL,blue,cyl L panel out (after stat and cut-out),sleeve brown at 1b
+W2 left stat out to left valve,loose 3-way,2,W22,VCL,-,cyl L valve motor live,
+W2 left stat out to left valve,loose 3-way,3,W23,OPT-B,brown,opto IN5 cyl L valve drive,
+W1 right stat out to right valve,loose 3-way,1,W11,CPR,blue,cyl R panel out (after stat and cut-out),sleeve brown at 1b
+W1 right stat out to right valve,loose 3-way,2,W12,VCR,-,cyl R valve motor live,
+W1 right stat out to right valve,loose 3-way,3,W13,OPT-C,black,opto IN6 cyl R valve drive,
+caps,221-412 each,-,-,DAN,black,TS715Si spare core,capped
+caps,221-412 each,-,-,DAN,grey,TS715Si spare core,capped
+caps,221-412 each,-,-,OPT-A,brown,opto cable A spare,capped
+caps,221-412 each,-,-,HWL,white,left relay cable spare,capped (also capped at the relay)
+caps,221-412 each,-,-,HWR,white,right relay cable spare,capped (also capped at the relay)
+caps,221-412 each,-,W84 64 34 05,VTF,brown blue grey orange,TF radiator zone valve head,capped until the bypass (Stage 2)
+caps,221-412 each,-,W85 65 35 06,VMF,brown blue grey orange,MF radiator zone valve head,capped until the bypass (Stage 2)

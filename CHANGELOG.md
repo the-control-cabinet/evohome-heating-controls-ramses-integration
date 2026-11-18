@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.0] - 2026-11-18
+- A4 §8: junction box Stage 1a as built (17 Nov): Wago bars and joints W1-W8, the W + joint + slot marker scheme, W8 built early so IN8 works now, re-energising and the relays' behaviour after the power cut; open earth-bar items. New data/junction-box-wago-map.csv.
+- B8 §7: the 14 Nov output map; stray zones 7/8 identified from the setpoint message and fitted to two wall stats; the per-output broadcast shortening from 016 to 012 (and stopping when idle), and the decoder now reading any length. config/ha-ufh-hcc80r-demand.yaml updated (masked IDs).
+- B9 addendum: downstairs advanced load scaling disabled (17 Nov 09:14) with the evidence and the first morning's result; HCC80R binding lessons (green/red slots, a hub binding fills both, the wrong first re-bind caught in the packet log); the Lounge door-end loop.
+- B11 §6: per-device "not heard" monitoring (new config/ha-ramses-device-not-heard.yaml and ha-ramses-device-health-card.yaml).
+- B12: settings 18 Nov; change log for ALS, the HCC80R clean-up and the junction box isolation.
+- D1 update; device inventory (HCC80R outputs since 14 Nov); README short version.
+
 ## [1.8.0] - 2026-11-16
 - 12-13 Nov detail: docs 02/03/04/05/08/13 addenda (NTC offset, clamp AC check, GPIO6 boiler gauge and gauge boxes, long-term statistics and the daily cold-minimum decay check, inlet span checks with a tyre gauge, ADC-pin filtering lesson, 5 V decoupling, outlet NTC position, mains and inlet-group losses, tundish counter history, GPIO21); hardware/gauge-box; hot water card v4.
 - New B10: schedules in Home Assistant: the schedule card, snapshot/restore package and write guards; the 15 Nov hot water write that reported success but was rejected (final ack `FF` vs `00`); the controllers' own DHW record (byte 0 = `01`) vs ramses_rf's (`00`); the "– OVERRIDE" screen title red herring; the read path proven after re-enabling sending and clearing the cache; reported upstream as ramses_cc #1427; card v5/v5.1 (hot water read-only, "sent – not confirmed" + Confirm from hub, override marker) and package v4.

@@ -51,3 +51,28 @@ Status: open (loop test next).
 - **Utility room:** warm with no demand and its HCC80R LED off: its own loops are closed; the heat comes from the adjacent manifold and pipework (lagging will cut it).
 - **Hall vs Landing:** the Landing (radiators) is always 1-3 K warmer than the Hall below and never falls below ~19.5 °C at its 12 °C setback: heated from below. A Landing setpoint trial (20 → 18 °C) follows the current changes.
 - **Morning shortfall watch (from 16 Nov):** Kitchen reaches setpoint; Hall close; **Family room** (19.0 → 19.5 °C vs 20) and **Dining room** (17.6 → 18.4 °C vs 19) fall short after ~3 h at 85-95 % demand. Watched for 3-4 mornings before changing anything (options: earlier start, cold weather boost for those zones, the Dining room's stairwell loss). Both cylinders now reheat until 08:30 in the same period, which is part of the picture.
+
+## Addendum (17-18 Nov 2026): ALS off, and the HCC80R bindings
+
+### Advanced load scaling: Partial → Disabled (downstairs, 17 Nov 09:14)
+
+Two mornings of clean data (16-17 Nov) showed ALS cutting the UFH relay demand progressively as zone demand fell below ~90 %: zones at ~80 % gave a relay demand of ~50 %, zones at ~65 % about 25 %. The relay cycled ~10 minutes on, ~10 off: **49 % duty** while the Dining room asked for ~78 %. Screed UFH responds over hours, so starving the pump and manifold just lengthened the shortfalls.
+
+| Morning | Hub UFH valve demand | UFH relay on, 04:00-08:38 | Family / Dining / Kitchen / Hall at 08:38 |
+|---|---|---|---|
+| 17 Nov (ALS Partial) | max 56 % | 96 min | 19.4 / 18.1 / 19.9 / 18.9 °C |
+| **18 Nov (ALS Disabled)** | **100 %** 04:04-06:21, then following the zones | **195 min** | **20.0 / 18.8 / 20.1 / 18.9 °C** |
+
+On 18 Nov the rooms also started 1-1.6 °C colder (the junction box had been isolated the evening before) and still finished warmer. Shortfall at the end of each morning period: Family −0.4, Dining −0.3, Hall −0.2 °C. A second morning (19 Nov) confirms before the next change.
+
+### HCC80R binding lessons (17 Nov)
+
+- **Each HCC80R zone has two bindings:** in installation mode the zone LED steps through **green** (time program / room setpoint) and **red** (temperature sensor). Clearing a zone means clearing the colour that holds the binding.
+- **Zones 7 and 8** held only old **red** (sensor) bindings to the Hall and Utility wall stats. Clearing red removed them completely; outputs 7 and 8 went to 0 and dropped out of the broadcast ([B8](B8-ufh-demand-decoding.md#7-addendum-14-17-nov-2026-new-output-map-and-a-broadcast-that-got-shorter)).
+- **A binding made from the hub on green also fills red.** Clearing red on zone 6 (as a test of whether zones 1-6 had leftovers) disconnected Utility completely. Zones 1-5 were left alone: they held only the hub binding.
+- **Check the hub's zone before binding.** The first re-bind of zone 6 went to the **Family room** (the hub's bind offer carries its zone index: 01 = Family, 05 = Utility), so the Utility loop would have followed the Family room. Caught in the packet log within minutes, cleared and re-bound to Utility; LED 6 then followed the Utility override.
+- After any re-bind: ramses_cc *Clear system state*, then verify from the messages, not the LEDs alone.
+
+### The Lounge (open)
+
+One of the two Lounge loops (door / front-window end) gets **no power at its actuator** (room-temperature head, pin down) while the other opens. On 18 Nov the Lounge was the only UFH room cooling during its morning (17.9 → 17.7 °C). A wiring fault on HCC80R output 2, to trace with the controller isolated, then a per-output check of every head.
