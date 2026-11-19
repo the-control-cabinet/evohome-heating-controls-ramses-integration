@@ -71,3 +71,38 @@ So at **moderate** demand, the valve is open only a fraction of each 20-minute c
 - **Outputs re-wired and re-bound (14 Nov)** so each room's loops sit on one output: **1 Kitchen, 2 Lounge, 3 Dining, 4 Hall, 5 Family room, 6 Utility, 7-8 spare**. The package's output sensor names follow this map; their entity IDs keep the old labels so history is kept.
 - **Stray zones 7 and 8 (17 Nov).** Outputs 7 and 8 showed demand (mean 84 % and 23 % overnight) with nothing wired. The HCC80R's setpoint message (`22C9`) listed zones 7 and 8 at a fixed 20.00 °C, and their demand fitted two wall stats exactly (Hall and Utility, `34:000015` / `34:000016`): **old sensor bindings from the original setup** that the 14 Nov clear-down hadn't covered. Clearing them is in [B9](B9-ufh-and-radiator-behaviour.md#addendum-17-18-nov-2026-als-off-and-the-hcc80r-bindings).
 - **The broadcast now lists only bound outputs.** Once 7 and 8 were cleared, the per-output broadcast changed from length `016` (8 outputs) to **`012` (6 outputs)**, and stops altogether when no output is calling. The package accepted only `016`, so the output sensors froze. The decoder now reads any length, treats an unlisted output as 0 %, and ignores the HCC80R's overall-demand message (`FC..`) sent to itself. Verified on `009601C802C803A004C80500` = Kitchen 75, Lounge 100, Dining 100, Hall 80, Family 100, Utility 0, matching the per-zone messages.
+
+## 8. Addendum (19 Nov 2026): the curve is Evohome's own, not the binding or load scaling
+
+**Conclusion.** The steep curve in [§4](#4-the-ufh-valve-demand-f9) is how the Evohome controller itself turns zone demand into relay demand. It follows the **highest** zone demand (not an average), is close to one-to-one above ~90 % and falls away steeply below it. It is the same on **both controllers** and for **both relay roles**, with advanced load scaling **disabled** on both. Rebinding the UFH relay would not change it.
+
+**Evidence (packet log, 19 Nov mornings).** Raw 3150/0008 values are out of 200.
+
+Downstairs controller `01:000002`, UFH relay `13:000004` bound as the S-plan **heating valve** (domain F9):
+
+| HCC80R highest zone (3150 to the controller) | F9 to the UFH relay (0008) | Ratio |
+|---|---|---|
+| 59 % | 22 % | 0.37 |
+| 62 % (`7C`) | 23 % (`2E`) | 0.37 |
+| 63 % (`7E`) | 25 % (`32`) | 0.40 |
+
+An average of the zones does not fit (four zones at 41-62 % still gave 23-24 %; one zone at 61 % alone gave 23 %).
+
+Upstairs controller `01:000001`, radiator relay `13:000002` in the **boiler relay** role (domain FC):
+
+| Highest radiator-zone demand | FC to the boiler relay | Ratio |
+|---|---|---|
+| 99 % (`C6`) | 98 % (`C4`) | 0.99 |
+| 91 % (`B6`) | 79 % (`9E`) | 0.87 |
+| ~51 % | 16 % (`20`) | 0.31 |
+| 46 % (`5C`) | 12 % (`18`) | 0.26 |
+
+The relay is on/off; the percentage is its TPI duty. At 3 cycles an hour, 23 % is **~4.6 min in every 20**, matching the UFH relay exactly (e.g. on 07:20:02, off 07:24:38; on 07:40:07, off 07:44:43). In the two-relay (S-plan) setup the controller sends FC only when hot water is calling (then 100 %).
+
+**What it means.**
+- **Radiators:** the curve is reasonable: radiators respond in minutes and each HR92 also throttles its own radiator.
+- **Screed UFH:** it works against a slow floor. A room 0.7 °C under setpoint asks for ~60 %, gets ~23 % valve time and cannot catch up before the period ends. This explains the **mild-morning shortfalls** (19 Nov: Dining −0.7 °C with the UFH relay on 25 min, 03:00-10:30, against 204 min on the colder 18 Nov). Disabling load scaling (17 Nov) fixed the learned down-scaling on cold mornings; it cannot change this curve.
+
+**Next (one change at a time).**
+- [ ] Trial: Dining room weekday morning setpoint **19.0 → 19.5 °C**. A larger error lifts zone demand into the steep part of the curve (zone ~70 % gives ~30 % relay time, ~90 % gives ~77 %). Watch for overshoot once the slab catches up.
+- [ ] Longer term: let Home Assistant decide the UFH relay from the actual zone demands, as part of the OpenTherm plan ([D1](D1-roadmap.md#opentherm-and-advanced-boiler-control-planned)).

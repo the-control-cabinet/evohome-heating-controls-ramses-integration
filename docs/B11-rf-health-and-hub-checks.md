@@ -56,6 +56,13 @@ The left hot water BDR91 reads −84 dBm at the gateway but 5/5 from its control
 
 Package [config/ha-ramses-device-not-heard.yaml](../config/ha-ramses-device-not-heard.yaml) and card [config/ha-ramses-device-health-card.yaml](../config/ha-ramses-device-health-card.yaml):
 - Once a minute, every `ramses_cc` device status entity with a `last_seen` attribute (controllers, BDR91s, CS92s, wall stats, TRVs, HCC80R; 37 devices) is checked: hours since the gateway last heard it, last-known and best signal. Built from `integration_entities`, so new devices join automatically.
-- A device silent for longer than a threshold helper (6 h to start) is written to the logbook at once; a **phone message at 08:05 only when the list of silent devices has changed** (one message per problem), and a clear when they recover.
+- A device silent for longer than a threshold helper (6 h to start, **3 h since 19 Nov**) is written to the logbook at once; a **phone message at 08:05 only when the list of silent devices has changed** (one message per problem), and a clear when they recover.
 - A statistics sensor keeps the **longest silence over 72 h**: after night 1 it was 1.98 h (the CS92s are the quietest, ~1-2 h). The threshold gets tightened just above that ceiling after a few nights.
 - After the junction box was re-energised (17 Nov) every device was heard again within 0.34 h.
+
+## 7. A hot water relay left unpowered (19 Nov)
+
+- **What happened:** the left cylinder's hot water BDR91 (`13:000001`) was taken off its backplate during mounting work (~15:40) and not refitted. Off its backplate a BDR91 has no mains and no radio. The upstairs controller noticed only when it next needed the relay: at the 18:30 evening window it got no reply and logged **`dhw_actuator_communication_lost` at 18:40**. The left cylinder sat at a 17-20 °C bottom probe all evening; the 21:30 digest showed it at 39 %.
+- **Why nothing alerted:** the RAMSES not-heard check needs 3 hours of silence and then messages the phone only at 08:05. The controller's own fault was visible in Home Assistant through the **cloud integration** (`status.activeFaults` on the hot water entity), but nothing watched it.
+- **Fix:** relay refitted 22:13; it was heard at once, the fault cleared, and a 1-hour boost reheated the cylinder. A new **Evohome hub faults** alert now passes on any fault either controller reports (relay lost, battery, sensor) within one cloud update: [plant doc 15](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome/blob/main/docs/15-alerts.md#changes-19-nov-2026). Its first "all cleared" message arrived after the refit.
+- **Lesson:** the controller that depends on a device knows first. Radio-silence monitoring stays as the second line (it covers devices the controller only hears occasionally).

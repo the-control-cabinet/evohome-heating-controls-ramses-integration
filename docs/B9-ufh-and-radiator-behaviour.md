@@ -73,6 +73,38 @@ On 18 Nov the rooms also started 1-1.6 °C colder (the junction box had been iso
 - **Check the hub's zone before binding.** The first re-bind of zone 6 went to the **Family room** (the hub's bind offer carries its zone index: 01 = Family, 05 = Utility), so the Utility loop would have followed the Family room. Caught in the packet log within minutes, cleared and re-bound to Utility; LED 6 then followed the Utility override.
 - After any re-bind: ramses_cc *Clear system state*, then verify from the messages, not the LEDs alone.
 
-### The Lounge (open)
+### The Lounge (closed 19 Nov: see below)
 
-One of the two Lounge loops (door / front-window end) gets **no power at its actuator** (room-temperature head, pin down) while the other opens. On 18 Nov the Lounge was the only UFH room cooling during its morning (17.9 → 17.7 °C). A wiring fault on HCC80R output 2, to trace with the controller isolated, then a per-output check of every head.
+One of the two Lounge loops (door / front-window end) got **no heat at its actuator** while the other opened. On 18 Nov the Lounge was the only UFH room cooling during its morning (17.9 → 17.7 °C).
+
+## Addendum (19 Nov 2026): the Lounge door-end loop: a failed actuator
+
+**Result:** the door-end loop's thermal actuator had failed **internally**: intermittent first, then open circuit. The HCC80R, its binding, both zone 2 terminal pairs, the plug, the ferrules and the valve were all proven good.
+
+### How it was narrowed down
+
+| Step | Observation | Ruled out |
+|---|---|---|
+| Lounge override 22 °C (13:35), HA output sensors | Zone demand 100 %; **only output 2** demanded. The Lounge is zone 2 on the 14 Nov map; **both** Lounge actuators land on zone 2's two terminal pairs | Binding. (The output sensors' **entity IDs** still carry pre-14 Nov labels: `…output_1_demand_lounge` is the Kitchen. Read the names, not the IDs.) |
+| HCC80R LEDs | On new demand LEDs 1-6 lit briefly, then settled to LED 2 only (matching HA) | A controller fault |
+| At the manifold, ~7 min on | One actuator pin up and warm; the door-end one **no pin, cold** | A valve or flow problem: the actuator wasn't opening |
+| Resistance, power off, wires out | ~10 kΩ and ~6.5-7 kΩ (PTC heaters, the warm one still cooling) | A broken coil or cable *at rest* |
+| Swap the two actuators between zone 2's ports | Both opened… then **the same actuator dropped again** ~40 min later, now in the port the good one had used | The terminal pair and the plug: **the fault followed the actuator** |
+| Resistance again, plug removed; then ferrules cut off | **OL** on the bare cores, no change when the cable was flexed at the head | The crimps and the cable entry: the heater inside the head had failed open |
+
+The valve pin was free and the valve dry with the actuator removed. While the actuators were off, one valve's **adapter ring** was found very loose and re-tightened hand-tight.
+
+### The HCC80R after a power cycle
+
+After each power-off the zone LEDs **flash red for several minutes** (no RF contact yet), then settle as the controller's demand messages arrive (power-on ~13:52, settled to zone 2 green by 14:17). The red flashing is expected: no rebinding or button presses needed. Allow for it in any HCC80R work.
+
+### Now
+
+- **Replacement:** a generic 230 V AC, normally closed, M30 × 1.5, 2-wire actuator of the same style. To fit with fresh ferrules; then check both pins rise and stay up ≥ 30 min with the zone calling, and that the loop shows no flow when the zone is off.
+- **Until then** the door-end valve is open and uncontrolled (heats whenever any UFH zone calls). The plant monitoring uses this as an open-load trial: [plant doc 18](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome/blob/main/docs/18-bypass-trials-open-loads.md).
+
+### Lessons
+
+1. **A thermal actuator can read normal cold and still fail warm.** A resistance check at rest isn't proof; watch it open and *stay* open.
+2. **Swap test before any meter work:** moving the actuators between two ports separated "output" from "actuator" with no live testing.
+3. **When an entity's ID and its name disagree, check the name** (the IDs here were never renamed after the output map changed).

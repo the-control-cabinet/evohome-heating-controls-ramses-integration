@@ -74,3 +74,18 @@ With only the UFH zone valve open, the boiler sees too little flow, overheats it
 - **12 Nov morning, radiators only:** 37 starts by 08:30, 9 in the last hour; long burns only when radiators and UFH call together (12 Nov evening: 91 starts, 5.3 h firing).
 - **15 Nov 04:15-04:37, flow-confirmed:** ~50 s burns every ~2.6 minutes with only the radiators calling. Details and the boiler-state findings: [plant monitoring doc 16](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome/blob/main/docs/16-boiler-states-short-cycling-and-v3.md).
 - **Settings in the meantime:** upstairs cycle rate 6 → 3/h and minimum on 1 → 5 min (14 Nov); hot water overrun 5 min on both controllers (gives the boiler's pump overrun somewhere to go). Lowering the flow temperature would make cycling worse. The bypass remains the fix.
+
+## Addendum (19 Nov 2026): what the bypass will and won't fix
+
+The fix above was written as "the bypass". The data since then splits the problem in two:
+
+| | Automatic bypass valve | Open radiator / loop |
+|---|---|---|
+| Flow path when the valves and TRVs shut (pump, overrun, **re-powering the TF/MF zone valve heads**) | **Yes**: required before the heads go back on | Only while guaranteed open |
+| Heat taken away, so burns last longer | **No**: bypassed water comes straight back hot | **Yes** |
+
+- **Flow-starved cycling** (7-9 Nov, UFH only: ΔT 35-40 K, ~47 s burns) is where a bypass helps: the boiler gets a minimum flow.
+- **Load-limited cycling** (19 Nov evening, UFH only with the screed warm: flow − return **0.3-2.6 K**, 7 starts an hour) isn't: the mixing valve injects only a trickle and the boiler has almost nothing to heat. A bypass adds flow, not load; an open floor loop didn't help either.
+- **The TPI floor:** each controller's relay windows (3 an hour, 5 min minimum on) are boiler starts by design; no bypass changes them.
+
+So the automatic bypass stays **required** (for the zone valve heads and the overrun) and **helps** the worst burns, but it is not expected to end short cycling on its own. Two open-load trials started on 19 Nov (Lounge UFH loop, Landing radiator), with the method and first results in [plant doc 18](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome/blob/main/docs/18-bypass-trials-open-loads.md). The service questions now include the boiler's **anti-cycle time**.

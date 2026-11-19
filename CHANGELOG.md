@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.0] - 2026-11-19
+- B8 §8: the steep zone-to-relay demand curve is Evohome's own: same curve on both controllers and both relay roles with load scaling disabled, following the highest zone; binding ruled out (masked evidence). D1: 19 Nov update and OpenTherm design input (HA decides the UFH relay from real zone demands, Evohome as fallback).
+- B9 addendum: the Lounge door-end loop traced to a failed thermal actuator (swap test between zone 2's ports, then open circuit at the bare cores); the HCC80R's red-flashing resync after power-on; output sensor IDs vs names.
+- B11 §7: the left hot water relay left unpowered (~15:40-22:13): the controller's fault at 18:40, why nothing alerted, the new hub-fault alert; not-heard threshold 3 h.
+- B12: settings 19 Nov (left weekday hot water 06:00-09:30); change log for 19 Nov including the excluded windows and the two open-load trials.
+- A6 addendum: the bypass adds flow, not load; flow-starved vs load-limited cycling; the TPI floor.
+- README: short version, known issues, roadmap.
+
 ## [1.9.0] - 2026-11-18
 - A4 §8: junction box Stage 1a as built (17 Nov): Wago bars and joints W1-W8, the W + joint + slot marker scheme, W8 built early so IN8 works now, re-energising and the relays' behaviour after the power cut; open earth-bar items. New data/junction-box-wago-map.csv.
 - B8 §7: the 14 Nov output map; stray zones 7/8 identified from the setpoint message and fitted to two wall stats; the per-output broadcast shortening from 016 to 012 (and stopping when idle), and the decoder now reading any length. config/ha-ufh-hcc80r-demand.yaml updated (masked IDs).

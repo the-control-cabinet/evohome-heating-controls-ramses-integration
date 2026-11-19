@@ -97,3 +97,15 @@ These are being built on dedicated ESP32 boards in the control room and understa
 - [ ] Lounge door-end loop: no power on output 2 (wiring); then a per-output check.
 - [x] ~~Per-device "not heard" alert~~: live ([B11 §6](B11-rf-health-and-hub-checks.md#6-per-device-not-heard-monitoring-16-nov)); tighten the threshold after the 72 h review.
 - [ ] After the morning watch (~19 Nov): sunny rooms for the Family room and Lounge, cold weather boost, UFH mixing temperature 45 °C trial and pump mode III → CP1 (plant monitoring repo), one at a time.
+
+## Update (19 Nov 2026)
+- [x] ~~Is the UFH binding wrong?~~ No. The controller's own curve turns zone demand into relay demand the same way on both controllers and in both relay roles (heating valve and boiler relay), with load scaling disabled ([B8 §8](B8-ufh-demand-decoding.md#8-addendum-19-nov-2026-the-curve-is-evohomes-own-not-the-binding-or-load-scaling)).
+- [ ] Trial (Sat 21 decision): Dining room weekday morning 19.0 → 19.5 °C, single change.
+- [x] ~~Per-device "not heard" threshold~~: 6 → 3 h (19 Nov), from normal nights peaking ~2 h.
+- [x] ~~Off-gap check~~: closed. The boiler relights 86-97 s after a real cut-out (plant monitoring repo).
+
+### OpenTherm design input (from B8 §8)
+The OpenTherm/HA control should **not** inherit Evohome's demand curve for the screed floor:
+- **UFH relay decided by HA** from the HCC80R zone demands (or room error and floor response), so a zone at ~60 % gets ~60 % valve time rather than ~23 %. A first step can run before OpenTherm: HA drives the UFH valve relay path directly, with Evohome's call as a fallback (same interlock principle as the OpenTherm switch-back).
+- **Separate treatment for radiators and screed:** short TPI cycles and the existing curve suit radiators; the slab needs longer on-times and earlier starts.
+- **Measure it:** the RAMSES 3150/0008 decode and the ESP32 opto inputs already give before/after evidence for any controller change.
