@@ -32,6 +32,17 @@ Done on 2 Nov 2026 with the browser-based esptool flasher (Chrome/Edge on Window
 
 **After flashing:** confirm the version on the `info/version` topic, Tx working, RF traffic flowing. Then monitor it ([B6](B6-gateway-reliability.md)): the update fixed Wi-Fi reconnection but exposed an RF stall.
 
+## Home Assistant 2026.11 and the `evohome_1` copy (21 Nov 2026)
+
+The second controller runs through a copy of core Evohome under the domain `evohome_1` ([B0](B0-cloud-integration.md)). HA 2026.11 moved core Evohome from **evohome-async 2.1.0 to 3.1.0**, so the old copy would have pinned the old library beside the new one.
+
+**Procedure used:**
+1. Before the update, check the new release's `homeassistant/components/evohome/manifest.json` for the evohome-async version.
+2. If it changed: download that release's Evohome files, change only `DOMAIN: Final = "evohome"` → `"evohome_1"` in `const.py`, write a custom-component manifest (domain `evohome_1`, its own version, the new requirement), keep the old copy as a backup, then update HA straight away (the new code needs the new core). Script: [`config/rebuild_evohome_1.sh`](../config/rebuild_evohome_1.sh).
+3. After the update: both hubs' entities present, schedules and setpoints reading, no Evohome errors in the log.
+
+Result: both hubs fine on 2026.11.2; the old copy kept for a week, then deleted. **Standing rule:** check the evohome-async version before every HA update.
+
 ## Known issues to work around
 
 | Issue | Effect | Workaround |

@@ -98,7 +98,7 @@ The valve pin was free and the valve dry with the actuator removed. While the ac
 
 After each power-off the zone LEDs **flash red for several minutes** (no RF contact yet), then settle as the controller's demand messages arrive (power-on ~13:52, settled to zone 2 green by 14:17). The red flashing is expected: no rebinding or button presses needed. Allow for it in any HCC80R work.
 
-### Now
+### Then (19 Nov)
 
 - **Replacement:** a generic 230 V AC, normally closed, M30 × 1.5, 2-wire actuator of the same style. To fit with fresh ferrules; then check both pins rise and stay up ≥ 30 min with the zone calling, and that the loop shows no flow when the zone is off.
 - **Until then** the door-end valve is open and uncontrolled (heats whenever any UFH zone calls). The plant monitoring uses this as an open-load trial: [plant doc 18](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome/blob/main/docs/18-bypass-trials-open-loads.md).
@@ -107,4 +107,23 @@ After each power-off the zone LEDs **flash red for several minutes** (no RF cont
 
 1. **A thermal actuator can read normal cold and still fail warm.** A resistance check at rest isn't proof; watch it open and *stay* open.
 2. **Swap test before any meter work:** moving the actuators between two ports separated "output" from "actuator" with no live testing.
-3. **When an entity's ID and its name disagree, check the name** (the IDs here were never renamed after the output map changed).
+3. **When an entity's ID and its name disagree, check the name.** The IDs here kept the pre-14 Nov labels until they were renamed to match on 19 Nov (after a search showed nothing else used them).
+
+## Addendum (20-22 Nov 2026): actuator replaced, the open loop closed as a cure, the Dining sensor
+
+### Replacement actuator (21 Nov)
+- Fitted ~15:37: a 230 V AC, normally closed, M30 × 1.5, two-wire thermal actuator of the same style (a DIY-store "Warmer System" part), fresh ferrules into the HCC80R's zone 2 outputs.
+- Proven: pin dropped (valve open) with the Lounge calling, rose again when the call ended (~16:55); both Lounge actuators working; normal operation overnight.
+
+### Does an open UFH loop help short cycling? No.
+- **A/B test:** Test A (21 Nov, loop open, Hall 22 °C, upstairs off) and Test B (22 Nov, meant to be the Hall with the loop closed; the override went on the **Lounge** by mistake, so its loops were open and calling). Both hours were **one continuous ~55-minute burn**: on a frosty afternoon a cooled screed takes everything, so there was no cycling to change.
+- **Data check, 19-22 Nov** (UFH-only burns, the Landing radiator open throughout): loop open, 30 burns, median 3.7 min, 37 % under 3 min; loop closed, 16 burns, median 4.1 min, 12 % under 3 min (colder period). No sign the open loop helped.
+- **Why:** once the screed is warm the mixing valve lets in only a trickle of boiler water whatever the loops do, and the boiler's minimum output (6.1 kW) is far above it. UFH-only cycling needs control-side answers: HA deciding the UFH relay from real zone demand, then OpenTherm ([D1](D1-roadmap.md); plant [doc 18](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome/blob/main/docs/18-bypass-trials-open-loads.md)).
+
+### The Dining room "shortfall" is partly where its sensor was
+- The Dining T87RF sat at the **bottom of the open stairs**, in the cold downdraught from the floor above. The floor was as warm as the other rooms and a draught could be felt, so the sensor read colder than the room.
+- **22 Nov 18:17:** moved to an inside wall at ~1.5 m (temporary fixing); **18:28:** weekday morning setpoint back to 19.0 °C (a 19.5 °C trial from 21 Nov ended). One change judged over Mon-Wed mornings; then the Play room (radiators, at the top of those stairs) matched to the other rooms during heating periods only.
+
+### Lessons
+4. **An override is only as good as the zone it lands on.** Check the zone's setpoint in HA after setting a test override.
+5. **A thermostat measures its own spot.** In a room with an open stairwell, a sensor in the downdraught makes a warm floor look short.

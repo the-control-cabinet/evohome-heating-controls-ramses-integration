@@ -26,6 +26,9 @@
 # 17 Nov 2026: output sensor NAMES updated to the 14 Nov map. unique_ids (and so entity IDs and history)
 #   are unchanged: the entity IDs still carry the old labels (e.g. sensor.hcc80r_output_1_demand_lounge is
 #   now the Kitchen output).
+# 19 Nov 2026: entity IDs renamed in the UI to match the names (history carried over; nothing else used the
+#   old IDs): sensor.hcc80r_output_1_demand_kitchen, _2_demand_lounge, _3_demand_dining_room, _4_demand_hall,
+#   _5_demand_family_room, _6_demand_utility, _7_demand_spare, _8_demand_spare_2. unique_ids unchanged.
 # 17 Nov 2026 (evening): output decoder reads any broadcast length (was 016 only, so the output sensors
 #   froze at 09:47 when the HCC80R switched to the 6-output 012 broadcast). Verified 21:57:
 #   009601C802C803A004C80500 = Kitchen 75, Lounge 100, Dining 100, Hall 80, Family 100, Utility 0,

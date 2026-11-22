@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0] - 2026-11-22
+- B9 addendum: replacement Lounge actuator fitted and proven (21 Nov); the Lounge loop A/B test (Test B's override landed on the Lounge) and the 19-22 Nov data check: an open UFH loop is not a cure for UFH-only cycling; the Dining wall stat in the stairwell downdraught, moved 22 Nov; lessons 4-5. Lesson 3 updated (HCC80R output entity IDs renamed to match their names, 19 Nov).
+- B12: current settings 22 Nov (right cylinder weekday window 06:00-09:30); change log 19-22 Nov (Landing radiator trial end, HA update, Dining trial, Test A/B windows, actuator, towel rail trial, Dining sensor move and setpoint).
+- B4: HA 2026.11 and the `evohome_1` copy rebuilt for evohome-async 3.1.0; new `config/rebuild_evohome_1.sh`; standing rule.
+- config/ha-ufh-hcc80r-demand.yaml: entity ID rename note.
+- README: short version updated.
+
 ## [1.10.0] - 2026-11-19
 - B8 §8: the steep zone-to-relay demand curve is Evohome's own: same curve on both controllers and both relay roles with load scaling disabled, following the highest zone; binding ruled out (masked evidence). D1: 19 Nov update and OpenTherm design input (HA decides the UFH relay from real zone demands, Evohome as fallback).
 - B9 addendum: the Lounge door-end loop traced to a failed thermal actuator (swap test between zone 2's ports, then open circuit at the bare cores); the HCC80R's red-flashing resync after power-on; output sensor IDs vs names.

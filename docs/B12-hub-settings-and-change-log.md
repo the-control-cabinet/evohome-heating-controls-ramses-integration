@@ -4,7 +4,7 @@
 
 One change at a time, each with a time stamp, so the data can say what each change did. Change points are reviewed against boiler starts, burn lengths and room temperatures.
 
-## Current settings (19 Nov 2026)
+## Current settings (22 Nov 2026)
 
 | Setting | Upstairs (radiators, left cylinder) | Downstairs (UFH, right cylinder) |
 |---|---|---|
@@ -16,7 +16,7 @@ One change at a time, each with a time stamp, so the data can say what each chan
 | Warm weather saver | **All zones** | Lounge, Family, Utility, Dining |
 | Sunny rooms | **Master Bedroom, Bedroom 3, Guest Bath** | Off (Family/Lounge to enable after the morning watch) |
 | Cold weather boost | Off | Off |
-| Hot water windows | Mon-Fri **06:00-09:30** + 18:30-21:00 (since 19 Nov); Sat/Sun 06:00-10:00 + 18:30-21:00 | Mon-Fri 06:00-08:30 + 18:30-21:00; Sat/Sun 06:00-10:00 + 18:30-21:00 |
+| Hot water windows | Mon-Fri **06:00-09:30** + 18:30-21:00 (since 19 Nov); Sat/Sun 06:00-10:00 + 18:30-21:00 | Mon-Fri **06:00-09:30** + 18:30-21:00 (since 22 Nov); Sat/Sun 06:00-10:00 + 18:30-21:00 |
 
 ## Change log
 
@@ -34,7 +34,16 @@ One change at a time, each with a time stamp, so the data can say what each chan
 | 19 Nov 13:35-15:27 | Lounge override 22 °C; HCC80R powered off ~13:52 and ~14:50-15:05 | Lounge actuator diagnosis ([B9](B9-ufh-and-radiator-behaviour.md#addendum-19-nov-2026-the-lounge-door-end-loop-a-failed-actuator)). **Excluded window** for UFH data |
 | 19 Nov 14:41 → | Lounge door-end UFH loop **open, uncontrolled** (failed actuator removed) | Until the replacement is fitted; used as an open-load trial |
 | 19 Nov ~15:40-22:13 | Left hot water BDR91 **unpowered** (off its backplate after mounting work); evening reheat missed; 1-hour boost from ~22:15 | [B11 §7](B11-rf-health-and-hub-checks.md#7-a-hot-water-relay-left-unpowered-19-nov). **Excluded window** for left cylinder data |
-| 19 Nov ~19:15 ± 30 min → | Far-end Landing radiator **fully open** (HR92 and adapter removed; HR92 left powered nearby; zone still on its T87RF) | Open-load (bypass radiator) trial against radiators-only short cycling |
+| 19 Nov ~19:15 ± 30 min → 22 Nov ~17:50 | Far-end Landing radiator **fully open** (HR92 and adapter removed; HR92 left powered nearby; zone still on its T87RF) | Open-load (bypass radiator) trial against radiators-only short cycling: median burn 1.8 → 2.8 min |
+| 21 Nov ~11:58-12:05 | Home Assistant 2026.11.2; `evohome_1` rebuilt from that release first ([B4](B4-upgrade-and-known-issues.md#home-assistant-202611-and-the-evohome_1-copy-21-nov-2026)) | Core Evohome moved to evohome-async 3.1.0 |
+| 21 Nov ~14:38 | Dining weekday morning 19 → 19.5 °C (trial) | Morning shortfall; ended 22 Nov once the sensor position was found to be the main cause |
+| 21 Nov 14:41-15:42 | Test A: upstairs Heating Off, Hall 22 °C override | Lounge loop A/B test. **Excluded window** |
+| 21 Nov ~15:37 | Lounge door-end actuator replaced; proven ~16:55 | [B9](B9-ufh-and-radiator-behaviour.md#addendum-20-22-nov-2026-actuator-replaced-the-open-loop-closed-as-a-cure-the-dining-sensor) |
+| 22 Nov 14:46-15:46 | Test B: upstairs Heating Off; 22 °C override set on the **Lounge** by mistake (meant the Hall) | **Excluded window** |
+| 22 Nov ~17:50 → | Landing HR92 refitted; **master en-suite towel rail fully open** (TRV head off, kept powered in the room) | Second open-load trial (smaller, warmth welcome there) |
+| 22 Nov 18:17 | Dining T87RF moved off the bottom of the stairs (inside wall, ~1.5 m, temporary) | It sat in the stairwell downdraught |
+| 22 Nov 18:28 | Dining weekday morning back to 19.0 °C | One change at a time: judge the sensor move first |
+| 22 Nov 18:29 | **Downstairs (right cylinder) weekday morning window 06:00-08:30 → 06:00-09:30** | Same reason as the left on 19 Nov: late showers; "reheat cut short" at 10:41 |
 
 ## Decisions and reasoning
 
