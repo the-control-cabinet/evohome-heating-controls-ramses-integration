@@ -37,7 +37,9 @@
 > - **Lounge actuator replaced; open loop closed as a cure (21-22 Nov):** the new actuator opens and closes as it should. An A/B test and three days of burns showed an open UFH loop doesn't stop UFH-only short cycling; that needs control-side changes ([B9](docs/B9-ufh-and-radiator-behaviour.md#addendum-20-22-nov-2026-actuator-replaced-the-open-loop-closed-as-a-cure-the-dining-sensor)).
 > - **The Dining "shortfall" was partly its sensor (22 Nov):** the wall stat sat in the stairwell downdraught; moved, and the setpoint trial ended, one change at a time ([B12](docs/B12-hub-settings-and-change-log.md)).
 > - **HA 2026.11 (21 Nov):** core Evohome moved to evohome-async 3.1.0, so the second-controller copy was rebuilt from the new release before updating, with a script and a standing check ([B4](docs/B4-upgrade-and-known-issues.md#home-assistant-202611-and-the-evohome_1-copy-21-nov-2026)).
-> - **Still open:** the junction box earth bar and Stage 1b tidy; the official gateway firmware fix (upstream #50); the schedule write fix (upstream #1427, then one verified zone test write); the bypass (plumber) and the towel rail open-load trial; judging the Dining sensor move.
+> - **Which relay fires the boiler (26 Nov):** the upstairs radiator BDR91 is bound as the **boiler relay** (on the same second as the left hot water relay, off 5 min before it, never under 5 min), while the downstairs UFH BDR91 is a **heating zone valve** with no minimum on time (48-s pulses near setpoint). An afternoon hot water test with no radiator calling proved it. Plan: keep it until the radiator valve heads are re-powered, then both controllers on standard S-plan zone-valve binding, then HA/OpenTherm sets its own minimum on time ([B12](docs/B12-hub-settings-and-change-log.md#relay-roles-and-the-binding-plan-26-nov-2026)).
+> - **Dining and the Play room (23-26 Nov):** the sensor move made no difference; the Play room at 19 °C closed the Dining evening gap; mornings still plateau ~0.5 °C short while the UFH relay runs 4-5 min per 20 ([B9](docs/B9-ufh-and-radiator-behaviour.md#addendum-23-26-nov-2026-the-dining-morning-plateau-the-play-room-and-48-second-ufh-pulses)). Schedules recorded from both controllers on 23 Nov ([data](data/evohome-schedules-record-2026-11-23.txt)).
+> - **Still open:** the junction box earth bar and Stage 1b tidy; the official gateway firmware fix (upstream #50); the schedule write fix (upstream #1427, then one verified zone test write); the bypass (plumber), the towel rail open-load trial and the pump 100 % trial; the Dining morning setpoint decision; Phase 2 relay rebind after the bypass.
 
 > **Device IDs are masked.** Real RAMSES-II addresses are replaced with consistent placeholders that keep the device-type prefix (`01:000001` = controller 1, `04:…` = TRV, `34:…` = wall stat, `13:…` = BDR91, `18:000001` = the gateway). Every file uses the same mapping.
 
@@ -99,7 +101,7 @@ The house is split into two independent Evohome systems, each with its own zones
 | Heats | Radiators, 12 zones | Underfloor, 6 zones |
 | Zone actuators | HR92 TRV on every radiator (two zones have two) | HCC80R + HCS80, driving the manifold actuators and UFH pump |
 | Room sensors | T87RF wall stats (one zone uses its TRV's sensor) | T87RF wall stats (Kitchen uses the controller's sensor) |
-| Boiler call | BDR91 | BDR91 |
+| Boiler call | BDR91 bound as the boiler relay (wired to the boiler switched live) | BDR91 bound as the UFH heating zone valve (end switch calls the boiler) |
 | Hot water | Left cylinder: CS92 + BDR91 on its zone valve | Right cylinder: CS92 + BDR91 on its zone valve |
 
 ### 2.2 Key design decisions
@@ -148,14 +150,14 @@ All zones have **local override** enabled: a wall-stat change holds until the ne
 
 | Issue | Current understanding | Next step |
 |---|---|---|
-| ✅ Tundishes dripped when hot water was used | Failed DHW expansion vessels: **replaced 11 Nov**; no tundish events since, reheat peak 3.8 bar | pressure reducing valves settle at ~2.5 bar (marked 3.5): strainers/cartridges at the next visit, then match the vessels' pre-charge |
-| Lounge UFH: one loop cold | ✅ Labels swapped (fixed 12-14 Nov by rebinding); the remaining door-end loop: **actuator failed internally** (19 Nov) ([B9](docs/B9-ufh-and-radiator-behaviour.md#addendum-19-nov-2026-the-lounge-door-end-loop-a-failed-actuator)) | Fit the replacement actuator; prove open and closed |
+| Tundishes dripped when hot water was used | Failed DHW expansion vessels **replaced 11 Nov** (fixed the original drips). Since 22 Nov the **right** tundish has had six small events, idle and during draws, at pressures the valve held dry before: water hammer and condensation ruled out; working theory a **passing expansion relief valve seat** ([plant monitoring doc 05](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome/blob/main/docs/05-dhw-cylinders-expansion-and-tundish.md)) | Plumber (G3): right expansion relief valve; right inlet strainer / pressure reducing valve (it falls to 0.75 bar under draw); pressure reducing valves settle at ~2.5 bar (marked 3.5), then match the vessels' pre-charge |
+| Lounge UFH: one loop cold | ✅ Labels swapped (fixed 12-14 Nov by rebinding); the remaining door-end loop: **actuator failed internally** (19 Nov) ([B9](docs/B9-ufh-and-radiator-behaviour.md#addendum-19-nov-2026-the-lounge-door-end-loop-a-failed-actuator)) | ✅ Replacement fitted 21 Nov, open and close proven |
 | Slow loss of heating-system pressure | Not the boiler's expansion vessel (recharged, and its diaphragm isn't leaking) | Trend the new boiler pressure gauge; isolate circuits one at a time |
 | Missing pipe lagging | Avoidable primary and DHW losses | Complete it |
 | **No automatic bypass** | The Ideal Logic+ System S30 manual requires an ABV with TRVs on all radiators or two-port valves; there are HR92s everywhere, five two-port valves, and no ABV found ([A6](docs/A6-pump-overrun-and-bypass.md)). An ABV adds flow, not load: required, but not expected to end short cycling alone | Plumber to fit an ABV; open-load trials running (Landing radiator, Lounge loop) |
 | TF/MF valves latched in manual override | May not be fully open, restricting the radiator circuits | Check the position; re-power the heads on a permanent live if needed |
 | **Boiler earth** | The boiler's supply flex has no earth core | Prove the earth path (continuity to the earth bar); Gas Safe to fit a flex with a CPC |
-| Slow pressure leak | Topped up about every two weeks; fault history shows F1 twice | Gas Safe: relief valve, expansion vessel, leak search, inhibitor |
+| Slow pressure leak | 0.05-0.07 bar/day measured at like water temperature (topped up 22 Nov); fault history F1, FU, F1 | Gas Safe: relief valve, expansion vessel, leak search, inhibitor |
 | Wiring identification | Blues used as switched lives, greys and a black used as neutrals; two floating Danfoss cores; hot-water BDR91s on stiff cable, loose | Tidy-up planned: sleeving, caps, labels, flex in trunking ([A4](docs/A4-junction-box-survey-and-wiring.md#7-planned-tidy-up-box-still-isolated)) |
 
 ---
@@ -401,30 +403,33 @@ I --- 01:000002 --:------ 01:000002 2309 018 00 01F4 01 04B0 02 04B0 03 04B0 04 
 
 ### Heating and hot water behaviour
 - [x] **Lounge loop test**: labels swapped (fixed by rebinding); door-end actuator failed internally (19 Nov) ([B9](docs/B9-ufh-and-radiator-behaviour.md#addendum-19-nov-2026-the-lounge-door-end-loop-a-failed-actuator)).
-- [ ] Fit the replacement Lounge actuator (230 V NC, M30 × 1.5); prove open and closed.
+- [x] Replacement Lounge actuator fitted and proven (21 Nov).
 - [ ] **Legionella:** 60-61 °C setpoint, or a weekly HA/RAMSES pasteurising reheat with a failsafe; then implement.
 - [ ] **Left/right mapping checks:** which hub, BDR91 and CS92 serves which cylinder; fix the names.
-- [ ] Upstairs hub settings review; flow temperature 70 → 65 °C after the bypass; one-zone setback test.
+- [x] Which relay fires the boiler: upstairs radiator BDR91 = boiler relay, downstairs UFH BDR91 = heating zone valve (26 Nov, [B12](docs/B12-hub-settings-and-change-log.md#relay-roles-and-the-binding-plan-26-nov-2026)).
+- [ ] **Phase 2** (after the bypass and the radiator valve heads): rebind the upstairs radiator BDR91 as a heating zone valve. **Phase 3:** HA/OpenTherm fires the boiler with its own minimum on time.
+- [ ] Pump 100 % trial (from 25 Nov), then the flow temperature test; towel rail open-load trial; Dining weekday morning 19.0 → 19.5 °C decision.
+- [ ] One-zone setback test.
 
 ### Gateway
-- [ ] **Move the gateway to a central position (priority):** missed reports from the far end (above). Separate supply from Wi-Fi location first; update the issue on the firmware repository.
-- [ ] Keep the September packet logs permanently; confirm the upstairs boiler-demand BDR91 appears in captures.
+- [x] **Gateway moved to the landing** (12 Nov); every controller-to-device link 5/5 on the controllers' own RF check ([B11](docs/B11-rf-health-and-hub-checks.md)).
+- [ ] Keep the September packet logs permanently. ✅ The upstairs boiler relay is seen in captures (its role proven 26 Nov).
 
 ### Plant room: physical works (soon)
 | Item | Purpose |
 |---|---|
-| ✅ Both DHW **expansion vessels** replaced 11 Nov (24 L, 3.5 bar; relief valves kept) | No tundish drips since · pressure reducing valves settle ~2.5 bar: strainers/cartridges next |
+| ✅ Both DHW **expansion vessels** replaced 11 Nov (24 L, 3.5 bar; relief valves kept) | Original drips fixed; since 22 Nov the right expansion relief valve seat passes (plumber) · pressure reducing valves settle ~2.5 bar: strainers/cartridges next |
 | ✅ **Pressure gauges on both cylinder cold inlets** (between pressure reducing valve and vessel) | Live; reheat peak 3.8 bar |
 | ✅ **Tundish drip sensors** | Live and water-tested |
 | **Complete the missing lagging** | Cut avoidable losses |
-| **Trace the slow system pressure loss** with the new boiler gauge | Boiler's expansion vessel ruled out; isolate circuits one at a time |
+| **Trace the slow system pressure loss** with the new boiler gauge | 0.05-0.07 bar/day; boiler's expansion vessel ruled out; tissue round, then isolate circuits one at a time |
 
 ### Plant room: monitoring (soon)
 | Item | Purpose |
 |---|---|
-| **CT clamp on the boiler switched live / supply** | Boiler states (standby, pump, firing, DHW) into HA |
-| **Opto boards on all four BDR91 switched lives** and the boiler's | Exactly which controller and function is calling, which is also an input to the OpenTherm logic |
-| **Strap-on NTCs on both DHW cylinder hot outlets** | Real top-of-cylinder temperature vs the CS92; quantify the top overshoot; weekly 60 °C check |
+| ✅ **CT clamp on the boiler switched live / supply** (live, 2 turns) | Boiler states (standby, pump, firing, DHW) into HA |
+| ✅ **Opto boards on all four BDR91 switched lives** and the boiler's (commissioned 17 Nov) | Exactly which controller and function is calling, which is also an input to the OpenTherm logic |
+| ✅ **Strap-on NTCs on both DHW cylinder hot outlets** | Real top-of-cylinder temperature vs the CS92; quantify the top overshoot; weekly 60 °C check |
 | Flow/return temperatures, pressures, leak plates | Full boiler and primary picture |
 
 The monitoring build is documented in its own repository: [heating-plant-monitoring-esphome](https://github.com/the-control-cabinet/heating-plant-monitoring-esphome).
@@ -488,6 +493,7 @@ The README covers the whole journey. These hold the full detail:
 ├── data/junction-box-terminal-map.csv ← surveyed Oct 2026
 ├── data/junction-box-core-map.csv     ← every core, by marker
 ├── data/junction-box-wago-map.csv     ← Stage 1a Wago layout, slot by slot (17 Nov 2026)
+├── data/evohome-schedules-record-2026-11-23.txt ← all 20 schedules read from the controllers
 ├── docs/                              ← A1-A8, B0-B12, C1-C6, D1
 ├── docs/images/                       ← survey photos and dashboard screenshots (metadata stripped)
 └── scripts/packet-audit.sh · rename_rf_entities.py · list_ramses_devices.sh
@@ -495,4 +501,4 @@ The README covers the whole journey. These hold the full detail:
 
 📺 [The Control Cabinet on YouTube](https://www.youtube.com/channel/UC5Cupmz7vlfcodpCX7k8iuQ)
 
-*Designed, installed and documented by James (install 2018; cloud integration August 2026; RAMSES-II and case study September-October 2026; site survey 29 October 2026; gateway fix and UFH decoding November 2026) · part of [The Control Cabinet BMS portfolio](https://github.com/the-control-cabinet). MIT Licence.*
+*Designed, installed and documented by James (install 2018; cloud integration August 2026; RAMSES-II and case study September-October 2026; site survey 29 October 2026; gateway fix, UFH decoding and relay roles November 2026) · part of [The Control Cabinet BMS portfolio](https://github.com/the-control-cabinet). MIT Licence.*

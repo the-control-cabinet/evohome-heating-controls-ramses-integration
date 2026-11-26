@@ -127,3 +127,29 @@ After each power-off the zone LEDs **flash red for several minutes** (no RF cont
 ### Lessons
 4. **An override is only as good as the zone it lands on.** Check the zone's setpoint in HA after setting a test override.
 5. **A thermostat measures its own spot.** In a room with an open stairwell, a sensor in the downdraught makes a warm floor look short.
+
+## Addendum (23-26 Nov 2026): the Dining morning plateau, the Play room and 48-second UFH pulses
+
+### The Dining sensor move made no difference
+- Judged 23 Nov: the Dining-Hall gap was about −1.0 °C before and after the move (the 19.6 °C just after the move was hand warmth). The Dining room is genuinely colder: the open stairwell and the double-height ceiling. The wall stat stays at its new spot.
+
+### The Play room at 19 °C (from 23 Nov)
+- One change: the Play room (radiators, at the top of the Dining room's stairs) set to 19 °C during its heating periods, so less cold air falls down the stairwell.
+- **Evenings:** Dining-Hall gap −0.5/−0.7 °C on the first evening (−1.0/−1.2 the night before); by 24 Nov the Dining evening gap had **closed** (19.2 °C by 19:00, 19.7 at 19:53, setpoint 19; 19.4 at 20:30 on 25 Nov).
+- **The Play room's own setpoint drops early by a varying amount** (26 Nov 07:32, 25 Nov 08:12, 24 Nov 08:31; evening 21:03 vs 22:00): that is **optimum stop** on the upstairs controller, not a schedule error. Its optimum start begins ~04:02, two hours before 06:00, and brings the radiator relay on for one room.
+
+### The Dining morning plateau
+- Mornings at the end of the period (08:30): −0.9, −0.6, −0.4, −0.6 °C (23-26 Nov). On 26 Nov the room sat at 18.4 °C from 07:00 to 08:29 while the UFH relay ran only **4-5 min in every 20**: the steep zone-to-relay curve ([B8 §8](B8-ufh-demand-decoding.md#8-addendum-19-nov-2026-the-curve-is-evohomes-own-not-the-binding-or-load-scaling)) again, the zone asking moderately and getting a fraction of it.
+- **Recommendation (pending):** Dining weekday morning setpoint **19.0 → 19.5 °C**, single change. A larger error lifts the zone into the steeper part of the curve so the relay runs longer; an earlier start would not lift the plateau.
+
+### 48-second UFH pulses
+- 25 Nov from 21:04 the UFH relay gave **48-s pulses every 20 min** (21:04:30, 21:24:36, 21:44:42, 22:04:48; 96 s at 20:43), each firing the boiler for 23-46 s. Near setpoint the controller's demand is small and the UFH relay, bound as a heating zone valve, gets **no minimum on time** (that applies to the boiler relay). These pulses are one source of the sub-minute burns.
+- The upstairs radiator relay, bound as the boiler relay, never goes below 5 min. Why the two differ, and the plan: [B12](B12-hub-settings-and-change-log.md#relay-roles-and-the-binding-plan-26-nov-2026).
+
+### Radiator short calls
+- With one room calling (an Office afternoon, a single radiator), the load is far below the boiler's 6.1 kW minimum: the boiler burns 12-15 min to ~71 °C flow, waits ~90 s (anti-cycle), then relights for under a minute, repeatedly. Both controllers are already at Evohome's slowest settings (3 cycles/h, 5 min minimum on), so there is nothing to change there; the levers are load (the towel rail trial), pump speed (trial from 25 Nov) and, later, OpenTherm modulation.
+- The Lounge's occasional overshoot after a long call is stored heat in the screed, not a fault.
+
+### Lessons
+6. **Read a zone's setpoint changes as the controller's, not the schedule's.** Optimum stop moves the drop earlier by a different amount each day; check before editing a schedule.
+7. **Prove a relay's role from its own timing.** "Comes on the same second as the hot water relay and goes off 5 min before it" identified the boiler relay without opening anything.

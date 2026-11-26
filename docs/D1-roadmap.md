@@ -24,7 +24,7 @@
 - [ ] **Cloud integration:** stalled after several HA restarts in a day (all cloud zones blank ~80 min); check recovery, consider `scan_interval: 600`, avoid repeated restarts ([B0](B0-cloud-integration.md)).
 - [ ] Update the issue raised with the firmware maintainer with the results (no response yet).
 - [ ] Copy the September packet logs to permanent storage; review retention.
-- [ ] Confirm the upstairs boiler-demand BDR91 (13:000002) is seen in captures.
+- [x] ~~Confirm the upstairs boiler-demand BDR91 (13:000002) is seen in captures.~~ Seen, and its role proven (26 Nov).
 - [ ] Optional: alert for any zone at or below 5.5 °C, or the sun-and-thermometer override state.
 
 ## OpenTherm and advanced boiler control (planned)
@@ -109,3 +109,11 @@ The OpenTherm/HA control should **not** inherit Evohome's demand curve for the s
 - **UFH relay decided by HA** from the HCC80R zone demands (or room error and floor response), so a zone at ~60 % gets ~60 % valve time rather than ~23 %. A first step can run before OpenTherm: HA drives the UFH valve relay path directly, with Evohome's call as a fallback (same interlock principle as the OpenTherm switch-back).
 - **Separate treatment for radiators and screed:** short TPI cycles and the existing curve suit radiators; the slab needs longer on-times and earlier starts.
 - **Measure it:** the RAMSES 3150/0008 decode and the ESP32 opto inputs already give before/after evidence for any controller change.
+
+## Update (26 Nov 2026)
+- [x] ~~Which relay is the boiler relay?~~ Proven: upstairs radiator BDR91 (13:000002) = boiler relay; downstairs UFH BDR91 (13:000004) = heating zone valve ([B12](B12-hub-settings-and-change-log.md#relay-roles-and-the-binding-plan-26-nov-2026)).
+- [ ] **Phase 2** (after the automatic bypass and the TF/MF radiator valve heads are re-powered): rebind 13:000002 on the upstairs controller as a heating zone valve; re-check the plant monitoring's radiator signal (it reads "radiators or left cylinder" until then).
+- [ ] **Phase 3** (HA / OpenTherm): HA fires the boiler with its own minimum on time, and decides the UFH relay from zone demand (above); the controllers' cycle rate and minimum on time stop mattering.
+- [ ] Decide: Dining weekday morning 19.0 → 19.5 °C (recommended; [B9](B9-ufh-and-radiator-behaviour.md#addendum-23-26-nov-2026-the-dining-morning-plateau-the-play-room-and-48-second-ufh-pulses)).
+- [ ] Pump 100 % trial (from 25 Nov), then the flow temperature test (the boiler's CH knob also sets the cylinder reheat flow: cylinders must still reach 60 °C).
+- [ ] Towel rail open-load trial: recheck at like return temperatures.

@@ -22,8 +22,10 @@ The house is split into two independent Evohome systems, each with its own contr
 |---|---|---|
 | Heats | Radiators, 12 zones | Underfloor, 6 zones |
 | Zone control | **HR92 TRVs** on every radiator; **T87RF** wall stats as room sensors | **HCC80R** UFH controller + **HCS80** expansion driving the manifold actuators; T87RF wall stats as room sensors |
-| Boiler demand | BDR91 (13:000002) | BDR91 (13:000004) |
+| Boiler demand | BDR91 (13:000002), bound as the **boiler relay** (appliance control), wired straight to the boiler switched live; it also switches on for left cylinder reheats | BDR91 (13:000004), bound as the **heating zone valve** on the UFH zone valve; the valve's end switch calls the boiler (S-plan) |
 | Hot water | Left cylinder: **CS92** sensor + BDR91 (13:000001) driving its zone valve | Right cylinder: **CS92** sensor + BDR91 (13:000003) driving its zone valve |
+
+> **Relay roles (proven 26 Nov 2026):** the two controllers bind their second BDR91 differently, and it matters for short cycling. See [B12 · Relay roles and the binding plan](B12-hub-settings-and-change-log.md#relay-roles-and-the-binding-plan-26-nov-2026).
 
 ```mermaid
 flowchart TB

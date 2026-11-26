@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0] - 2026-11-26
+- B12: relay roles and the binding plan: the upstairs radiator BDR91 proven to be the boiler relay (history 13-25 Nov and a clean afternoon test 26 Nov), the downstairs UFH BDR91 a heating zone valve with no minimum on time; plan Now / Phase 2 (rebind after the bypass and the radiator valve heads) / Phase 3 (HA/OpenTherm). Current settings 26 Nov; change log 22-26 Nov (Play room schedule and 19 °C, schedule record, failed-ignitions alert, pump 100 % trial, relay test); current trials (towel rail first result).
+- B9 addendum: the Dining sensor move made no difference; the Play room at 19 °C closed the evening gap; optimum stop explains its early drops; the Dining morning plateau and the 19.5 °C recommendation; 48-s UFH pulses; one-radiator short calls; lessons 6-7.
+- A1, B2: the "Boiler demand" rows corrected to the two relays' actual roles. D1: update 26 Nov.
+- data/evohome-schedules-record-2026-11-23.txt: all 20 schedules as read from the controllers (room names anonymised).
+- README: short version, architecture table.
+
 ## [1.11.0] - 2026-11-22
 - B9 addendum: replacement Lounge actuator fitted and proven (21 Nov); the Lounge loop A/B test (Test B's override landed on the Lounge) and the 19-22 Nov data check: an open UFH loop is not a cure for UFH-only cycling; the Dining wall stat in the stairwell downdraught, moved 22 Nov; lessons 4-5. Lesson 3 updated (HCC80R output entity IDs renamed to match their names, 19 Nov).
 - B12: current settings 22 Nov (right cylinder weekday window 06:00-09:30); change log 19-22 Nov (Landing radiator trial end, HA update, Dining trial, Test A/B windows, actuator, towel rail trial, Dining sensor move and setpoint).

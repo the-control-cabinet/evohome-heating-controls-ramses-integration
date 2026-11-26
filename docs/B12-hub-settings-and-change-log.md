@@ -4,7 +4,7 @@
 
 One change at a time, each with a time stamp, so the data can say what each change did. Change points are reviewed against boiler starts, burn lengths and room temperatures.
 
-## Current settings (22 Nov 2026)
+## Current settings (26 Nov 2026)
 
 | Setting | Upstairs (radiators, left cylinder) | Downstairs (UFH, right cylinder) |
 |---|---|---|
@@ -16,6 +16,7 @@ One change at a time, each with a time stamp, so the data can say what each chan
 | Warm weather saver | **All zones** | Lounge, Family, Utility, Dining |
 | Sunny rooms | **Master Bedroom, Bedroom 3, Guest Bath** | Off (Family/Lounge to enable after the morning watch) |
 | Cold weather boost | Off | Off |
+| Second BDR91 role | **Boiler relay** (13:000002, appliance control) | **Heating zone valve** (13:000004, UFH) |
 | Hot water windows | Mon-Fri **06:00-09:30** + 18:30-21:00 (since 19 Nov); Sat/Sun 06:00-10:00 + 18:30-21:00 | Mon-Fri **06:00-09:30** + 18:30-21:00 (since 22 Nov); Sat/Sun 06:00-10:00 + 18:30-21:00 |
 
 ## Change log
@@ -44,6 +45,45 @@ One change at a time, each with a time stamp, so the data can say what each chan
 | 22 Nov 18:17 | Dining T87RF moved off the bottom of the stairs (inside wall, ~1.5 m, temporary) | It sat in the stairwell downdraught |
 | 22 Nov 18:28 | Dining weekday morning back to 19.0 °C | One change at a time: judge the sensor move first |
 | 22 Nov 18:29 | **Downstairs (right cylinder) weekday morning window 06:00-08:30 → 06:00-09:30** | Same reason as the left on 19 Nov: late showers; "reheat cut short" at 10:41 |
+
+| 22 Nov evening | Play room schedule: start 05:00 → 06:00, finish 23:00 → 22:00 | Optimum start was firing the radiators (and the boiler) from ~03:00 for one room |
+| 22 Nov ~19:03 | Plant alert "boiler failed ignitions" re-enabled (off since 15 Nov) | Plant monitoring repo, doc 15 |
+| 23 Nov ~09:20 | **Play room 19 °C** in its heating periods (weekdays 06:00-08:30 + 15:00-22:00; weekends 06:00-08:30, 11:30-14:00, 15:00-22:00), single change | The Play room is at the top of the Dining room's open stairs: a cold room upstairs feeds the downdraught. Judged on Dining mornings and evenings |
+| 23 Nov ~09:39 | All 20 schedules read back from the controllers and recorded ([data/evohome-schedules-record-2026-11-23.txt](../data/evohome-schedules-record-2026-11-23.txt)) | Baseline after the 16-23 Nov changes. Dining's weekday morning period is only 07:30-08:30, so optimum start pre-heats from ~04:30 |
+| 25 Nov 21:03 | Boiler installer menu: pump minimum speed **P7 (70 %) → P1 (100 %)**, trial | Plant monitoring repo, doc 16 §12. The long-burn flow-return gap fell from 15-17 K to 12-15 K, so the pump had been on 70 %. Revert = select P7 |
+| 26 Nov 14:24-14:50 | **Relay-role test:** left hot water override with no radiator zone calling (first run void: the Office was calling; clean rerun 14:37) | Proved the upstairs radiator BDR91 is the boiler relay ([below](#relay-roles-and-the-binding-plan-26-nov-2026)). **Excluded window** for left cylinder and radiator data |
+
+## Current trials (26 Nov)
+- **Master en-suite towel rail fully open** (since 22 Nov ~17:50): radiators-only burns over the first day, median **6.0 min, 27 % under 3 min** (Landing radiator period 2.8 min / 63 %; before 1.8 min / 76 %). Provisional: colder weather lengthens burns, so it is rechecked at like return temperatures.
+- **Pump at 100 %** (since 25 Nov 21:03): judged on long-burn flow-return gaps and short-burn counts; the flow temperature test follows it (one change at a time).
+- **Play room 19 °C** (since 23 Nov): Dining-Hall gap first evening −0.5/−0.7 °C vs −1.0/−1.2; Dining evening gap closed by 24 Nov (19.2 by 19:00, setpoint 19). Dining **mornings** still plateau ~0.4-0.6 °C short: see [B9](B9-ufh-and-radiator-behaviour.md#addendum-23-26-nov-2026-the-dining-morning-plateau-the-play-room-and-48-second-ufh-pulses).
+
+## Relay roles and the binding plan (26 Nov 2026)
+
+Each controller has a hot water BDR91 for its cylinder's zone valve and a second BDR91 for heating. On an Evohome controller that second relay can be bound as the **boiler relay** (appliance control) or as a **heating zone valve**. The two controllers here differ, and the data showed it.
+
+| | Upstairs (radiators, left cylinder) | Downstairs (UFH, right cylinder) |
+|---|---|---|
+| Hot water relay | 13:000001 on the left cylinder's zone valve | 13:000003 on the right cylinder's zone valve |
+| Second relay | **13:000002 = boiler relay**, wired straight to the boiler switched live (the radiator valve heads are latched open, not live) | **13:000004 = heating zone valve**, on the UFH zone valve; its end switch fires the boiler |
+| Switches for hot water calls? | **Yes**: on with the left hot water relay, off 5 min before it (the hot water overrun) | No: on for only 41 % of right hot water time, 0 % on 22-25 Nov |
+| Minimum on time applied? | **Yes**: its on-times never go below 5 min | **No**: 48-s pulses seen near setpoint (25 Nov 21:04-22:05), each firing the boiler for 23-46 s |
+
+**How it was proven:**
+1. **History, 13-25 Nov:** the left hot water relay came on and the radiator relay came on **the same second**, also outside heating periods (e.g. 18 Nov 08:11:59, 19 Nov 22:16:57); the radiator relay went off **exactly 5 min** before the left one (17 Nov 08:07:58/08:12:58, 19 Nov 23:12:57/23:17:57, 22 Nov 09:36:54/09:41:54). It was on for 92 % of left hot water time (one unexplained 28-min gap, 22 Nov evening). The installer screens read "appliance control: wireless relay box" (14 Nov photos), and the stored schema has `appliance_control: 13:000002`.
+2. **Test, 26 Nov:** a left hot water override in the afternoon with no radiator zone calling. The first run was void (the Office zone was calling). Clean rerun: radiator relay on 14:37:50, left relay and its valve end switch 14:38:51; cancelled ~14:44: radiator relay off 14:44:50, the left valve due off 5 min later. In the first run the burner kept firing to 14:35:50, through the 5-min overrun, because the left valve's end switch still calls the boiler: the overrun only works as Evohome intends once firing no longer runs through the end switches.
+
+**Why the rooms don't overheat:** with the radiator valve heads latched open, a left cylinder reheat also runs the radiator pump path; each radiator's HR92 still closes when its room is warm.
+
+**Plan (agreed 26 Nov):**
+
+| Phase | Upstairs | Downstairs |
+|---|---|---|
+| **Now** | 13:000002 stays **boiler relay**: there is no zone valve to absorb short pulses, and it keeps the 5-min minimum on time | No change: hot water valve + UFH heating zone valve |
+| **Phase 2** (automatic bypass fitted, TF/MF radiator valve heads re-powered from 13:000002) | Rebind 13:000002 as a **heating zone valve**, so both controllers use the standard S-plan binding (zone valves, end switches fire the boiler). Expect somewhat more short calls (no minimum on time), partly absorbed by valve travel | No change |
+| **Phase 3** (HA / OpenTherm control) | Home Assistant fires the boiler with its **own minimum on time**; the controllers' cycle rate and minimum on time no longer set the burn length | Same |
+
+Dropped: a trial of the UFH relay as boiler relay (it would open the UFH valve and run the manifold pump on every right cylinder reheat), and an upstairs zone-valve trial before Phase 2. Both controllers stay at 3 cycles/h and 5 min minimum on (Evohome's slowest settings).
 
 ## Decisions and reasoning
 

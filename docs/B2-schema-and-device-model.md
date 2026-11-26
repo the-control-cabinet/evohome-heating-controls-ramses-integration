@@ -22,7 +22,7 @@ Left to discovery alone, ramses_cc only finds devices as they talk, and it can't
 | Actuators | HR92 TRVs per zone | HCC80R 02:000001, circuits 00-05 → zones 00-05 |
 | Zone sensors | T87RF wall stats (one zone uses its own TRV) | T87RF wall stats (Kitchen uses the controller's sensor) |
 | DHW | sensor 07:000001, valve BDR 13:000001 | sensor 07:000002, valve BDR 13:000003 |
-| Boiler demand | BDR 13:000002 | BDR 13:000004 |
+| Boiler demand | BDR 13:000002 (boiler relay, `appliance_control`) | BDR 13:000004 (UFH heating zone valve) |
 
 `main_tcs` is the upstairs controller.
 
