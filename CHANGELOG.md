@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.12.1] - 2026-11-27
+- B12: Dining weekday morning setpoint 19.0 → 19.5 °C (26 Nov 19:33) and its first morning (19.2 held vs 18.4).
+
 ## [1.12.0] - 2026-11-26
 - B12: relay roles and the binding plan: the upstairs radiator BDR91 proven to be the boiler relay (history 13-25 Nov and a clean afternoon test 26 Nov), the downstairs UFH BDR91 a heating zone valve with no minimum on time; plan Now / Phase 2 (rebind after the bypass and the radiator valve heads) / Phase 3 (HA/OpenTherm). Current settings 26 Nov; change log 22-26 Nov (Play room schedule and 19 °C, schedule record, failed-ignitions alert, pump 100 % trial, relay test); current trials (towel rail first result).
 - B9 addendum: the Dining sensor move made no difference; the Play room at 19 °C closed the evening gap; optimum stop explains its early drops; the Dining morning plateau and the 19.5 °C recommendation; 48-s UFH pulses; one-radiator short calls; lessons 6-7.
